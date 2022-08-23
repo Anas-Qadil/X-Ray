@@ -1,6 +1,16 @@
 const express = require("express");
-
+const dotenv = require("dotenv").config
+const router = require("./src/routes/index");
+// @configs
 const app = express();
+const HOST = process.env.HOST || "localhost";
+const PORT = process.env.PORT || 5000;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api", router);
 
 
-app.listen(3000, () => console.log("server running on port 3000"));
+
+app.listen(PORT, () => console.log(`server running on port ${PORT}`));
