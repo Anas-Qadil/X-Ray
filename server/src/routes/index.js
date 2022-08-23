@@ -1,14 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const signUpRoute = require("./authRouter/signUpRouter");
+const loginRoute = require("./authRouter/loginRouter");
 
-router.get("/", (req, res) => {
-	  res.send("Hello World");
-});
-
-router.get("/rules", (req, res) => {
-	  res.send("Hello World");
-})
-
-
+router.post("/sign-up", signUpRoute);
+router.post("/login", loginRoute);
 
 module.exports = router;
