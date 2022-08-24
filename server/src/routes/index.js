@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const signUpRoute = require("./authRouter/signUpRouter");
-const loginRoute = require("./authRouter/loginRouter");
+const { signUpController, signUpPatient, signUpHospital } = require("../controllers/authController/signUpController");
+const { signUpMiddleware, patientMiddleware } = require("../middlewares/authMiddleware/signUpMiddleware");
 
-router.post("/sign-up", signUpRoute);
-router.post("/login", loginRoute);
+// @route POST api/signup
+router.post("/sign-up", signUpMiddleware, signUpController);
+router.post("/sign-up/patient", signUpMiddleware, patientMiddleware, signUpPatient);
+router.post("/sign-up/hospital", signUpMiddleware, signUpHospital);
 
 module.exports = router;
