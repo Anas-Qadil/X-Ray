@@ -1,14 +1,15 @@
 const express = require("express");
 const validator = require('validator');
+const patientModel = require("../../models/patientModel");
 
 const signUpMiddleware = async (req, res, next) => {
 	console.log("middleware runs");
 	next();
 }
 
+//@checker Middleware
 const patientMiddleware = async (req, res, next) => {
 	const data = req.body;
-	console.log(data);
 
 	//@data checker
 	if (data)
@@ -166,6 +167,14 @@ const patientMiddleware = async (req, res, next) => {
           message: "phone must be less than 10 characters long"
         });
       }
+      const phone = await patientModel.findOne({ phone: data.phone });
+      if (phone)
+      {
+        console.log(phone);
+        return res.status(400).json({
+          message: "phone already exists"
+        });
+      }
     } else {
       return res.status(400).json({
         message: "phone is required"
@@ -185,6 +194,13 @@ const patientMiddleware = async (req, res, next) => {
       {
         return res.status(400).json({
           message: "email must be a valid email"
+        });
+      }
+      const email = await patientModel.findOne({ email: data.email });
+      if (email)
+      {
+        return res.status(400).json({
+          message: "email already exists"
         });
       }
     }

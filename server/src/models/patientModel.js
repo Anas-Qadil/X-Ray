@@ -23,9 +23,11 @@ const patientSchema = new Schema({
 	},
 	phone: {
 		type: String,
+		unique: true,
 	},
 	email: {
 		type: String,
+		unique: true,
 	},
 	cin: {
 		type: String,
