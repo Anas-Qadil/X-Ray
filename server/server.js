@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/test", test);
 app.use("/api", router);
 app.use("/", (req, res) => {
-	res.send("Route not found");
+	res.send(`[ ${req.method} ] Route [ ${req.path} ] not found`);
 });
 
 

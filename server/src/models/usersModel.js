@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const companyModel = require("./companyModel");
+const patientModel = require("./patientModel");
+const hospitalModel = require("./hospitalModel");
 
 //@ remember to desing the schema well
 const usersSchema = new Schema({
@@ -14,7 +17,7 @@ const usersSchema = new Schema({
 	},
 	role: {
 		type: String,
-		enum: ["admin", "patient", "hospital"],
+		enum: ["admin", "patient", "hospital", "company", "person"],
 		required: true,
 	},
 	patient: {
@@ -25,6 +28,11 @@ const usersSchema = new Schema({
 	hospital: {
 		type: Schema.Types.ObjectId,
 		ref: "hospitalModel",
+		default: null,
+	},
+	company: {
+		type: Schema.Types.ObjectId,
+		ref: "companyModel",
 		default: null,
 	},
 }, { timestamps: true });

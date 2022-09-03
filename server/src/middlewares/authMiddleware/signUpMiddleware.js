@@ -1,6 +1,7 @@
 const express = require("express");
 const validator = require('validator');
 const patientModel = require("../../models/patientModel");
+const usersModel = require("../../models/usersModel");
 
 const signUpMiddleware = async (req, res, next) => {
 	console.log("middleware runs");
@@ -274,7 +275,81 @@ const patientMiddleware = async (req, res, next) => {
 	next();
 }
 
+// @company validation
+
+const companyMiddleware = async (req, res, next) => {
+  try {
+    const data = req.body;
+    if (data)
+    {
+      if (!data.region)
+      {
+        return res.status(400).json({
+          status: "failure",
+          message: "region is required"
+        });
+      }
+      if (!data.ville)
+      {
+        return res.status(400).send({
+          status: "failure",
+          message: "ville is required"
+        });
+      }
+      if (!data.designation)
+      {
+        return res.status(400).send({
+          status: "failrue",
+          message: "designation is required"
+        });
+      }
+      if (!data.phone)
+      {
+        return res.status(400).send({
+          status: "failure",
+          message: "phone is required"
+        });
+      }
+      if (!data.username)
+      {
+        return res.status(400).send({
+          status: "failure",
+          message: "username is required"
+        });
+      } else {
+        const user = await usersModel.findOne({ username: data.username });
+        if (user)
+        {
+          return res.status(400).send({
+            status: "failure",
+            message: "username already exists"
+          });
+        }
+      }
+      if (!data.password)
+      {
+        return res.status(400).send({
+          status: "failure",
+          message: "password is required"
+        })
+      }
+    } else {
+      return res.status(400).send({
+        status: "failure",
+        message: "invalid data"
+      });
+    }
+    next();
+  } catch (e) {
+    res.status(500).send({
+      status: "failure",
+      message: e.message
+    })
+  }
+}
+
 module.exports = {
 	signUpMiddleware,
 	patientMiddleware,
+  companyMiddleware
 }
