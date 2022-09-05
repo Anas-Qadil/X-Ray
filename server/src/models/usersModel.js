@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const companyModel = require("./companyModel");
 const patientModel = require("./patientModel");
 const hospitalModel = require("./hospitalModel");
+const personModel = require("./personModel")
 
 //@ remember to desing the schema well
 const usersSchema = new Schema({
@@ -35,6 +36,11 @@ const usersSchema = new Schema({
 		ref: "companyModel",
 		default: null,
 	},
+	person: {
+		type: Schema.Types.ObjectId,
+		ref: "personModel",
+		default: null,
+	}
 }, { timestamps: true });
 
 const usersModel = mongoose.model("usersModel", usersSchema);

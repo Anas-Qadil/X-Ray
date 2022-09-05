@@ -2,6 +2,7 @@ const express = require("express");
 const validator = require('validator');
 const patientModel = require("../../models/patientModel");
 const usersModel = require("../../models/usersModel");
+const personModel = require("../../models/personModel");
 
 const signUpMiddleware = async (req, res, next) => {
 	console.log("middleware runs");
@@ -348,8 +349,137 @@ const companyMiddleware = async (req, res, next) => {
   }
 }
 
+const signUpPersonMiddleware = async (req, res, next) => {
+  try {
+    const data = req.body;
+    if (data)
+    {
+      //check if user has access to create person
+      if (data.role !== "admin" && data.role !== "company") {
+        return res.status(400).send({
+          status: "failure",
+          message: "you don't have access to create person"
+        });
+      }
+      // check if person data exists
+      if (!data.firstName) {
+        return res.status(400).send({
+          status: "failure",
+          message: "firstName is required"
+        });
+      }
+      if (!data.lastName) {
+        return res.status(400).send({
+          status: "failure",
+          message: "lastName is required"
+        });
+      }
+      if (!data.cin) {
+        return res.status(400).send({
+          status: "failure",
+          message: "cin is required"
+        });
+      } else {
+        const cin = await personModel.findOne({ cin: data.cin });
+        if (cin) {
+          return res.status(400).send({
+            status: "failure",
+            message: "cin already exists"
+          });
+        }
+      }
+      if (!data.gender) {
+        return res.status(400).send({
+          status: "failure",
+          message: "gender is required"
+        });
+      }
+      if (!data.birthDate) {
+        return res.status(400).send({
+          status: "failure",
+          message: "birthDate is required"
+        });
+      }
+      if (!data.age) {
+        return res.status(400).send({
+          status: "failure",
+          message: "age is required"
+        });
+      }
+      if (!data.address) {
+        return res.status(400).send({
+          status: "failure",
+          message: "address is required"
+        });
+      }
+      if (!data.phone) {
+        return res.status(400).send({
+          status: "failure",
+          message: "phone is required"
+        });
+      } else {
+        const phone = await personModel.findOne({ phone: data.phone });
+        if (phone) {
+          return res.status(400).send({
+            status: "failure",
+            message: "phone already exists"
+          });
+        }
+      }
+      if (!data.secteur) {
+        return res.status(400).send({
+          status: "failure",
+          message: "secteur is required"
+        });
+      }
+      if (!data.fonction) {
+        return res.status(400).send({
+          status: "failure",
+          message: "fonction is required"
+        });
+      }
+
+      // check if username already exists
+    if (data.username)
+    {
+      const user = usersModel.findOne({ username: data.username });
+      if (user) {
+        return res.status(400).send({
+          status: "failure",
+          message: "username already exists"
+        });
+      }
+    } else {
+      return res.status(400).send({
+        status: "failure",
+        message: "username is required"
+      });
+    }
+    if (!data.password) {
+      return res.status(400).send({
+        status: "failure",
+        message: "password is required"
+      });
+    }
+    } else {
+      return res.status(400).send({
+        status: "failure",
+        message: "invalid data"
+      });
+    }
+    next();
+  } catch(e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    })
+  }
+  next();
+}
+
 module.exports = {
 	signUpMiddleware,
 	patientMiddleware,
-  companyMiddleware
+  companyMiddleware,
+  signUpPersonMiddleware
 }

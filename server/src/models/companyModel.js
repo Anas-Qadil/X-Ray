@@ -12,7 +12,7 @@ const companySchema = new Schema({
     required: true,
     trim: true
   },
-  Designation: {
+  designation: {
     type: String,
     required: true,
     trim: true

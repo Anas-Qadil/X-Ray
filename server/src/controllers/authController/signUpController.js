@@ -2,6 +2,7 @@ const express = require("express");
 const patientModel = require("../../models/patientModel");
 const usersModel = require("../../models/usersModel");
 const cryptPassword = require("../../utils/cryptPassword");
+const companyModel = require("../../models/companyModel");
 
 const signUpController = async (req, res, next) => {
 	res.send("hello from signUpController");
@@ -95,6 +96,7 @@ const signUpCompany = async (req, res, next) => {
         message: "user not saved"
       });
     }
+    console.log({user, savedUser});
     delete savedUser.password
     res.send({
       status: "success",
@@ -112,12 +114,70 @@ const signUpCompany = async (req, res, next) => {
   }
 }
 
+const signUpPerson = async (req, res, next) => {
+  try {
+    const data = req.body;
+    
+    const { username, password } = data;
+    const person = new personModel(data);
+    if (!person) {
+      return res.status(500).send({
+        status: "failure",
+        message: "Person not created"
+      });
+    }
+    const savedPerson = await person.save();
+    if (!savedPerson)
+    {
+      return res.status(500).send({
+        status: "failure",
+        message: "person not saved"
+      });
+    }
+    const hashedPassword = await cryptPassword(password);
+    const user = new usersModel({
+      username: username,
+      password: hashedPassword,
+      role: "person",
+      person: savedPerson._id
+    });
+    if (!user) {
+      return res.status(500).send({
+        status: "failure",
+        message: "user not created"
+      });
+    }
+    const savedUser = await user.save();
+    if (!savedUser) {
+      return res.status(500).send({
+        status: "failure",
+        message: "user not saved"
+      });
+    }
+    delete savedUser.password;
+    res.status(200).send({
+      status: "success",
+      message: "Person saved successfully",
+      data: {
+        user: savedUser,
+        person: savedPerson
+      }
+    });
+  } catch (e) {
+    res.status(500).send({
+      status: "failure",
+      message: e.message
+    })
+  }
+}
+
 
 module.exports = {
 	signUpPatient,
 	signUpController,
 	signUpHospital,
-  signUpCompany
+  signUpCompany,
+  signUpPerson
 };
 
 // const user = {
