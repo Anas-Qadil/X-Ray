@@ -7,13 +7,19 @@ const { getAllPatients, getPatientById } = require("../controllers/patientContro
 const loginController = require("../controllers/authController/loginController");
 const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware");
 const usersModel = require("../models/usersModel");
-const { getCurrentCompany } = require("../controllers/companyController");
+const { getCurrentCompany, getServices, getAllPatientDoses } = require("../controllers/companyController");
 
 // person middlewares
 const { deletePersonMiddleware } = require("../middlewares/personMiddleware");
 
 // person controllers
 const { deletePerson } = require("../controllers/personController");
+
+// company middlewares
+const { gettingServicesMiddleware, checkCompanyMiddleware } = require("../middlewares/companyMiddleware");
+
+// Auth Middleware
+const authenticateMiddleware = require("../middlewares/authMiddleware/authenticateMiddleware");
 
 // @route POST api/login
 router.post("/login", loginMiddleware, loginController);
@@ -36,8 +42,13 @@ router.get("/get-hospital/:id", getHospitalById);
 router.get("/get-all-patients", getAllPatients);
 router.get("/get-patient/:id", getPatientById);
 
+/* COMPANY ROUTES */
+
 // @route GET api/companies
-router.get("/get-current-company", getCurrentCompany);
+router.get("/get-current-company", authenticateMiddleware, checkCompanyMiddleware, getCurrentCompany);
+router.get("/company/get-services", authenticateMiddleware, checkCompanyMiddleware, gettingServicesMiddleware, getServices);
+router.get("/company/get-doses", authenticateMiddleware, checkCompanyMiddleware, getAllPatientDoses);
+
 
 // @route GET api/users
 router.get("/all-users", async (req, res) => {
