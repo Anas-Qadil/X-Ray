@@ -88,7 +88,7 @@ const signUpCompany = async (req, res, next) => {
         message: "user not created"
       })
     }
-    const savedUser = user.save();
+    const savedUser = await user.save();
     if (!savedUser)
     {
       return res.status(500).send({
@@ -96,8 +96,6 @@ const signUpCompany = async (req, res, next) => {
         message: "user not saved"
       });
     }
-    console.log({user, savedUser});
-    delete savedUser.password
     res.send({
       status: "success",
       message: "Company saved successfully",
@@ -154,12 +152,12 @@ const signUpPerson = async (req, res, next) => {
         message: "user not saved"
       });
     }
-    delete savedUser.password;
+    delete user.password;
     res.status(200).send({
       status: "success",
       message: "Person saved successfully",
       data: {
-        user: savedUser,
+        user: user,
         person: savedPerson
       }
     });

@@ -4,8 +4,6 @@ const generateToken = require("../../utils/genToken");
 
 const loginController = async (req, res, next) => {
 	try {
-    delete req.user.password;
-    console.log(req.user);
     const token = generateToken({ payload: req.user });
     if (token)
       return res.send({
