@@ -58,6 +58,12 @@ const personSchema = new Schema({
     required: true,
     trim: true,
   },
+  company: {
+    type: Schema.Types.ObjectId,
+    ref: "companyModel",
+    default: null,
+	  required: true,
+  }
 }, { timestamps: true });
 
 const personModel = mongoos.model("personModel", personSchema);

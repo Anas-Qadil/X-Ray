@@ -1,0 +1,139 @@
+# How to use this api
+
+# Company/societe routes
+	#Route: [POST] /api/sign-up/company
+      #requirement
+        Nothing for now
+      #Expected Data:
+        {
+          region,          // required
+          ville,           // required
+          designation,     // required
+          phone,           // required
+          email,
+          company          // required | this is company id who creted the person           
+        }
+      #Received Data
+      {
+        data: {
+          user,            // userinfo
+          company          // company/societe info
+        }
+      }
+
+  #Route: [GET] /api/get-current-company
+        #requirement
+          - user should be logged in 
+          - user role should be company
+        #Expected Data:
+          nothing
+        #Received Data
+          {
+            data,          // company data
+          }
+
+  #Route: [GET] /api/company/get-services
+        #requirement
+          - user should be logged in 
+          - user role should be company
+        #Expected Data:
+          nothing
+        #Received Data
+          {
+            data,          // all services
+          }
+
+  #Route: [GET] /api/company/get-doses
+        #requirement
+          - user should be logged in 
+          - user role should be company
+        #Expected Data:
+          nothing
+        #Received Data
+          {
+            data,          // all doses which are services
+          }
+    
+  #Route: [GET] /company/:id/persons
+        #requirement
+          - user should be logged in 
+          - user role should be company
+        #Expected Data:
+          company Id
+        #Received Data
+          {
+            data,          // all persons working for company Id
+          }
+
+  #Route: [GET] /company/:id/persons/:id
+        #requirement
+          - user should be logged in 
+          - user role should be company
+        #Expected Data:
+          company Id
+          person Id
+        #Received Data
+          {
+            data,          // person data who work work for company Id
+          }
+
+  #Route: [DELETE] /person/:username
+        #requirement
+          - user should be logged in 
+          - user role should be company
+        #Expected Data:
+          person username
+        #Received Data
+          nothing
+  
+  #Route: [POST] /filter/patient
+        #requirement
+          - user should be logged in 
+          - user role should be company or hospital
+        #Expected Data:
+          {
+            filter          // filter is an object contains which filed u want to filter with #see model patient to see patient filed and the name of the filter data should match name of field in model
+          }
+        #Received Data
+          {
+            data            // filtred data
+          }
+
+  #Route: [POST] /filter/service
+        #requirement
+          - user should be logged in 
+          - user role should be company or hospital
+        #Expected Data:
+          {
+            filter          // filter is an object contains which field u want to filter with #see model service to see service fields and the name of the filter data should match name of field in model
+          }
+        #Received Data
+          {
+            data            // filtred data
+          }
+
+  #Route: [POST] /filter/person
+        #requirement
+          - user should be logged in 
+          - user role should be company or hospital
+        #Expected Data:
+          {
+            filter          // filter is an object contains which field u want to filter with #see model person to see person fields and the name of the filter data should match name of field in model
+          }
+        #Received Data
+          {
+            data            // filtred data
+          }
+
+  #Route: [POST] /filter/hospital
+        #requirement
+          - user should be logged in 
+          - user role should be company or hospital
+        #Expected Data:
+          {
+            filter          // filter is an object contains which field u want to filter with #see model hospital to see hospital fields and the name of the filter data should match name of field in model
+          }
+        #Received Data
+          {
+            data            // filtred data
+          }

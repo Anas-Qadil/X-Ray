@@ -7,7 +7,7 @@ const { getAllPatients, getPatientById, getPatientServices, getPatientDoses, get
 const loginController = require("../controllers/authController/loginController");
 const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware");
 const usersModel = require("../models/usersModel");
-const { getCurrentCompany, getServices, getAllPatientDoses } = require("../controllers/companyController");
+const { getCurrentCompany, getServices, getAllPatientDoses, getPersons, getPerson } = require("../controllers/companyController");
 const { filterPatient, filterService, filterPerson, filterHospital } = require("../controllers/filter/index");
 
 // person middlewares
@@ -39,9 +39,6 @@ router.post("/sign-up/hospital", signUpMiddleware, signUpHospital);
 router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
 router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpPerson);
 
-// @route DELETE api/person/:username
-router.delete("/person/:username", deletePersonMiddleware, deletePerson);
-
 // @route api/hospitals
 router.get("/get-all-hospitals", authenticateMiddleware, hospitalMiddleware, getAllHospitals);
 router.get("/get-hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospitalById);
@@ -58,8 +55,13 @@ router.get("/patient/:id/hospital", getPatientHospital);
 
 /* COMPANY ROUTES */
 router.get("/get-current-company", authenticateMiddleware, checkCompanyMiddleware, getCurrentCompany);
-router.get("/company/get-services", authenticateMiddleware, checkCompanyMiddleware, gettingServicesMiddleware, getServices);
+router.get("/company/get-services", authenticateMiddleware, checkCompanyMiddleware, getServices);
 router.get("/company/get-doses", authenticateMiddleware, checkCompanyMiddleware, getAllPatientDoses);
+router.get("/company/:id/persons", authenticateMiddleware, checkCompanyMiddleware, getPersons);
+router.get("/company/:id/person/:id", authenticateMiddleware, checkCompanyMiddleware, getPerson);
+
+/* PERSON ROUTES */
+router.delete("/person/:username", deletePersonMiddleware, deletePerson);
 
 /* FILTER ROUTES */
 router.post("/filter/patient", authenticateMiddleware, filterPatientMiddleware, filterPatient);

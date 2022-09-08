@@ -97,7 +97,7 @@ const getServices = async (req, res, next) => {
 
 const getAllPatientDoses = async (req, res, next) => {
   try {
-    const services = await serviceModel.find();
+    const services = await serviceModel.find({});
     if (!services) {
       return res.status(400).send({
         status: "failure",
@@ -117,8 +117,58 @@ const getAllPatientDoses = async (req, res, next) => {
   }
 }
 
+const getPersons = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await personModel.find({company: id});
+    if (!data) {
+      return res.status(404).send({
+        status: "failure",
+        message: "no persons has found"
+      });
+    }
+
+    return res.status(200).send({
+      status: "success",
+      message: "persons has been found",
+      data: data
+    })
+  } catch (e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    })
+  }
+}
+
+const getPerson = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await personModel.findById(id);
+    if (!data) {
+      return res.status(404).send({
+        status: "failure",
+        message: "no person has found"
+      });
+    }
+
+    return res.status(200).send({
+      status: "success",
+      message: "person has been found",
+      data: data
+    })
+  } catch (e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    })
+  }
+}
+
 module.exports = {
   getCurrentCompany,
   getServices,
-  getAllPatientDoses
+  getAllPatientDoses,
+  getPersons,
+  getPerson
 }
