@@ -4,7 +4,7 @@ const patientModel = require("../../models/patientModel");
 const filterPatientMiddleware = async (req, res, next) => {
 	try {
     const user = req.user;
-    if (user.role !== "company" && user.role !== "admin") {
+    if (user.role !== "company" && user.role !== "hospital" && user.role !== "admin") {
       return res.status(401).send({
         status: "failure",
         message: "Unauthorized"
@@ -23,7 +23,7 @@ const filterPatientMiddleware = async (req, res, next) => {
 const filterServiceMiddleware = async (req, res, next) => {
   try {
     const user = req.user;
-    if (user.role !== "company" && user.role !== "admin") {
+    if (user.role !== "company" && user.role !== "hospital" && user.role !== "admin") {
       return res.status(401).send({
         status: "failure",
         message: "Unauthorized"

@@ -3,7 +3,7 @@ const router = express.Router();
 const { signUpController, signUpPatient, signUpHospital, signUpCompany, signUpPerson } = require("../controllers/authController/signUpController");
 const { signUpMiddleware, patientMiddleware, signUpPersonMiddleware, companyMiddleware } = require("../middlewares/authMiddleware/signUpMiddleware");
 const { getAllHospitals, getHospitalById, getHospitalPatients, getHospitalServices } = require("../controllers/hospitalController");
-const { getAllPatients, getPatientById } = require("../controllers/patientController");
+const { getAllPatients, getPatientById, getPatientServices, getPatientDoses, getPatientHospital } = require("../controllers/patientController");
 const loginController = require("../controllers/authController/loginController");
 const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware");
 const usersModel = require("../models/usersModel");
@@ -47,6 +47,9 @@ router.get("/hospital/:id/services", getHospitalServices);
 // @route GET api/patients
 router.get("/get-all-patients", getAllPatients);
 router.get("/get-patient/:id", getPatientById);
+router.get("/patient/:id/services", getPatientServices);
+router.get("/patient/:id/doses", getPatientDoses);
+router.get("/patient/:id/hospital", getPatientHospital);
 
 /* COMPANY ROUTES */
 router.get("/get-current-company", authenticateMiddleware, checkCompanyMiddleware, getCurrentCompany);
