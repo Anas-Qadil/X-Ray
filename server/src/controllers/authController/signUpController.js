@@ -9,11 +9,9 @@ const signUpController = async (req, res, next) => {
 }
 
 const signUpPatient = async (req, res, next) => {
-	
 	try {
 		const data = req.body;
     const { username, password } = data;
-    
     const hashedPassword = await cryptPassword(password);
     const patient = new patientModel(data);
     const savedPatient = await patient.save();

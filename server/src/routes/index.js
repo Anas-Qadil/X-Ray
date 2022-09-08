@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { signUpController, signUpPatient, signUpHospital, signUpCompany, signUpPerson } = require("../controllers/authController/signUpController");
 const { signUpMiddleware, patientMiddleware, signUpPersonMiddleware, companyMiddleware } = require("../middlewares/authMiddleware/signUpMiddleware");
-const { getAllHospitals, getHospitalById } = require("../controllers/hospitalController");
+const { getAllHospitals, getHospitalById, getHospitalPatients, getHospitalServices } = require("../controllers/hospitalController");
 const { getAllPatients, getPatientById } = require("../controllers/patientController");
 const loginController = require("../controllers/authController/loginController");
 const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware");
@@ -25,7 +25,8 @@ const authenticateMiddleware = require("../middlewares/authMiddleware/authentica
 const { filterPatientMiddleware, filterServiceMiddleware } = require("../middlewares/filterMiddleware");
 
 // @route POST api/login
-router.post("/login", loginMiddleware, loginController);
+router.post("/login", loginMiddleware, loginController); // turn this on
+// router.post("/login", loginController); // just for test
 
 // @route POST api/signup
 router.post("/sign-up", signUpMiddleware, signUpController);
@@ -37,23 +38,22 @@ router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpP
 // @route DELETE api/person/:username
 router.delete("/person/:username", deletePersonMiddleware, deletePerson);
 
-// @route GET api/hospitals
+// @route api/hospitals
 router.get("/get-all-hospitals", getAllHospitals);
 router.get("/get-hospital/:id", getHospitalById);
+router.get("/hospital/:id/patients", getHospitalPatients);
+router.get("/hospital/:id/services", getHospitalServices);
 
 // @route GET api/patients
 router.get("/get-all-patients", getAllPatients);
 router.get("/get-patient/:id", getPatientById);
 
 /* COMPANY ROUTES */
-
-// @route GET api/companies
 router.get("/get-current-company", authenticateMiddleware, checkCompanyMiddleware, getCurrentCompany);
 router.get("/company/get-services", authenticateMiddleware, checkCompanyMiddleware, gettingServicesMiddleware, getServices);
 router.get("/company/get-doses", authenticateMiddleware, checkCompanyMiddleware, getAllPatientDoses);
 
 /* FILTER ROUTES */
-
 router.post("/filter/patient", authenticateMiddleware, filterPatientMiddleware, filterPatient);
 router.post("/filter/service", authenticateMiddleware, filterServiceMiddleware, filterService);
 router.post("/filter/person", authenticateMiddleware, filterPerson);

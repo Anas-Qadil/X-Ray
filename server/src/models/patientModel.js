@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const hospitalModel = require("./hospitalModel");
 
 //@ remember to desing the schema well
 const patientSchema = new Schema({
@@ -34,6 +35,12 @@ const patientSchema = new Schema({
 	},
 	poids: {
 		type: Number,
+	},
+	hospital: {
+		type: Schema.Types.ObjectId,
+		ref: "hospitalModel",
+		default: null,
+		require: true,
 	},
 }, { timestamps: true });
 
