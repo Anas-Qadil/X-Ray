@@ -9,10 +9,11 @@ const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware")
 const usersModel = require("../models/usersModel");
 const { getCurrentCompany, getServices, getAllPatientDoses } = require("../controllers/companyController");
 const { filterPatient, filterService, filterPerson, filterHospital } = require("../controllers/filter/index");
+
 // person middlewares
 const { deletePersonMiddleware } = require("../middlewares/personMiddleware");
 
-//hospital Middlewares
+// hospital Middlewares
 const { hospitalMiddleware } = require("../middlewares/hospitalMiddleware");
 
 // person controllers
@@ -33,7 +34,7 @@ router.post("/login", loginMiddleware, loginController); // turn this on
 
 // @route POST api/signup
 router.post("/sign-up", signUpMiddleware, signUpController);
-router.post("/sign-up/patient", signUpMiddleware, signUpPatient);
+router.post("/sign-up/patient", signUpMiddleware, patientMiddleware, signUpPatient);
 router.post("/sign-up/hospital", signUpMiddleware, signUpHospital);
 router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
 router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpPerson);

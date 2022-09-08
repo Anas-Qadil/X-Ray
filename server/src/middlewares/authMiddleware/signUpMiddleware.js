@@ -348,6 +348,14 @@ const companyMiddleware = async (req, res, next) => {
         message: "invalid data"
       });
     }
+    
+    if (req.user.role !== "admin" && req.user.role !== "hospital") {
+      return res.status(401).send({
+        status: "failure",
+        message: "Unauthorized"
+      });
+    }
+
     next();
   } catch (e) {
     res.status(500).send({

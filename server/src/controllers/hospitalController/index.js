@@ -94,6 +94,7 @@ const hospitalDoes = async (req, res) => {
     const data = await serviceModel.findById({hospital: id})
     .populate("hospital")
     .populate("patient");
+
     let doses = 0;
     data.map((dose) => {
       doses += parseInt(dose.dose);
