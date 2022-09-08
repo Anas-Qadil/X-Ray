@@ -17,15 +17,20 @@ const serviceSchema = new Schema({
 	protocol: {
 		type: String,
 	},
+  dose: {
+    type: "string",
+  },
   patient: {
     type: Schema.Types.ObjectId,
     ref: "patientModel",
     default: null,
+	  required: true,
   },
   hospital: {
     type: Schema.Types.ObjectId,
     ref: "hospitalModel",
     default: null,
+	  required: true,
   },
 }, { timestamps: true });
 

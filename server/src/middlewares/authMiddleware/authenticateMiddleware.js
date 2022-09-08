@@ -28,7 +28,6 @@ const athenticateMiddleware = async (req, res, next) => {
         message: "User not found"
       })
     }
-    console.log(user)
     req.user = user;
     next();
   } catch (e) {

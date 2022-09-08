@@ -8,7 +8,7 @@ const loginController = require("../controllers/authController/loginController")
 const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware");
 const usersModel = require("../models/usersModel");
 const { getCurrentCompany, getServices, getAllPatientDoses } = require("../controllers/companyController");
-
+const { filterPatient, filterService, filterPerson, filterHospital } = require("../controllers/filter/index");
 // person middlewares
 const { deletePersonMiddleware } = require("../middlewares/personMiddleware");
 
@@ -20,6 +20,9 @@ const { gettingServicesMiddleware, checkCompanyMiddleware } = require("../middle
 
 // Auth Middleware
 const authenticateMiddleware = require("../middlewares/authMiddleware/authenticateMiddleware");
+
+// filter middlewares
+const { filterPatientMiddleware, filterServiceMiddleware } = require("../middlewares/filterMiddleware");
 
 // @route POST api/login
 router.post("/login", loginMiddleware, loginController);
@@ -49,6 +52,12 @@ router.get("/get-current-company", authenticateMiddleware, checkCompanyMiddlewar
 router.get("/company/get-services", authenticateMiddleware, checkCompanyMiddleware, gettingServicesMiddleware, getServices);
 router.get("/company/get-doses", authenticateMiddleware, checkCompanyMiddleware, getAllPatientDoses);
 
+/* FILTER ROUTES */
+
+router.post("/filter/patient", authenticateMiddleware, filterPatientMiddleware, filterPatient);
+router.post("/filter/service", authenticateMiddleware, filterServiceMiddleware, filterService);
+router.post("/filter/person", authenticateMiddleware, filterPerson);
+router.post("/filter/hospital", authenticateMiddleware, filterHospital);
 
 // @route GET api/users
 router.get("/all-users", async (req, res) => {

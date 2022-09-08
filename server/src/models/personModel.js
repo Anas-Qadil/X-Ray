@@ -60,6 +60,6 @@ const personSchema = new Schema({
   },
 }, { timestamps: true });
 
-const model = mongoos.model("personModel", personSchema);
+const personModel = mongoos.model("personModel", personSchema);
 
-module.exports = model;
+module.exports = personModel;
