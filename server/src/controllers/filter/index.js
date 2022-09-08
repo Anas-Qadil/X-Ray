@@ -33,6 +33,7 @@ const filterService = async (req, res, next) => {
     const data = await serviceModel.find(filter)
     .populate("hospital")
     .populate("patient");
+
     if (!data) {
       return res.status(404).send({
         status: "failure",

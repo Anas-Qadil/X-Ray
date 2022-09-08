@@ -23,14 +23,20 @@ const filterPatientMiddleware = async (req, res, next) => {
 const filterServiceMiddleware = async (req, res, next) => {
   try {
     const user = req.user;
-    if (user.role !== "company" && user.role !== "hospital" && user.role !== "admin") {
+    if (user.role !== "company" && user.role !== "hospital" && user.role !== "admin" && user.role !== "patient") {
       return res.status(401).send({
         status: "failure",
         message: "Unauthorized"
       });
-    } else {
-      next();
+    } else if (user.role === "patient") {
+      const filter = req.body;
+      if (!filter._id)
+        return res.status(400).send({
+          status: "failure",
+          message: "_id of patient is required"
+        });
     }
+    next();
   } catch(e) {
     return res.status(500).send({
       status: "failure",

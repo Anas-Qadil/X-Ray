@@ -88,9 +88,39 @@ const getHospitalServices = async (req, res) => {
   }
 }
 
+const hospitalDoes = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await serviceModel.findById({hospital: id})
+    .populate("hospital")
+    .populate("patient");
+    let doses = 0;
+    data.map((dose) => {
+      doses += parseInt(dose.dose);
+    })
+
+    if (!data) {
+      return res.status(400).json({
+        message: "No hospital found",
+      });
+    }
+    res.status(200).send({
+      message: "Hospital found",
+      data: data,
+      doses: doses
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: "Server error",
+      error: error.message
+    });
+  }
+}
+
 module.exports = {
 	getAllHospitals,
 	getHospitalById,
   getHospitalPatients,
-  getHospitalServices
+  getHospitalServices,
+  hospitalDoes
 }

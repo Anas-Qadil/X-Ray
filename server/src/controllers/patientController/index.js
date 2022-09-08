@@ -2,7 +2,9 @@ const patientModel = require("../../models/patientModel");
 
 const getAllPatients = async (req, res) => {
 	try {
-		const data = await patientModel.find({});
+		const data = await patientModel.find({})
+    .populate("hospital");
+
 		if (!data) {
 			return res.status(400).json({
         status: "failure",
