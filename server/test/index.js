@@ -255,4 +255,6 @@ router.post("/all-companies", async (req, res, next) => {
   }
 });
 
+// company route tests
+
 module.exports = router;

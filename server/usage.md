@@ -1,6 +1,6 @@
 # How to use this api
 
-# Company/societe routes
+# -------------------------- Company/societe routes --------------------------
 	#Route: [POST] /api/sign-up/company
       #requirement
         Nothing for now
@@ -11,7 +11,7 @@
           designation,     // required
           phone,           // required
           email,
-          company          // required | this is company id who creted the person           
+          company,         // required | this is company id who creted the person           
         }
       #Received Data
       {
@@ -21,7 +21,7 @@
         }
       }
 
-  #Route: [GET] /api/get-current-company
+  # Route: [GET] /api/get-current-company
         #requirement
           - user should be logged in 
           - user role should be company
@@ -32,7 +32,7 @@
             data,          // company data
           }
 
-  #Route: [GET] /api/company/get-services
+  # Route: [GET] /api/company/get-services
         #requirement
           - user should be logged in 
           - user role should be company
@@ -43,7 +43,7 @@
             data,          // all services
           }
 
-  #Route: [GET] /api/company/get-doses
+  # Route: [GET] /api/company/get-doses
         #requirement
           - user should be logged in 
           - user role should be company
@@ -54,8 +54,8 @@
             data,          // all doses which are services
           }
     
-  #Route: [GET] /company/:id/persons
-        #requirement
+  # Route: [GET] /api/company/:id/persons
+        # Requirement
           - user should be logged in 
           - user role should be company
         #Expected Data:
@@ -65,8 +65,8 @@
             data,          // all persons working for company Id
           }
 
-  #Route: [GET] /company/:id/persons/:id
-        #requirement
+  # Route: [GET] /api/company/:id/persons/:id
+        # Requirement
           - user should be logged in 
           - user role should be company
         #Expected Data:
@@ -77,7 +77,7 @@
             data,          // person data who work work for company Id
           }
 
-  #Route: [DELETE] /person/:username
+  # Route: [DELETE] /api/person/:username
         #requirement
           - user should be logged in 
           - user role should be company
@@ -86,7 +86,7 @@
         #Received Data
           nothing
   
-  #Route: [POST] /filter/patient
+  # Route: [POST] /api/filter/patient
         #requirement
           - user should be logged in 
           - user role should be company or hospital
@@ -99,7 +99,7 @@
             data            // filtred data
           }
 
-  #Route: [POST] /filter/service
+  # Route: [POST] /api/filter/service
         #requirement
           - user should be logged in 
           - user role should be company or hospital
@@ -112,7 +112,7 @@
             data            // filtred data
           }
 
-  #Route: [POST] /filter/person
+  # Route: [POST] /api/filter/person
         #requirement
           - user should be logged in 
           - user role should be company or hospital
@@ -125,7 +125,7 @@
             data            // filtred data
           }
 
-  #Route: [POST] /filter/hospital
+  # Route: [POST] /api/filter/hospital
         #requirement
           - user should be logged in 
           - user role should be company or hospital
@@ -136,4 +136,68 @@
         #Received Data
           {
             data            // filtred data
+          }
+
+# -------------------------- hospital routes --------------------------
+  # Route: [GET] /api/get-all-hospitals
+        #requirement
+          - user should be logged in 
+          - user role should be hospital
+        #Expected Data:
+          nothing
+        #Received Data
+          {
+            data            // all hospital data
+          }
+
+  # Route: [GET] /api/hospital/:id/services
+        #requirement
+          - user should be logged in 
+          - user role should be hospital
+        #Expected Data:
+          {
+            id      // hospital id as params
+          }
+        #Received Data
+          {
+            data            // all services this hospital has done
+          }
+
+  # Route: [GET] /api/hospital/:id/doses
+        #requirement
+          - user should be logged in 
+          - user role should be hospital
+        #Expected Data:
+          {
+            id     // hospital id as params
+          }
+        #Received Data
+          {
+            data            // all doses this hospital has done
+          }
+
+  # Route: [GET] /api/hospital/:id/patients
+        #requirement
+          - user should be logged in 
+          - user role should be hospital
+        #Expected Data:
+          {
+            id     // hospital id as params
+          }
+        #Received Data
+          {
+            data            // all patients this hospital has done
+          }
+
+  # Route: [GET] /api/get-hospital/:id
+        #requirement
+          - user should be logged in 
+          - user role should be hospital
+        #Expected Data:
+          {
+            id            // hospital id as params
+          }
+        #Received Data
+          {
+            data            // data of hospital id
           }
