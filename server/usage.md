@@ -201,3 +201,18 @@
           {
             data            // data of hospital id
           }
+
+# -------------------------- authentication routes --------------------------
+  # Route: [GET] /api/login
+        #requirement
+          nothing
+        #Expected Data:
+          {
+            username,
+            password
+          }
+        #Received Data
+          {
+            token            
+            user
+          }

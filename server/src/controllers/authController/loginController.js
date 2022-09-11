@@ -22,7 +22,6 @@ const loginController = async (req, res, next) => {
 			message: e.message
 		});
 	}
-	res.send("hello from loginController");
 }
 
 module.exports = loginController;
