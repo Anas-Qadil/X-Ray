@@ -1,4 +1,5 @@
 const patientModel = require("../../models/patientModel");
+const serviceModel = require("../../models/serviceModel");
 
 const getAllPatients = async (req, res) => {
 	try {

@@ -3,6 +3,7 @@ const patientModel = require("../../models/patientModel");
 const usersModel = require("../../models/usersModel");
 const cryptPassword = require("../../utils/cryptPassword");
 const companyModel = require("../../models/companyModel");
+const hospitalModel = require("../../models/hospitalModel");
 
 const signUpController = async (req, res, next) => {
 	res.send("hello from signUpController");
@@ -49,8 +50,57 @@ const signUpPatient = async (req, res, next) => {
 }
 
 const signUpHospital = async (req, res, next) => {
-  const data = req.body;
-	res.send("hello from singUpHospital");
+  try {
+    const data = req.body;
+    const hospital = new hospitalModel(data);
+    if (!hospital) {
+      return res.status(400).json({
+        status: "Failure ",
+        message: "Hospital not saved. Please try again later!"
+      });
+    }
+    const savedHospital = await hospital.save();
+    if (!savedHospital) {
+      return res.status(400).send({
+        status: "failure ",
+        messgae: "Hospital not saved"
+      });
+    }
+    const { username, password } = data;
+    const hashedPassword = await cryptPassword(password);
+    const user = new usersModel({
+      username,
+      password: hashedPassword,
+      role: "hospital",
+      hospital: savedHospital._id
+    });
+    if (!user) {
+      return res.status(400).send({
+        status: "failure ",
+        messgae: "User not saved"
+      });
+    }
+    const savedUser = await user.save();
+    if (!savedUser) {
+      return res.status(400).send({
+        status: "failure ",
+        messgae: "User not saved"
+      });
+    }
+    res.send({
+      status: "success",
+      message: "Hospital saved successfully",
+      data: {
+        savedUser,
+        savedHospital
+      }
+    });
+  } catch (e) {
+    res.status(500).send({
+      status: "failure",
+      message: e.message
+    })
+  }
 }
 
 const signUpCompany = async (req, res, next) => {

@@ -69,7 +69,7 @@ const getHospitalPatients = async (req, res) => {
 const getHospitalServices = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await serviceModel.find({hospital: id});
+    const data = await serviceModel.find({ hospital: id });
     if (!data) {
       return res.status(400).json({
         status: "failure",

@@ -14,7 +14,7 @@ const { filterPatient, filterService, filterPerson, filterHospital } = require("
 const { deletePersonMiddleware } = require("../middlewares/personMiddleware");
 
 // hospital Middlewares
-const { hospitalMiddleware } = require("../middlewares/hospitalMiddleware");
+const { hospitalMiddleware, signUpHospitalMiddleware } = require("../middlewares/hospitalMiddleware");
 
 // person controllers
 const { deletePerson } = require("../controllers/personController");
@@ -35,7 +35,7 @@ router.post("/login", loginMiddleware, loginController); // turn this on
 // @route POST api/signup
 router.post("/sign-up", signUpMiddleware, signUpController);
 router.post("/sign-up/patient", signUpMiddleware, patientMiddleware, signUpPatient);
-router.post("/sign-up/hospital", signUpMiddleware, signUpHospital);
+router.post("/sign-up/hospital", signUpMiddleware, signUpHospitalMiddleware, signUpHospital);
 router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
 router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpPerson);
 
@@ -44,7 +44,7 @@ router.get("/get-all-hospitals", authenticateMiddleware, hospitalMiddleware, get
 router.get("/get-hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospitalById);
 router.get("/hospital/:id/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);
 router.get("/hospital/:id/services", authenticateMiddleware, hospitalMiddleware, getHospitalServices);
-router.get("/hospital/:id/doses", authenticateMiddleware, hospitalMiddleware, hospitalDoes);
+// router.get("/hospital/:id/doses", authenticateMiddleware, hospitalMiddleware, hospitalDoes);
 
 // @route GET api/patients
 router.get("/get-all-patients", getAllPatients);
