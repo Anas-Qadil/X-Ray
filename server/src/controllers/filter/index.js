@@ -3,21 +3,27 @@ const patientModel = require("../../models/patientModel");
 const serviceModel = require("../../models/serviceModel");
 const personModel = require("../../models/personModel");
 const hospitalModel = require("../../models/hospitalModel");
+const traitementModel = require("../../models/traitementModel");
 
 const filterPatient = async (req, res, next) => {
 	try {
     const filter = req.body;
-    const data = await patientModel.find(filter);
-    if (!data) {
-      return res.status(404).send({
-        status: "failure",
-        message: "No data found",
+    const id = req.params.id;
+    const patients = await patientModel.find(filter);
+    const traitements = await traitementModel.find({}).populate("patient").populate("service");
+    let result = [];
+
+    traitements.map((doc) => {
+      patients.map((patient) => {
+        if (String(doc.patient._id) == String(patient._id) && String(doc.service.hospital) == id) {
+          result.push(doc);
+        }
       });
-    }
+    });
     return res.status(200).send({
       status: "success",
       message: "data filtred successfully",
-      data
+      data: result
     });
   } catch (e) {
     return res.status(500).send({

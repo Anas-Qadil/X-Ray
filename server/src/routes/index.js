@@ -87,10 +87,10 @@ router.get("/company/:id/person/:id", authenticateMiddleware, checkCompanyMiddle
 router.delete("/person/:username", deletePersonMiddleware, deletePerson);
 
 /* FILTER ROUTES */
-router.post("/filter/patient", authenticateMiddleware, filterPatientMiddleware, filterPatient);
-router.post("/filter/service", authenticateMiddleware, filterServiceMiddleware, filterService);
-router.post("/filter/person", authenticateMiddleware, filterPerson);
-router.post("/filter/hospital", authenticateMiddleware, filterHospital);
+router.post("/filter/hospital/:id/patient", filterPatient);
+// router.post("/filter/service", filterServiceMiddleware, filterService);
+// router.post("/filter/person", filterPerson);
+// router.post("/filter/hospital", filterHospital);
 
 // @route GET api/users
 router.get("/all-users", async (req, res) => {
