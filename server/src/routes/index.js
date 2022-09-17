@@ -33,6 +33,10 @@ const authenticateMiddleware = require("../middlewares/authMiddleware/authentica
 // filter middlewares
 const { filterPatientMiddleware, filterServiceMiddleware } = require("../middlewares/filterMiddleware");
 
+// STATISTIQUE HOSPITAL
+const { patient, appareil, service } = require("../controllers/hospitalController/statistique");
+
+
 
 // @route POST api/login
 router.post("/login", loginMiddleware, loginController); // turn this on
@@ -51,6 +55,12 @@ router.get("/hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospi
 router.get("/hospital/:id/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);
 router.get("/hospital/:id/services", authenticateMiddleware, hospitalMiddleware, getHospitalServices);
 router.get("/hospital/:id/traitements", authenticateMiddleware, hospitalMiddleware, getHospitalTraitements);
+// hospital Statistique
+router.get("/statistique/hospital/:id/patient", patient);
+router.get("/statistique/hospital/:id/appareil", appareil);
+router.get("/statistique/hospital/:id/service", service);
+
+
 
 // @route api/traitement
 router.get("/traitement/:id", authenticateMiddleware, getTraitementById);
