@@ -35,7 +35,6 @@ const hospitalSchema = new schema({
 	email: {
 		type: String,
     trim: true,
-		required: true,
 	},
 }, { timestamps: true });
 

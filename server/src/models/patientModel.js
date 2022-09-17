@@ -6,24 +6,34 @@ const hospitalModel = require("./hospitalModel");
 const patientSchema = new Schema({
 	firstName: {
 		type: String,
+    required: true,
+    trim: true,
 	},
 	lastName: {
 		type: String,
+    required: true,
+    trim: true,
 	},
 	age: {
 		type: Number,
+    required: true,
 	},
 	gender: {
 		type: String,
+    enum: ['male, female'],
+    required: true,
 	},
 	birthDate: {
 		type: Date,
+    required: true,
 	},
 	address: {
 		type: String,
+    trim: true
 	},
 	phone: {
 		type: String,
+    required: true,
 		unique: true,
 	},
 	email: {
@@ -32,16 +42,12 @@ const patientSchema = new Schema({
 	},
 	cin: {
 		type: String,
+    required: true,
+    unique: true,
 	},
 	poids: {
 		type: Number,
-	},
-	hospital: {
-		type: Schema.Types.ObjectId,
-		ref: "hospitalModel",
-		default: null,
-		require: true,
-	},
+	}
 }, { timestamps: true });
 
 const patientModel = mongoose.model("patientModel", patientSchema);

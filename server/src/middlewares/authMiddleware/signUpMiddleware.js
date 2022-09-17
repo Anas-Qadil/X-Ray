@@ -268,14 +268,6 @@ const patientMiddleware = async (req, res, next) => {
       }
     }
 
-    // @validate hospital
-    if (!data.hospital) {
-      return res.status(400).send({
-        status: "failure",
-        message: "hospital is required"
-      });
-    }
-
 	} else {
     return res.status(400).json({
       message: "patient data is required"
