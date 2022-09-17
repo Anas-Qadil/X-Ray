@@ -16,13 +16,13 @@ const loginMiddleware = async (req, res, next) => {
         });
       switch (user.role) {
         case "patient":
-          user.populate("patient");
+          await user.populate("patient");
           break;
         case "hospital":
-          user.populate("hospital");
+          await user.populate("hospital");
           break;
         case "company":
-          user.populate("company");
+          await user.populate("company");
           break;
         default:
           return res.status(400).send({

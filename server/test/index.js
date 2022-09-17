@@ -17,11 +17,32 @@ router.post("/add-services", async (req, res, next) => {
 	try {
     const services = [
       {
+        name: "Service 1",
+        equipment: "Equipment 1",
+        examen: "Examen 1",
+        protocol: "Protocole 1",
+        hospital: "6317a7501bb0144558b12e90"
+      },
+      {
+        name: "Service 2",
+        equipment: "Equipment 2",
+        examen: "Examen 2",
+        protocol: "Protocole 2",
+        hospital: "6317a7561bb0144558b12e93"
+      },
+      {
+        name: "Service 3",
+        equipment: "Equipment 3",
+        examen: "Examen 3",
+        protocol: "Protocole 3",
+        hospital: "6317a7571bb0144558b12e95"
+      },
+      {
         name: "Service 4",
         equipment: "Equipment 4",
         examen: "Examen 4",
-        protocole: "Protocole 4",
-        patient: "63060c304e3bc60011f49be1",
+        protocol: "Protocole 4",
+        hospital: "6317a7581bb0144558b12e97"
       }
     ]
     await serviceModel.insertMany(services);
@@ -256,5 +277,33 @@ router.post("/all-companies", async (req, res, next) => {
 });
 
 // company route tests
+
+
+const traitement = [{
+  patient: '630609a6061274d47405b6fd',
+  service: '6325cd62717238e0cf9de9c4',
+  hospital: '6317a7501bb0144558b12e90',
+  date: '2021-09-03',
+  dose: 3,
+},{
+  patient: '631397ac64d2d999605844ca',
+  service: '6325cd62717238e0cf9de9c6',
+  hospital: '6317a7561bb0144558b12e93',
+  date: '2021-07-03',
+  dose: 3,
+},{
+  patient: '63060c304e3bc60011f49be1',
+  service: '6325cd62717238e0cf9de9c7',
+  hospital: '6317b79ace25721f6d551704',
+  date: '2021-08-03',
+  dose: 3,
+},{
+  patient: '63060be14e3bc60011f49bd9',
+  service: '6325cd62717238e0cf9de9c5',
+  hospital: '6317a7571bb0144558b12e95',
+  date: '2021-05-03',
+  dose: 3,
+}
+]
 
 module.exports = router;

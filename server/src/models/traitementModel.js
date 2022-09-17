@@ -14,19 +14,17 @@ const traitementSchema = new Schema({
     required: true,
     default: null
   },
-  hospital: {
-    type: Schema.Types.ObjectId,
-    ref: "hospitalModel",
-    required: true,
-    default: null
-  },
   date: {
     type: Date,
     required: true,
     default: Date.now
   },
-
-});
+  dose: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+}, { timestamps: true });
 
 const traitementModel = mongoose.model("traitementModel", traitementSchema);
 

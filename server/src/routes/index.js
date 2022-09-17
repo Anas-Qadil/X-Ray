@@ -10,7 +10,7 @@ const usersModel = require("../models/usersModel");
 const { getCurrentCompany, getServices, getAllPatientDoses, getPersons, getPerson } = require("../controllers/companyController");
 const { filterPatient, filterService, filterPerson, filterHospital } = require("../controllers/filter/index");
 
-const { addTraitement } = require("../controllers/traitementController");
+const { addTraitement, getHospitalTraitements, getTraitementById } = require("../controllers/traitementController");
 
 // traitement middleware
 const traitementMiddleware = require("../middlewares/traitementMiddleware");
@@ -47,10 +47,14 @@ router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpP
 
 // @route api/hospitals
 router.get("/get-all-hospitals", authenticateMiddleware, hospitalMiddleware, getAllHospitals);
-router.get("/get-hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospitalById);
+router.get("/hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospitalById);
 router.get("/hospital/:id/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);
 router.get("/hospital/:id/services", authenticateMiddleware, hospitalMiddleware, getHospitalServices);
-// router.get("/hospital/:id/doses", authenticateMiddleware, hospitalMiddleware, hospitalDoes);
+router.get("/hospital/:id/traitements", authenticateMiddleware, hospitalMiddleware, getHospitalTraitements);
+
+// @route api/traitement
+router.get("/traitement/:id", authenticateMiddleware, getTraitementById);
+// router.put("/traitement/:id", authenticateMiddleware, updateTraitement);
 
 // @route GET api/patients
 router.get("/get-all-patients", getAllPatients);

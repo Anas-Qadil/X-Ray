@@ -7,30 +7,29 @@ const companyModel = require("./companyModel");
 const serviceSchema = new Schema({
 	name: {
 		type: String,
+    required: true,
+    trim: true
 	},
 	equipment: {
 		type: String,
+    required: true,
+    trim: true
 	},
 	examen: {
 		type: String,
+    required: true,
+    trim: true
 	},
 	protocol: {
 		type: String,
+    required: true,
+    trim: true
 	},
-  dose: {
-    type: "string",
-  },
-  patient: {
-    type: Schema.Types.ObjectId,
-    ref: "patientModel",
-    default: null,
-	  required: true,
-  },
   hospital: {
     type: Schema.Types.ObjectId,
     ref: "hospitalModel",
-    default: null,
-	  required: true,
+    required: true,
+    default: null
   },
 }, { timestamps: true });
 

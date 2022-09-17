@@ -3,7 +3,7 @@ const traitementModel = require("../../models/traitementModel");
 
 const traitementMiddleware = async (req, res, next) => {
 	try {
-    const data = req.data;
+    const data = req.body;
     
     if (data)
     {
@@ -11,12 +11,6 @@ const traitementMiddleware = async (req, res, next) => {
         return res.status(400).send({
           status: "failure",
           message: "Service is required"
-        });
-      }
-      if (!data.hospital) {
-        return res.status(400).send({
-          status: "failure",
-          message: "Hospital is required"
         });
       }
       if (!data.patient) {

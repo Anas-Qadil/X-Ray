@@ -2,6 +2,7 @@ const express = require("express");
 const hospitalModel = require("../../models/hospitalModel");
 const patientModel = require("../../models/patientModel");
 const serviceModel = require("../../models/serviceModel");
+const traitementModel = require("../../models/traitementModel");
 
 const getAllHospitals = async (req, res) => {
 	try {
@@ -26,7 +27,7 @@ const getAllHospitals = async (req, res) => {
 const getHospitalById = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const data = await hospitalModel.findById({id});
+		const data = await hospitalModel.findOne({_id: id});
 		if (!data) {
 			return res.status(400).json({
 				message: "No hospital found",
@@ -47,7 +48,13 @@ const getHospitalById = async (req, res) => {
 const getHospitalPatients = async (req, res) => {
 	try {
 		const { id } = req.params;
-    const data = await patientModel.find({hospital: id});
+    const data = await traitementModel.find({ }).populate("patient").populate("service");
+    let result =[]
+    data.map((doc) => {
+      if (doc.service.hospital == id) {
+        result.push(doc)
+      }
+    });
     if (!data) {
       return res.status(400).json({
         message: "No patient found",
@@ -56,7 +63,7 @@ const getHospitalPatients = async (req, res) => {
     res.status(200).send({
       status: "success",
       message: "Patients found",
-      data: data,
+      data: result,
     });
 	} catch (error) {
 		res.status(500).send({
