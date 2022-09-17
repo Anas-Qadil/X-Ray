@@ -248,6 +248,13 @@ const patientMiddleware = async (req, res, next) => {
     //@validate cin
     if (data.cin)
     {
+      const cin = await patientModel.findOne({ cin: data.cin });
+      if (cin)
+      {
+        return res.status(400).json({
+          message: "cin already exists"
+        });
+      }
       if (typeof data.cin !== "string")
       {
         return res.status(400).json({
@@ -268,12 +275,34 @@ const patientMiddleware = async (req, res, next) => {
       }
     }
 
+    if (!data.password)
+    {
+      return res.status(400).json({
+        message: "password is required"
+      });
+    }
+
+    if (!data.username)
+    {
+      return res.status(400).json({
+        message: "username is required"
+      });
+    } else {
+      const username = await usersModel.findOne({ username: data.username });
+      if (username)
+      {
+        return res.status(400).json({
+          message: "username already exists"
+        });
+      }
+    }
+
+    next();
 	} else {
     return res.status(400).json({
       message: "patient data is required"
     });
   }
-	next();
 }
 
 // @company validation

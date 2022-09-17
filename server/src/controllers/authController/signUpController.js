@@ -11,7 +11,7 @@ const signUpController = async (req, res, next) => {
 
 const signUpPatient = async (req, res, next) => {
 	try {
-		const data = req.body;
+    const data = req.body;
     const { username, password } = data;
     const hashedPassword = await cryptPassword(password);
     const patient = new patientModel(data);
@@ -39,7 +39,8 @@ const signUpPatient = async (req, res, next) => {
     return res.send({
       status: "success",
       message: "Patient saved successfully",
-      data: savedPatient
+      data: savedPatient,
+      user: savedUser
     });
 	} catch (e) {
     res.status(500).send({

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Schema = mongoos.Schema
+const Schema = mongoose.Schema;
 
 const traitementSchema = new Schema({
 	patient: {
@@ -30,4 +30,4 @@ const traitementSchema = new Schema({
 
 const traitementModel = mongoose.model("traitementModel", traitementSchema);
 
-model.exports = traitementModel;
+module.exports = traitementModel;

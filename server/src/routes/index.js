@@ -10,6 +10,11 @@ const usersModel = require("../models/usersModel");
 const { getCurrentCompany, getServices, getAllPatientDoses, getPersons, getPerson } = require("../controllers/companyController");
 const { filterPatient, filterService, filterPerson, filterHospital } = require("../controllers/filter/index");
 
+const { addTraitement } = require("../controllers/traitementController");
+
+// traitement middleware
+const traitementMiddleware = require("../middlewares/traitementMiddleware");
+
 // person middlewares
 const { deletePersonMiddleware } = require("../middlewares/personMiddleware");
 
@@ -27,6 +32,7 @@ const authenticateMiddleware = require("../middlewares/authMiddleware/authentica
 
 // filter middlewares
 const { filterPatientMiddleware, filterServiceMiddleware } = require("../middlewares/filterMiddleware");
+
 
 // @route POST api/login
 router.post("/login", loginMiddleware, loginController); // turn this on
@@ -52,6 +58,9 @@ router.get("/get-patient/:id", getPatientById);
 router.get("/patient/:id/services", getPatientServices);
 router.get("/patient/:id/doses", getPatientDoses);
 router.get("/patient/:id/hospital", getPatientHospital);
+
+// Patient Traitement Routes
+router.post("/patient/add-traitement", traitementMiddleware, addTraitement);
 
 /* COMPANY ROUTES */
 router.get("/get-current-company", authenticateMiddleware, checkCompanyMiddleware, getCurrentCompany);
