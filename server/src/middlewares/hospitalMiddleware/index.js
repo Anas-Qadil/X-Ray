@@ -2,6 +2,7 @@ const express = require('express');
 const usersModel = require('../../models/usersModel');
 const hospitalModel = require('../../models/hospitalModel');
 const ObjectId = require('mongoose').Types.ObjectId;
+const validator = require('validator');
 
 const hospitalMiddleware = async (req, res, next) => {
 	try {
@@ -67,6 +68,21 @@ const signUpHospitalMiddleware = async (req, res, next) => {
           status: 'failure',
           message: 'Designation is required'
         });
+      }
+      if (data.email) {
+        const email = await hospitalModel.findOne({ email: data.email });
+        if (email) {
+          return res.status(400).send({
+            status: 'failure',
+            message: 'Email already exists'
+          });
+        }
+        if (!validator.isEmail(data.email)) {
+          return res.status(400).send({
+            status: 'failure',
+            message: 'Invalid email'
+          });
+        }
       }
       next();
     } else {

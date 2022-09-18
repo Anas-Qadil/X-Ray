@@ -50,7 +50,7 @@ router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpP
 
 {/* ---------------------------------------- Hospital --------------------------------------------------*/}
 // @route api/hospitals
-router.post("/sign-up/hospital", signUpMiddleware, signUpHospitalMiddleware, signUpHospital);
+router.post("/sign-up/hospital", signUpMiddleware, signUpHospitalMiddleware, signUpHospital); // todo: when u finish admin parte make sure to check who can access this route
 router.get("/get-all-hospitals", authenticateMiddleware, hospitalMiddleware, getAllHospitals);
 router.get("/hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospitalById);
 router.get("/hospital/:id/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);

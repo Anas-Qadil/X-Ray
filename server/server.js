@@ -2,11 +2,15 @@ const express = require("express");
 const dotenv = require("dotenv").config()
 const router = require("./src/routes/index");
 const connectDB = require("./src/configs/db");
-const test = require("./test/index")
+const test = require("./test/index");
+const cors = require("cors");
+const helmet = require("helmet");
 
 // @configs
-connectDB();
 const app = express();
+connectDB();
+app.use(cors()); // dont forget to make only the front end can access this api
+app.use(helmet()); // for security and check it out after project is done
 const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT || 5000;
 
