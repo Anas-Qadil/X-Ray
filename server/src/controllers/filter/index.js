@@ -35,21 +35,19 @@ const filterPatient = async (req, res, next) => {
 
 const filterService = async (req, res, next) => {
   try {
+    const id = req.params.id; // hospital id
     const filter = req.body;
-    const data = await serviceModel.find(filter)
-    .populate("hospital")
-    .populate("patient");
-
-    if (!data) {
-      return res.status(404).send({
-        status: "failure",
-        message: "No data found",
-      });
-    }
+    const data = await serviceModel.find({...filter}).populate("hospital");
+    let result = [];
+    data.map((doc) => {
+      if (String(doc.hospital._id) == id) {
+        result.push(doc);
+      }
+    });
     return res.status(200).send({
       status: "success",
       message: "data filtred successfully",
-      data
+      data: result
     });
   } catch (e) {
     return res.status(500).send({
@@ -105,9 +103,33 @@ const filterHospital = async (req, res, next) => {
   }
 }
 
+const filterTraitement = async (req, res, next) => {
+  try {
+    const filter  = req.body;
+    const data = await traitementModel.find(filter).populate("patient").populate("service");
+    if (!data) {
+      return res.status(404).send({
+        status: "failure",
+        message: "No data found",
+      });
+    }
+    return res.status(200).send({
+      status: "success",
+      message: "data filtred successfully",
+      data
+    });
+  } catch (e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    });
+  }
+}
+
 module.exports = { 
 	filterPatient,
   filterService,
   filterPerson,
-  filterHospital
+  filterHospital,
+  filterTraitement
 };

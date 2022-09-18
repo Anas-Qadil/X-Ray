@@ -2,7 +2,7 @@ const express = require("express");
 const traitementModel = require("../../models/traitementModel");
 const moment = require("moment");
 
-const patient = async (req, res) => {
+const patients = async (req, res) => {
   try {
     const { id } = req.params;  // hospital id
     const traitements = await traitementModel.find({}).populate("patient").populate("service");
@@ -28,6 +28,40 @@ const patient = async (req, res) => {
   }
 }
 
+const patient = async (req, res) => {
+  try {
+    const { id } = req.params;  // hospital id
+    const patient = req.query.patient; // patient id
+    const startDate = moment(req.query.startDate, "YYYY-MM-DD");
+    const endDate = moment(req.query.endDate, "YYYY-MM-DD");
+    const traitements = await traitementModel.find({}).populate("patient").populate("service");
+
+    let data = [];
+    traitements.map(doc => {
+      const currDate = moment(doc.createdAt, "YYYY-MM-DD");
+      if (String(doc.service.hospital) === id &&
+          String(doc.patient._id) === patient &&
+          currDate.isBetween(startDate, endDate)
+          ) {
+        data.push(doc);
+      }
+    }
+    );
+
+    return res.status(200).send({
+      status: "success",
+      message: "patient",
+      data
+    });
+
+  } catch (e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    });
+  }
+}
+
 const appareil = async (req, res) => {
   try {
     const { id } = req.params;  // hospital id
@@ -42,6 +76,34 @@ const appareil = async (req, res) => {
           currDate.isBetween(startDate, endDate) &&
           (doc.service.equipment === appareilName)
           ) {
+        data.push(doc);
+      }
+    });
+
+    return res.status(200).send({
+      status: "success",
+      message: "hospital",
+      data
+    });
+  } catch (e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    });
+  }
+}
+
+const services = async (req, res) => {
+  try {
+    const { id } = req.params;  // hospital id
+    const traitements = await traitementModel.find({}).populate("patient").populate("service");
+    const startDate = moment(req.query.startDate, "YYYY-MM-DD");
+    const endDate = moment(req.query.endDate, "YYYY-MM-DD");
+
+    let data = [];
+    traitements.map(doc => {
+      const currDate = moment(doc.createdAt, "YYYY-MM-DD");
+      if (String(doc.service.hospital) === id && currDate.isBetween(startDate, endDate)) {
         data.push(doc);
       }
     });
@@ -93,7 +155,9 @@ const service = async (req, res) => {
 
 
 module.exports = { 
+  patients,
   patient,
   appareil,
-  service
+  service,
+  services
 };

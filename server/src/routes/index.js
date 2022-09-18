@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const { signUpController, signUpPatient, signUpHospital, signUpCompany, signUpPerson } = require("../controllers/authController/signUpController");
 const { signUpMiddleware, patientMiddleware, signUpPersonMiddleware, companyMiddleware } = require("../middlewares/authMiddleware/signUpMiddleware");
-const { getAllHospitals, getHospitalById, getHospitalPatients, getHospitalServices, hospitalDoes } = require("../controllers/hospitalController");
+const { getAllHospitals, getHospitalById, getHospitalPatients, getHospitalServices, hospitalDoes, addService } = require("../controllers/hospitalController");
 const { getAllPatients, getPatientById, getPatientServices, getPatientDoses, getPatientHospital } = require("../controllers/patientController");
 const loginController = require("../controllers/authController/loginController");
 const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware");
 const usersModel = require("../models/usersModel");
 const { getCurrentCompany, getServices, getAllPatientDoses, getPersons, getPerson } = require("../controllers/companyController");
-const { filterPatient, filterService, filterPerson, filterHospital } = require("../controllers/filter/index");
+const { filterPatient, filterTraitement, filterService, filterPerson, filterHospital } = require("../controllers/filter/index");
 
 const { addTraitement, getHospitalTraitements, getTraitementById } = require("../controllers/traitementController");
 
@@ -34,7 +34,7 @@ const authenticateMiddleware = require("../middlewares/authMiddleware/authentica
 const { filterPatientMiddleware, filterServiceMiddleware } = require("../middlewares/filterMiddleware");
 
 // STATISTIQUE HOSPITAL
-const { patient, appareil, service } = require("../controllers/hospitalController/statistique");
+const { patients, patient, appareil, service, services } = require("../controllers/hospitalController/statistique");
 
 
 
@@ -55,10 +55,15 @@ router.get("/hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospi
 router.get("/hospital/:id/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);
 router.get("/hospital/:id/services", authenticateMiddleware, hospitalMiddleware, getHospitalServices);
 router.get("/hospital/:id/traitements", authenticateMiddleware, hospitalMiddleware, getHospitalTraitements);
+router.post("/hospital/add-service", addService); // add service to hospital
 // hospital Statistique
-router.get("/statistique/hospital/:id/patient", patient);
-router.get("/statistique/hospital/:id/appareil", appareil);
-router.get("/statistique/hospital/:id/service", service);
+router.get("/statistique/hospital/:id/patients", patients); // statistique dyal all patients
+router.get("/statistique/hospital/:id/patient", patient); // statistique dyal specific patient
+router.get("/statistique/hospital/:id/appareil", appareil); // statistique dyal specific appareil
+router.get("/statistique/hospital/:id/services", services); // statistique dyal all services
+router.get("/statistique/hospital/:id/service", service);   // statistique dyal specific service
+
+// router.get("/statistique/hospital/:id/all-services", allServices);
 
 
 
@@ -87,8 +92,9 @@ router.get("/company/:id/person/:id", authenticateMiddleware, checkCompanyMiddle
 router.delete("/person/:username", deletePersonMiddleware, deletePerson);
 
 /* FILTER ROUTES */
-router.post("/filter/hospital/:id/patient", filterPatient);
-// router.post("/filter/service", filterServiceMiddleware, filterService);
+router.post("/filter/hospital/:id/patient", authenticateMiddleware, filterPatient);
+router.post("/filter/hospital/:id/service", authenticateMiddleware, filterService);
+router.post("/filter/hospital/:id/traitement",authenticateMiddleware, filterTraitement);
 // router.post("/filter/person", filterPerson);
 // router.post("/filter/hospital", filterHospital);
 

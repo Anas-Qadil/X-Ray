@@ -125,10 +125,34 @@ const hospitalDoes = async (req, res) => {
   }
 }
 
+const addService = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const service = req.body;
+    const data = await serviceModel.create(service);
+    console.log(data);
+    if (!data) {
+      return res.status(400).json({
+        message: "No hospital found",
+      });
+    }
+    res.status(200).send({
+      message: "Hospital found",
+      data: data,
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: "Server error",
+      error: error.message
+    });
+  }
+}
+
 module.exports = {
 	getAllHospitals,
 	getHospitalById,
   getHospitalPatients,
   getHospitalServices,
-  hospitalDoes
+  hospitalDoes,
+  addService
 }
