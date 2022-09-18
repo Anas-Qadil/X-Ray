@@ -55,6 +55,7 @@ const personSchema = new Schema({
   },
   fonction: {
     type: String,
+    enum: ['public', 'private'],
     required: true,
     trim: true,
   },

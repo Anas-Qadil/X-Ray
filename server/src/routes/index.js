@@ -19,7 +19,7 @@ const traitementMiddleware = require("../middlewares/traitementMiddleware");
 const { deletePersonMiddleware } = require("../middlewares/personMiddleware");
 
 // hospital Middlewares
-const { hospitalMiddleware, signUpHospitalMiddleware } = require("../middlewares/hospitalMiddleware");
+const { hospitalMiddleware, signUpHospitalMiddleware, addServiceMiddleware } = require("../middlewares/hospitalMiddleware");
 
 // person controllers
 const { deletePerson } = require("../controllers/personController");
@@ -45,25 +45,30 @@ router.post("/login", loginMiddleware, loginController); // turn this on
 // @route POST api/signup
 router.post("/sign-up", signUpMiddleware, signUpController);
 router.post("/sign-up/patient", signUpMiddleware, patientMiddleware, signUpPatient);
-router.post("/sign-up/hospital", signUpMiddleware, signUpHospitalMiddleware, signUpHospital);
 router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
 router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpPerson);
 
+{/* ---------------------------------------- Hospital --------------------------------------------------*/}
 // @route api/hospitals
+router.post("/sign-up/hospital", signUpMiddleware, signUpHospitalMiddleware, signUpHospital);
 router.get("/get-all-hospitals", authenticateMiddleware, hospitalMiddleware, getAllHospitals);
 router.get("/hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospitalById);
 router.get("/hospital/:id/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);
 router.get("/hospital/:id/services", authenticateMiddleware, hospitalMiddleware, getHospitalServices);
 router.get("/hospital/:id/traitements", authenticateMiddleware, hospitalMiddleware, getHospitalTraitements);
-router.post("/hospital/add-service", addService); // add service to hospital
+router.post("/hospital/add-service", addServiceMiddleware, addService); // add service to hospital
 // hospital Statistique
-router.get("/statistique/hospital/:id/patients", patients); // statistique dyal all patients
-router.get("/statistique/hospital/:id/patient", patient); // statistique dyal specific patient
-router.get("/statistique/hospital/:id/appareil", appareil); // statistique dyal specific appareil
-router.get("/statistique/hospital/:id/services", services); // statistique dyal all services
-router.get("/statistique/hospital/:id/service", service);   // statistique dyal specific service
+router.get("/statistique/hospital/:id/patients", authenticateMiddleware, patients); // statistique dyal all patients
+router.get("/statistique/hospital/:id/patient", authenticateMiddleware, patient); // statistique dyal specific patient id
+router.get("/statistique/hospital/:id/appareil", authenticateMiddleware, appareil); // statistique dyal specific appareil name
+router.get("/statistique/hospital/:id/services", authenticateMiddleware, services); // statistique dyal all services
+router.get("/statistique/hospital/:id/service", authenticateMiddleware, service);   // statistique dyal specific service id
+// hospital filter
+router.post("/filter/hospital/:id/patient", authenticateMiddleware, filterPatient);
+router.post("/filter/hospital/:id/service", authenticateMiddleware, filterService);
+router.post("/filter/hospital/:id/traitement",authenticateMiddleware, filterTraitement);
 
-// router.get("/statistique/hospital/:id/all-services", allServices);
+{/* ---------------------------------------- Hospital --------------------------------------------------*/}
 
 
 
@@ -92,9 +97,7 @@ router.get("/company/:id/person/:id", authenticateMiddleware, checkCompanyMiddle
 router.delete("/person/:username", deletePersonMiddleware, deletePerson);
 
 /* FILTER ROUTES */
-router.post("/filter/hospital/:id/patient", authenticateMiddleware, filterPatient);
-router.post("/filter/hospital/:id/service", authenticateMiddleware, filterService);
-router.post("/filter/hospital/:id/traitement",authenticateMiddleware, filterTraitement);
+
 // router.post("/filter/person", filterPerson);
 // router.post("/filter/hospital", filterHospital);
 

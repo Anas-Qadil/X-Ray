@@ -1,5 +1,7 @@
 const express = require('express');
 const usersModel = require('../../models/usersModel');
+const hospitalModel = require('../../models/hospitalModel');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 const hospitalMiddleware = async (req, res, next) => {
 	try {
@@ -81,7 +83,73 @@ const signUpHospitalMiddleware = async (req, res, next) => {
   }
 }
 
+const addServiceMiddleware = async (req, res, next) => {
+  try {
+    const data = req.body;
+    if (data) {
+      if (!data.name) {
+        return res.status(400).send({
+          status: 'failure',
+          message: 'Service name is required'
+        });
+      }
+      if (!data.equipment) {
+        return res.status(400).send({
+          status: 'failure',
+          message: 'Equipment is required'
+        });
+      }
+      if (!data.examen) {
+        return res.status(400).send({
+          status: 'failure',
+          message: 'Examen is required'
+        });
+      }
+      if (!data.protocol) {
+        return res.status(400).send({
+          status: 'failure',
+          message: 'Protocol is required'
+        });
+      }
+      if (data.hospital) {
+        
+        if (!ObjectId.isValid(data.hospital)) {
+          return res.status(400).send({
+            status: 'failure',
+            message: 'Invalid hospital id'
+          });
+        }
+        const hospital = await hospitalModel.findOne({ _id: data.hospital });
+        if (!hospital) {
+          return res.status(400).send({
+            status: 'failure',
+            message: 'Hospital does not exist'
+          });
+        }
+      } else {
+        return res.status(400).send({
+          status: 'failure',
+          message: 'Hospital is required'
+        });
+      }
+    } else {
+      return res.send({
+        status: 'failure',
+        message: 'No data provided'
+      })
+    }
+
+    next();
+  } catch (e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    });
+  }
+}
+
 module.exports = {
 	hospitalMiddleware,
-  signUpHospitalMiddleware
+  signUpHospitalMiddleware,
+  addServiceMiddleware
 }
