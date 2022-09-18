@@ -37,7 +37,9 @@ const { filterPatientMiddleware, filterServiceMiddleware } = require("../middlew
 const { patients, patient, appareil, service, services } = require("../controllers/hospitalController/statistique");
 const { statistiquePatientMiddleware, statistiquePatientsMiddleware, statistiqueApparielMiddleware, statistiqueServiceMiddleware, statistiqueServicesMiddleware } = require("../middlewares/hospitalMiddleware/statistiqueMiddleware");
 
-
+// STATISTIQUE PATIENT
+const { SP_hospital, SP_region, SP_service, SP_appareil } = require("../controllers/patientController/statistique");
+const { SPM_patient } = require("../middlewares/patientMiddleware/statistiqueMiddleware");
 
 // @route POST api/login
 router.post("/login", loginMiddleware, loginController); // turn this on
@@ -45,7 +47,6 @@ router.post("/login", loginMiddleware, loginController); // turn this on
 
 // @route POST api/signup
 router.post("/sign-up", signUpMiddleware, signUpController);
-router.post("/sign-up/patient", signUpMiddleware, patientMiddleware, signUpPatient);
 router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
 router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpPerson);
 
@@ -81,12 +82,24 @@ router.post("/filter/hospital/:id/traitement", authenticateMiddleware, filterTra
 router.get("/traitement/:id", authenticateMiddleware, getTraitementById);
 // router.put("/traitement/:id", authenticateMiddleware, updateTraitement);
 
+
+{/* -------------------------------------------------- Start Patient --------------------------------------------------*/}
+
 // @route GET api/patients
-router.get("/get-all-patients", getAllPatients);
-router.get("/get-patient/:id", getPatientById);
-router.get("/patient/:id/services", getPatientServices);
-router.get("/patient/:id/doses", getPatientDoses);
-router.get("/patient/:id/hospital", getPatientHospital);
+router.post("/sign-up/patient", signUpMiddleware, patientMiddleware, signUpPatient);
+router.get("/get-all-patients", authenticateMiddleware, getAllPatients);
+router.get("/patient/:id", authenticateMiddleware, getPatientById);
+router.get("/patient/:id/services", authenticateMiddleware, getPatientServices);
+router.get("/patient/:id/doses", authenticateMiddleware, getPatientDoses);
+router.get("/patient/:id/hospital", authenticateMiddleware, getPatientHospital);
+
+// statistique patients
+router.get("/statistique/patient/:id/hospital", authenticateMiddleware, SPM_patient, SP_hospital);
+router.get("/statistique/patient/:id/region", authenticateMiddleware, SPM_patient, SP_region);
+router.get("/statistique/patient/:id/service", authenticateMiddleware, SPM_patient, SP_service);
+router.get("/statistique/patient/:id/appareil", authenticateMiddleware, SPM_patient, SP_appareil);
+
+{/* -------------------------------------------------- End Patient --------------------------------------------------*/}
 
 // Patient Traitement Routes
 

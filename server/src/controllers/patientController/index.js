@@ -1,10 +1,11 @@
 const patientModel = require("../../models/patientModel");
 const serviceModel = require("../../models/serviceModel");
+const traitementModel = require("../../models/traitementModel");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 const getAllPatients = async (req, res) => {
 	try {
-		const data = await patientModel.find({})
-    .populate("hospital");
+		const data = await patientModel.find({});
 
 		if (!data) {
 			return res.status(400).json({
@@ -27,8 +28,14 @@ const getAllPatients = async (req, res) => {
 const getPatientById = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const data = await patientModel.findById({id})
-    .populate("hospital");
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({
+        status: "failure",
+        message: "Invalid patient id",
+      });
+    }
+		const data = await patientModel.findById(id);
 
 		if (!data) {
 			return res.status(400).json({
@@ -50,10 +57,9 @@ const getPatientById = async (req, res) => {
 const getPatientServices = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await serviceModel.find({patient: id})
-    .populate("patient")
-    .populate("hospital");
-  
+    const data = await traitementModel.find({ patient: id })
+    .populate("service")
+
     if (!data) {
       return res.status(400).json({
         status: "failure",
@@ -76,9 +82,7 @@ const getPatientServices = async (req, res) => {
 const getPatientDoses = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await serviceModel.find({ patient: id })
-    .populate("patient")
-    .populate("hospital");
+    const data = await traitementModel.find({ patient: id });
   
     let doses = 0;
     data.map((service) => {
@@ -108,8 +112,8 @@ const getPatientDoses = async (req, res) => {
 const getPatientHospital = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await patientModel.findById({ hospital: id })
-    .populate("hospital");
+    const data = await traitementModel.find({ patient: id }, {service: 1})
+    .populate({path: "service", populate: {path: "hospital"}});
   
     if (!data) {
       return res.status(400).json({
