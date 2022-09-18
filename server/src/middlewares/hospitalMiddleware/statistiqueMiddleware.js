@@ -198,8 +198,123 @@ const statistiqueApparielMiddleware = async (req, res, next) => {
   }
 }
 
+const statistiqueServiceMiddleware = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const id = req.params.id; // hospital id
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+    const service = req.query.service; // service name
+
+    if (user.role !== "admin" && user.role !== "hospital") {
+      return res.status(401).send({
+        status: "failure",
+        message: "Unauthorized"
+      });
+    }
+    if (!startDate || !endDate) {
+      return res.status(400).send({
+        status: "failure",
+        message: "Start date and end date are required"
+      });
+    }
+
+    if (id) { // hospital id
+      if (!ObjectId.isValid(id)) {
+        return res.status(400).send({
+          status: "failure",
+          message: "Invalid hospital id"
+        });
+      }
+      const hospital = await hospitalModel.findById(id);
+      if (!hospital) {
+        return res.status(404).send({
+          status: "failure",
+          message: "Hospital not found"
+        });
+      }
+    } else {
+      return res.status(400).send({
+        status: "failure",
+        message: "Hospital id is required"
+      });
+    }
+    if (service) { // service name
+      const services = await serviceModel.find({ hospital: id , name: service });
+      if (!services) {
+        return res.status(404).send({
+          status: "failure",
+          message: "Service not found"
+        });
+      }
+    } else {
+      return res.status(400).send({
+        status: "failure",
+        message: "Service id is required"
+      });
+    }
+    next();
+  } catch (e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    });
+  }
+}
+
+const statistiqueServicesMiddleware = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const id = req.params.id; // hospital id
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+
+    if (user.role !== "admin" && user.role !== "hospital") {
+      return res.status(401).send({
+        status: "failure",
+        message: "Unauthorized"
+      });
+    }
+    if (!startDate || !endDate) {
+      return res.status(400).send({
+        status: "failure",
+        message: "Start date and end date are required"
+      });
+    }
+    
+    if (id) { // hospital id
+      if (!ObjectId.isValid(id)) {
+        return res.status(400).send({
+          status: "failure",
+          message: "Invalid hospital id"
+        });
+      }
+      const hospital = await hospitalModel.findById(id);
+      if (!hospital) {
+        return res.status(404).send({
+          status: "failure",
+          message: "Hospital not found"
+        });
+      }
+    } else {
+      return res.status(400).send({
+        status: "failure",
+        message: "Hospital id is required"
+      });
+    }
+    next();
+  } catch (e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    });
+  }
+}
+
 module.exports = { 
   statistiquePatientMiddleware,
   statistiquePatientsMiddleware,
-  statistiqueApparielMiddleware
+  statistiqueApparielMiddleware,
+  statistiqueServiceMiddleware,
+  statistiqueServicesMiddleware
 };

@@ -35,7 +35,7 @@ const { filterPatientMiddleware, filterServiceMiddleware } = require("../middlew
 
 // STATISTIQUE HOSPITAL
 const { patients, patient, appareil, service, services } = require("../controllers/hospitalController/statistique");
-const { statistiquePatientMiddleware, statistiquePatientsMiddleware, statistiqueApparielMiddleware } = require("../middlewares/hospitalMiddleware/statistiqueMiddleware");
+const { statistiquePatientMiddleware, statistiquePatientsMiddleware, statistiqueApparielMiddleware, statistiqueServiceMiddleware, statistiqueServicesMiddleware } = require("../middlewares/hospitalMiddleware/statistiqueMiddleware");
 
 
 
@@ -66,8 +66,8 @@ router.get("/hospital/:id/traitements", authenticateMiddleware, hospitalMiddlewa
 router.get("/statistique/hospital/:id/patients", authenticateMiddleware, statistiquePatientsMiddleware, patients); // statistique dyal all patients
 router.get("/statistique/hospital/:id/patient", authenticateMiddleware, statistiquePatientMiddleware, patient); // statistique dyal specific patient id
 router.get("/statistique/hospital/:id/appareil", authenticateMiddleware, statistiqueApparielMiddleware, appareil); // statistique dyal specific appareil name
-router.get("/statistique/hospital/:id/services", authenticateMiddleware, services); // statistique dyal all services
-router.get("/statistique/hospital/:id/service", authenticateMiddleware, service);   // statistique dyal specific service id
+router.get("/statistique/hospital/:id/services", authenticateMiddleware, statistiqueServicesMiddleware, services); // statistique dyal all services
+router.get("/statistique/hospital/:id/service", authenticateMiddleware, statistiqueServiceMiddleware, service);   // statistique dyal specific service id
 // hospital filter
 router.post("/filter/hospital/:id/patient", authenticateMiddleware, filterPatient);
 router.post("/filter/hospital/:id/service", authenticateMiddleware, filterService);
