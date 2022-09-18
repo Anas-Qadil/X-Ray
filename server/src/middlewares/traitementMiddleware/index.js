@@ -8,6 +8,13 @@ const serviceModel = require("../../models/serviceModel");
 const traitementMiddleware = async (req, res, next) => {
 	try {
     const data = req.body;
+    const user = req.user;
+    if (user.role !== "admin" && user.role !== "hospital") {
+      return res.status(401).send({
+        status: "failure",
+        message: "Unauthorized"
+      });
+    }
     
     if (data)
     {
@@ -72,10 +79,10 @@ const traitementMiddleware = async (req, res, next) => {
 
     next();
   } catch (e) {
-	res.status(500).send({
-	  status: "error",
-	  message: e.message
-	})
+    res.status(500).send({
+      status: "error",
+      message: e.message
+    });
   }
 }
 

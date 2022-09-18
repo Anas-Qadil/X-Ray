@@ -58,9 +58,9 @@ router.get("/hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospi
 router.get("/hospital/:id/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);
 // hospital services
 router.get("/hospital/:id/services", authenticateMiddleware, hospitalMiddleware, getHospitalServices);
-router.post("/hospital/add-service", addServiceMiddleware, addService); // add service to hospital | todo: make sure to check who can access this route
+router.post("/hospital/add-service", authenticateMiddleware, addServiceMiddleware, addService); // add service to hospital | todo: make sure to check who can access this route
 // hospital traitements
-router.post("/hospital/add-traitement", traitementMiddleware, addTraitement);
+router.post("/hospital/add-traitement", authenticateMiddleware, traitementMiddleware, addTraitement);
 router.get("/hospital/:id/traitements", authenticateMiddleware, hospitalMiddleware, getHospitalTraitements);
 // hospital Statistique
 router.get("/statistique/hospital/:id/patients", authenticateMiddleware, statistiquePatientsMiddleware, patients); // statistique dyal all patients
@@ -71,7 +71,7 @@ router.get("/statistique/hospital/:id/service", authenticateMiddleware, statisti
 // hospital filter
 router.post("/filter/hospital/:id/patient", authenticateMiddleware, filterPatient);
 router.post("/filter/hospital/:id/service", authenticateMiddleware, filterService);
-router.post("/filter/hospital/:id/traitement",authenticateMiddleware, filterTraitement);
+router.post("/filter/hospital/:id/traitement", authenticateMiddleware, filterTraitement);
 
 {/* -------------------------------------------------- End Hospital --------------------------------------------------*/}
 
