@@ -35,6 +35,7 @@ const { filterPatientMiddleware, filterServiceMiddleware } = require("../middlew
 
 // STATISTIQUE HOSPITAL
 const { patients, patient, appareil, service, services } = require("../controllers/hospitalController/statistique");
+const { statistiquePatientMiddleware, statistiquePatientsMiddleware, statistiqueApparielMiddleware } = require("../middlewares/hospitalMiddleware/statistiqueMiddleware");
 
 
 
@@ -48,19 +49,23 @@ router.post("/sign-up/patient", signUpMiddleware, patientMiddleware, signUpPatie
 router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
 router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpPerson);
 
-{/* ---------------------------------------- Hospital --------------------------------------------------*/}
+{/* -------------------------------------------------- Start Hospital --------------------------------------------------*/}
+
 // @route api/hospitals
 router.post("/sign-up/hospital", signUpMiddleware, signUpHospitalMiddleware, signUpHospital); // todo: when u finish admin parte make sure to check who can access this route
 router.get("/get-all-hospitals", authenticateMiddleware, hospitalMiddleware, getAllHospitals);
 router.get("/hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospitalById);
 router.get("/hospital/:id/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);
+// hospital services
 router.get("/hospital/:id/services", authenticateMiddleware, hospitalMiddleware, getHospitalServices);
+router.post("/hospital/add-service", addServiceMiddleware, addService); // add service to hospital | todo: make sure to check who can access this route
+// hospital traitements
+router.post("/hospital/add-traitement", traitementMiddleware, addTraitement);
 router.get("/hospital/:id/traitements", authenticateMiddleware, hospitalMiddleware, getHospitalTraitements);
-router.post("/hospital/add-service", addServiceMiddleware, addService); // add service to hospital
 // hospital Statistique
-router.get("/statistique/hospital/:id/patients", authenticateMiddleware, patients); // statistique dyal all patients
-router.get("/statistique/hospital/:id/patient", authenticateMiddleware, patient); // statistique dyal specific patient id
-router.get("/statistique/hospital/:id/appareil", authenticateMiddleware, appareil); // statistique dyal specific appareil name
+router.get("/statistique/hospital/:id/patients", authenticateMiddleware, statistiquePatientsMiddleware, patients); // statistique dyal all patients
+router.get("/statistique/hospital/:id/patient", authenticateMiddleware, statistiquePatientMiddleware, patient); // statistique dyal specific patient id
+router.get("/statistique/hospital/:id/appareil", authenticateMiddleware, statistiqueApparielMiddleware, appareil); // statistique dyal specific appareil name
 router.get("/statistique/hospital/:id/services", authenticateMiddleware, services); // statistique dyal all services
 router.get("/statistique/hospital/:id/service", authenticateMiddleware, service);   // statistique dyal specific service id
 // hospital filter
@@ -68,7 +73,7 @@ router.post("/filter/hospital/:id/patient", authenticateMiddleware, filterPatien
 router.post("/filter/hospital/:id/service", authenticateMiddleware, filterService);
 router.post("/filter/hospital/:id/traitement",authenticateMiddleware, filterTraitement);
 
-{/* ---------------------------------------- Hospital --------------------------------------------------*/}
+{/* -------------------------------------------------- End Hospital --------------------------------------------------*/}
 
 
 
@@ -84,7 +89,6 @@ router.get("/patient/:id/doses", getPatientDoses);
 router.get("/patient/:id/hospital", getPatientHospital);
 
 // Patient Traitement Routes
-router.post("/patient/add-traitement", traitementMiddleware, addTraitement);
 
 /* COMPANY ROUTES */
 router.get("/get-current-company", authenticateMiddleware, checkCompanyMiddleware, getCurrentCompany);

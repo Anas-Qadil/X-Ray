@@ -5,10 +5,12 @@ const moment = require("moment");
 const patients = async (req, res) => {
   try {
     const { id } = req.params;  // hospital id
-    const traitements = await traitementModel.find({}).populate("patient").populate("service");
     const startDate = moment(req.query.startDate, "YYYY-MM-DD");
     const endDate = moment(req.query.endDate, "YYYY-MM-DD");
     let data = [];
+    
+    const traitements = await traitementModel.find({}).populate("patient").populate("service");
+
     traitements.map(doc => {
       const currDate = moment(doc.createdAt, "YYYY-MM-DD");
       if (String(doc.service.hospital) === id && currDate.isBetween(startDate, endDate)) {
@@ -69,13 +71,14 @@ const appareil = async (req, res) => {
     const startDate = moment(req.query.startDate, "YYYY-MM-DD");
     const endDate = moment(req.query.endDate, "YYYY-MM-DD");
     const appareilName = req.query.appareil;
+
     let data = [];
     traitements.map(doc => {
       const currDate = moment(doc.createdAt, "YYYY-MM-DD");
       if (String(doc.service.hospital) === id && 
-          currDate.isBetween(startDate, endDate) &&
-          (doc.service.equipment === appareilName)
-          ) {
+      currDate.isBetween(startDate, endDate) &&
+      (doc.service.equipment == appareilName)
+      ) {
         data.push(doc);
       }
     });
