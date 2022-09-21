@@ -20,6 +20,32 @@ const deletePersonMiddleware = async (req, res, next) => {
   }
 }
 
+const checkPersonAccess = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const personId = req.params.id;
+    if (user.role !== "person") {
+      return res.status(401).send({
+        status: "failure",
+        message: "unauthorized"
+      });
+    }
+    if (String(user.person) !== personId) {
+      return res.status(401).send({
+        status: "failure",
+        message: "unauthorized"
+      });
+    }
+    next();
+  } catch (e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    });
+  }
+}
+
 module.exports = {
-	deletePersonMiddleware
+	deletePersonMiddleware,
+  checkPersonAccess
 }

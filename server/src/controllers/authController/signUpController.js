@@ -4,6 +4,7 @@ const usersModel = require("../../models/usersModel");
 const cryptPassword = require("../../utils/cryptPassword");
 const companyModel = require("../../models/companyModel");
 const hospitalModel = require("../../models/hospitalModel");
+const personModel = require("../../models/personModel");
 
 const signUpController = async (req, res, next) => {
 	res.send("hello from signUpController");
@@ -201,7 +202,6 @@ const signUpPerson = async (req, res, next) => {
         message: "user not saved"
       });
     }
-    delete user.password;
     res.status(200).send({
       status: "success",
       message: "Person saved successfully",

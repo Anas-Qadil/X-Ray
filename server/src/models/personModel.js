@@ -55,7 +55,12 @@ const personSchema = new Schema({
   },
   fonction: {
     type: String,
-    enum: ['public', 'private'],
+    required: true,
+    trim: true,
+  },
+  type: {
+    type: String,
+    enum: ["technical", "medical"],
     required: true,
     trim: true,
   },
@@ -63,7 +68,11 @@ const personSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "companyModel",
     default: null,
-	  required: true,
+  },
+  hospital: {
+    type: Schema.Types.ObjectId,
+    ref: "hospitalModel",
+    default: null,
   }
 }, { timestamps: true });
 

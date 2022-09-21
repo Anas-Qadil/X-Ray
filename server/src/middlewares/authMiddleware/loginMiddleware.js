@@ -6,6 +6,7 @@ const loginMiddleware = async (req, res, next) => {
 	try {
     const { username, password } = req.body;
     const user = await usersModel.findOne({ username });
+    console.log(user);
     if (user)
     {
       const match = await bcrypt.compare(password, user.password);
@@ -23,6 +24,9 @@ const loginMiddleware = async (req, res, next) => {
           break;
         case "company":
           await user.populate("company");
+          break;
+        case "person":
+          await user.populate("person");
           break;
         default:
           return res.status(400).send({

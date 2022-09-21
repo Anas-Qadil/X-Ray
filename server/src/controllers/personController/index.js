@@ -44,6 +44,31 @@ const deletePerson = async (req, res, next) => {
   }
 }
 
+const getPerson = async (req, res, next) => {
+  try {
+    const data = req.params;
+    const user = await usersModel.findOne({ person: data.id })
+      .populate("person");
+    if (!user) {
+      return res.status(404).send({
+        status: "failure",
+        message: "user not found"
+      });
+    }
+    res.status(200).send({
+      status: "success",
+      message: "person found successfully",
+      data: user
+    });
+  } catch (e) {
+    return res.status(500).send({
+      status: "failure",
+      message: e.message
+    });
+  }
+}
+
 module.exports = {
-	deletePerson
+	deletePerson,
+  getPerson
 }

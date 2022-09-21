@@ -7,7 +7,7 @@ const { getAllPatients, getPatientById, getPatientServices, getPatientDoses, get
 const loginController = require("../controllers/authController/loginController");
 const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware");
 const usersModel = require("../models/usersModel");
-const { getCurrentCompany, getServices, getAllPatientDoses, getPersons, getPerson } = require("../controllers/companyController");
+// const { getCurrentCompany, getServices, getAllPatientDoses, getPersons, getPerson } = require("../controllers/companyController");
 const { filterPatient, filterTraitement, filterService, filterPerson, filterHospital } = require("../controllers/filter/index");
 
 const { addTraitement, getHospitalTraitements, getTraitementById } = require("../controllers/traitementController");
@@ -22,7 +22,7 @@ const { deletePersonMiddleware } = require("../middlewares/personMiddleware");
 const { hospitalMiddleware, signUpHospitalMiddleware, addServiceMiddleware } = require("../middlewares/hospitalMiddleware");
 
 // person controllers
-const { deletePerson } = require("../controllers/personController");
+const { deletePerson, getPerson } = require("../controllers/personController");
 
 // company middlewares
 const { gettingServicesMiddleware, checkCompanyMiddleware } = require("../middlewares/companyMiddleware");
@@ -47,8 +47,6 @@ router.post("/login", loginMiddleware, loginController); // turn this on
 
 // @route POST api/signup
 router.post("/sign-up", signUpMiddleware, signUpController);
-router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
-router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpPerson);
 
 {/* -------------------------------------------------- Start Hospital --------------------------------------------------*/}
 
@@ -101,17 +99,38 @@ router.get("/statistique/patient/:id/appareil", authenticateMiddleware, SPM_pati
 
 {/* -------------------------------------------------- End Patient --------------------------------------------------*/}
 
-// Patient Traitement Routes
+
+
+{/* -------------------------------------------------- Start Company --------------------------------------------------*/}
 
 /* COMPANY ROUTES */
-router.get("/get-current-company", authenticateMiddleware, checkCompanyMiddleware, getCurrentCompany);
-router.get("/company/get-services", authenticateMiddleware, checkCompanyMiddleware, getServices);
-router.get("/company/get-doses", authenticateMiddleware, checkCompanyMiddleware, getAllPatientDoses);
-router.get("/company/:id/persons", authenticateMiddleware, checkCompanyMiddleware, getPersons);
-router.get("/company/:id/person/:id", authenticateMiddleware, checkCompanyMiddleware, getPerson);
+// router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
+// router.get("/get-current-company", authenticateMiddleware, checkCompanyMiddleware, getCurrentCompany);
+// router.get("/company/get-services", authenticateMiddleware, checkCompanyMiddleware, getServices);
+// router.get("/company/get-doses", authenticateMiddleware, checkCompanyMiddleware, getAllPatientDoses);
+// router.get("/company/:id/persons", authenticateMiddleware, checkCompanyMiddleware, getPersons);
+// router.get("/company/:id/person/:id", authenticateMiddleware, checkCompanyMiddleware, getPerson);
+
+{/* -------------------------------------------------- End Company --------------------------------------------------*/}
+
+
+{/* -------------------------------------------------- Start Person --------------------------------------------------*/}
+
+// @route GET api/person
+// router.post("/sign-up/person", signUpMiddleware, signUpPerson);
+const { checkPersonAccess } = require("../middlewares/personMiddleware");
+const { MID_addPersonTraitement } = require("../middlewares/traitementMiddleware/personTraitementMiddleware");
+const { addPersonTraitement, getPersonTraitements } = require("../controllers/traitementController/personTraitement");
+router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpPerson);
+router.get("/person/:id", authenticateMiddleware, checkPersonAccess, getPerson);
+// add person traitements
+router.post("/person/:id/add-traitement", authenticateMiddleware, MID_addPersonTraitement, addPersonTraitement);
+router.get("/person/:id/traitements", authenticateMiddleware, getPersonTraitements);
+
+router.delete("/person/:username", deletePersonMiddleware, deletePerson);
+{/* -------------------------------------------------- End Person --------------------------------------------------*/}
 
 /* PERSON ROUTES */
-router.delete("/person/:username", deletePersonMiddleware, deletePerson);
 
 /* FILTER ROUTES */
 

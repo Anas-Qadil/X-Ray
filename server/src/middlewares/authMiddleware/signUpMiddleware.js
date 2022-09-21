@@ -392,13 +392,24 @@ const signUpPersonMiddleware = async (req, res, next) => {
     if (data)
     {
       //check if user has access to create person
-      if (data.role !== "admin" && data.role !== "company") {
+      // if (data.role !== "admin" && data.role !== "company" && data.role !== "hospital") {
+      //   return res.status(400).send({
+      //     status: "failure",
+      //     message: "you don't have access to create person"
+      //   });
+      // }
+
+      if (!data.type)  {
         return res.status(400).send({
           status: "failure",
-          message: "you don't have access to create person"
+          message: "type is required"
         });
-      }
-      // check if person data exists
+      } else if (data.type !== "technical" && data.type !== "medical")
+          return res.status(400).send({
+            status: "failure",
+            message: "type must be technical or medical"
+          });
+    
       if (!data.firstName) {
         return res.status(400).send({
           status: "failure",
@@ -479,7 +490,7 @@ const signUpPersonMiddleware = async (req, res, next) => {
       // check if username already exists
     if (data.username)
     {
-      const user = usersModel.findOne({ username: data.username });
+      const user = await usersModel.findOne({ username: data.username });
       if (user) {
         return res.status(400).send({
           status: "failure",
@@ -511,7 +522,6 @@ const signUpPersonMiddleware = async (req, res, next) => {
       message: e.message
     })
   }
-  next();
 }
 
 module.exports = {
