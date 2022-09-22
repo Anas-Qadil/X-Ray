@@ -121,11 +121,21 @@ router.get("/statistique/patient/:id/appareil", authenticateMiddleware, SPM_pati
 const { checkPersonAccess } = require("../middlewares/personMiddleware");
 const { MID_addPersonTraitement } = require("../middlewares/traitementMiddleware/personTraitementMiddleware");
 const { addPersonTraitement, getPersonTraitements } = require("../controllers/traitementController/personTraitement");
+const { SPerson_hospital, SPerson_service, SPerson_region, SPerson_appareil } = require("../controllers/personController/statistique");
+
 router.post("/sign-up/person", signUpMiddleware, signUpPersonMiddleware, signUpPerson);
 router.get("/person/:id", authenticateMiddleware, checkPersonAccess, getPerson);
 // add person traitements
 router.post("/person/:id/add-traitement", authenticateMiddleware, MID_addPersonTraitement, addPersonTraitement);
 router.get("/person/:id/traitements", authenticateMiddleware, getPersonTraitements);
+// statistique person medical
+router.get("/statistique/person/:id/hospital", authenticateMiddleware, SPerson_hospital);
+router.get("/statistique/person/:id/service", authenticateMiddleware, SPerson_service);
+router.get("/statistique/person/:id/region", authenticateMiddleware, SPerson_region);
+router.get("/statistique/person/:id/appareil", authenticateMiddleware, SPerson_appareil);
+
+// statistique person technical
+// router.get("/statistique/person/:id/company", authenticateMiddleware, SPM_person, SP_hospital);
 
 router.delete("/person/:username", deletePersonMiddleware, deletePerson);
 {/* -------------------------------------------------- End Person --------------------------------------------------*/}
