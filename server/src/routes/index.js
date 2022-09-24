@@ -102,6 +102,7 @@ router.get("/statistique/patient/:id/appareil", authenticateMiddleware, SPM_pati
 
 {/* -------------------------------------------------- Start Company --------------------------------------------------*/}
 const { getCurrentCompany, filterCompanyService, getCompanyPerson, getCompanyPersons, getCompanyServices, filterCompanyPerson } = require("../controllers/companyController");
+const { statistiqueServiceAppareilCompany, statistiqueServicesCompany } = require ("../controllers/companyController/statistique");
 /* COMPANY ROUTES */
 router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
 router.get("/company", authenticateMiddleware, getCurrentCompany);
@@ -112,8 +113,8 @@ router.get("/company/services", authenticateMiddleware, getCompanyServices);
 router.post("/company/filter/person", authenticateMiddleware, filterCompanyPerson);
 router.post("/company/filter/services", authenticateMiddleware, filterCompanyService);
 // statistique
-
-
+router.get("/statistique/company/service/appareil", authenticateMiddleware, statistiqueServiceAppareilCompany);
+router.get("/statistique/company/services", authenticateMiddleware, statistiqueServicesCompany);
 
 {/* -------------------------------------------------- End Company --------------------------------------------------*/}
 
