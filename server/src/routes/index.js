@@ -145,6 +145,17 @@ router.get("/statistique/person/:id/appareil", authenticateMiddleware, SPerson_a
 router.delete("/person/:username", deletePersonMiddleware, deletePerson);
 {/* -------------------------------------------------- End Person --------------------------------------------------*/}
 
+{/* -------------------------------------------------- Start Search --------------------------------------------------*/}
+const { searchHospital, searchPerson, searchCompany, searchService, searchPatient } = require("../controllers/search"); 
+
+router.get("/search/hospital", searchHospital);
+router.get("/search/person", searchPerson);
+router.get("/search/company", searchCompany);
+router.get("/search/service", searchService);
+router.get("/search/patient", searchPatient);
+
+{/* -------------------------------------------------- End Search --------------------------------------------------*/}
+
 /* PERSON ROUTES */
 
 /* FILTER ROUTES */
