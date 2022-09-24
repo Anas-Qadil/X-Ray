@@ -28,6 +28,9 @@ const loginMiddleware = async (req, res, next) => {
         case "person":
           await user.populate("person");
           break;
+        case "admin":
+          await user.populate("admin");
+          break;
         default:
           return res.status(400).send({
             status: "failure",

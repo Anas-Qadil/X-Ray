@@ -40,6 +40,11 @@ const usersSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: "personModel",
 		default: null,
+	}, 
+	admin: {
+		type: Schema.Types.ObjectId,
+		ref: "adminModel",
+		default: null,
 	}
 }, { timestamps: true });
 

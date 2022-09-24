@@ -47,6 +47,13 @@ router.post("/login", loginMiddleware, loginController); // turn this on
 // @route POST api/signup
 router.post("/sign-up", signUpMiddleware, signUpController);
 
+{/* -------------------------------------------------- Start GigaChadAdmin --------------------------------------------------*/}
+
+const adminRouter = require("../controllers/adminController/index");
+router.use("/admin", adminRouter);
+
+{/* -------------------------------------------------- End GigaChadAdmin --------------------------------------------------*/}
+
 {/* -------------------------------------------------- Start Hospital --------------------------------------------------*/}
 
 // @route api/hospitals
@@ -157,14 +164,6 @@ router.get("/search/patient", searchPatient);
 
 {/* -------------------------------------------------- End Search --------------------------------------------------*/}
 
-/* PERSON ROUTES */
-
-/* FILTER ROUTES */
-
-// router.post("/filter/person", filterPerson);
-// router.post("/filter/hospital", filterHospital);
-
-// @route GET api/users
 router.get("/all-users", async (req, res) => {
 	const users = await usersModel.find({});
 	res.send({
