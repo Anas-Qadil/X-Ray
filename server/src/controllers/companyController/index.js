@@ -2,173 +2,202 @@ const express = require("express");
 const usersModel = require("../../models/usersModel");
 const companyModel = require("../../models/companyModel");
 const serviceModel = require("../../models/serviceModel");
+const personModel = require("../../models/personModel");
+const person_traitementModel = require("../../models/person_traitementModel");
 
-const getCurrentCompany = async (req, res, next) => {
-	try {
-    const data = req.query;
-
-    if (data.id) {
-      const company = await companyModel.findById(data.id);
-      if (!company) {
-        return res.status(400).json({
-          status: "failure",
-          message: "Company not found"
-        });
-      }
-      return res.status(200).json({
-        status: "success",
-        message: "Company found",
-        data: company
-      });
-    }
-    if (username) {
-      const user = await usersModel.findOne({ username: data.username })
-      .populate("company");
-      if (!user) {
-        return res.status(400).json({
-          status: "failure",
-          message: "User not found"
-        });
-      }
-      if (!user.company)
-      {
-        return res.status(400).send({
-          status: "failure",
-          message: "Company not found"
-        })
-      }
-      return res.status(200).json({
-        status: "success",
-        message: "Company found",
-        data: user.company
-      });
-    }
-
-	} catch(e) {
-		return res.status(500).send({
-			status: "failure",
-			message: e.message
-		});
-	}
-}
-
-const getServices = async (req, res, next) => {
+const getCurrentCompany = async (req, res) => {
   try {
-    const { data } = req.query;
-
-    if (data) {
-      let services;
-      let now = new Date();
-      let startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // todays date 
-      // console.log(startOfToday);
-      // const results = await usersModel.find({created_on: {$gte: startOfToday}});
-      switch (data) {
-        case "daily":
-          services = await serviceModel.find({created_on: {$gte: startOfToday}});
-          break;
-        case "weekly":
-          services = "weekly";
-          break;
-        case "monthly":
-          services = "monthly";
-          break;
-        case "yearly":
-          services = "yearly";
-          break;
-        default:
-          return res.status(400).send({
-            status: "failure",
-            message: "Invalid query"
-          });
-      }
-      res.send({
-        status: "success",
-        message: "Services found",
-        data: services
-      })
+    const company = req.user;
+    if (!company) {
+      return res.status(400).json({
+        message: "company not found",
+      });
     }
-  } catch (e) {
-    return res.status(500).send({
-      status: "failure",
-      message: e.message
+
+    if (company.role !== "company") {
+      return res.status(400).json({
+        message: "you are not a company",
+      });
+    }
+
+    if (company.company)
+      await company.populate("company");
+    res.status(200).send({
+      message: "company found",
+      data: company,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
     });
   }
 }
 
-const getAllPatientDoses = async (req, res, next) => {
+const getCompanyPerson = async (req, res) => {
   try {
-    const services = await serviceModel.find({});
+    const id = req.params.id; // person id
+    const user = req.user; // company user
+
+    if (!id) {
+      return res.status(400).json({
+        message: "id is required",
+      });
+    }
+    
+    const person = await personModel.findById(id);
+    if (!person) {
+      return res.status(400).json({
+        message: "person not found",
+      });
+    }
+
+    if (person.company?.toString() !== user.company?.toString()) {
+      return res.status(400).json({
+        message: "you are not allowed to access this person",
+      });
+    }   
+    res.status(200).send({
+      message: "person found",
+      data: person,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
+const getCompanyPersons = async (req, res) => {
+  try {
+    const company = req.user;
+    if (!company) {
+      return res.status(400).json({
+        message: "company not found",
+      });
+    }
+
+    const persons = await personModel.find({
+      company: company.company
+    });
+
+    res.status(200).send({
+      message: "persons found",
+      data: persons,
+    });
+
+  } catch (e) {
+    res.status(500).json({
+      message: e.message,
+    });
+  }
+}
+
+const getCompanyServices = async (req, res) => {
+  try {
+    const company = req.user;
+    if (!company) {
+      return res.status(400).json({
+        message: "company not found",
+      });
+    }
+    let data =[];
+    const services = await person_traitementModel.find({})
+      .populate("person")
+
     if (!services) {
-      return res.status(400).send({
-        status: "failure",
-        message: "No doses found"
+      return res.status(200).json({
+        message: "no services found",
       });
     }
-    res.send({
-      status: "success",
-      message: "doses found",
-      data: services
+    services.map(doc => {
+      if (String(doc?.person?.company) === String(company?.company)) {
+        data.push(doc);
+      }
+    })
+
+    res.status(200).send({
+      message: "services found",
+      data: data,
     });
+
   } catch (e) {
-    return res.status(500).send({
-      status: "failure",
-      message: e.message
+    res.status(500).json({
+      message: e.message,
     });
   }
 }
 
-const getPersons = async (req, res) => {
+const filterCompanyPerson = async (req, res) => {
   try {
-    const { id } = req.params;
-    const data = await personModel.find({company: id});
-    if (!data) {
-      return res.status(404).send({
-        status: "failure",
-        message: "no persons has found"
+    const company = req.user;
+    if (!company) {
+      return res.status(400).json({
+        message: "company not found",
       });
     }
 
-    return res.status(200).send({
-      status: "success",
-      message: "persons has been found",
-      data: data
-    })
+    const persons = await personModel.find({
+      company: company.company,
+      ...req.body,
+    });
+
+    res.status(200).send({
+      message: "persons found",
+      data: persons,
+    });
+
   } catch (e) {
-    return res.status(500).send({
-      status: "failure",
-      message: e.message
-    })
+    res.status(500).json({
+      message: e.message,
+    });
   }
 }
 
-const getPerson = async (req, res) => {
+const filterCompanyService = async (req, res) => {
   try {
-    const { id } = req.params;
-    const data = await personModel.findById(id);
-    if (!data) {
-      return res.status(404).send({
-        status: "failure",
-        message: "no person has found"
+    const company = req.user;
+    if (!company) {
+      return res.status(400).json({
+        message: "company not found",
       });
     }
 
-    return res.status(200).send({
-      status: "success",
-      message: "person has been found",
-      data: data
+    const services = await serviceModel.find({
+      ...req.body,
+    });
+    
+    const traitements = await person_traitementModel.find({
+    }).populate("person").populate("service")
+
+    let data = [];
+    traitements.map(doc => {
+      if (String(doc?.person?.company) === String(company?.company)) {
+        services.map(service => {
+          if (String(service._id) === String(doc.service._id)) {
+            console.log("doc")
+            data.push(doc);
+          }
+        });
+      }
     })
+    res.status(200).send({
+      message: "services found",
+      data: data,
+    });
+
   } catch (e) {
-    return res.status(500).send({
-      status: "failure",
-      message: e.message
-    })
+    res.status(500).json({
+      message: e.message,
+    });
   }
 }
 
 module.exports = {
   getCurrentCompany,
-  getServices,
-  getAllPatientDoses,
-  getPersons,
-  getPerson
+  getCompanyPerson,
+  getCompanyPersons,
+  getCompanyServices,
+  filterCompanyPerson,
+  filterCompanyService,
 }

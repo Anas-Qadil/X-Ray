@@ -3,6 +3,7 @@ const validator = require('validator');
 const patientModel = require("../../models/patientModel");
 const usersModel = require("../../models/usersModel");
 const personModel = require("../../models/personModel");
+const companyModel = require("../../models/companyModel");
 
 const signUpMiddleware = async (req, res, next) => {
 	console.log("middleware runs");
@@ -333,12 +334,16 @@ const companyMiddleware = async (req, res, next) => {
           message: "designation is required"
         });
       }
-      if (!data.phone)
+      if (data.phone)
       {
-        return res.status(400).send({
-          status: "failure",
-          message: "phone is required"
-        });
+        const phone = await companyModel.findOne({ phone: data.phone });
+        if (phone)
+        {
+          return res.status(400).json({
+            status: "failure",
+            message: "phone already exists"
+          });
+        }
       }
       if (!data.username)
       {
@@ -370,12 +375,12 @@ const companyMiddleware = async (req, res, next) => {
       });
     }
     
-    if (req.user.role !== "admin" && req.user.role !== "hospital") {
-      return res.status(401).send({
-        status: "failure",
-        message: "Unauthorized"
-      });
-    }
+    // if (req.user.role !== "admin" && req.user.role !== "hospital") {
+    //   return res.status(401).send({
+    //     status: "failure",
+    //     message: "Unauthorized"
+    //   });
+    // }
 
     next();
   } catch (e) {
@@ -409,7 +414,6 @@ const signUpPersonMiddleware = async (req, res, next) => {
             status: "failure",
             message: "type must be technical or medical"
           });
-    
       if (!data.firstName) {
         return res.status(400).send({
           status: "failure",

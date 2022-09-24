@@ -7,7 +7,6 @@ const { getAllPatients, getPatientById, getPatientServices, getPatientDoses, get
 const loginController = require("../controllers/authController/loginController");
 const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware");
 const usersModel = require("../models/usersModel");
-// const { getCurrentCompany, getServices, getAllPatientDoses, getPersons, getPerson } = require("../controllers/companyController");
 const { filterPatient, filterTraitement, filterService, filterPerson, filterHospital } = require("../controllers/filter/index");
 
 const { addTraitement, getHospitalTraitements, getTraitementById } = require("../controllers/traitementController");
@@ -102,14 +101,19 @@ router.get("/statistique/patient/:id/appareil", authenticateMiddleware, SPM_pati
 
 
 {/* -------------------------------------------------- Start Company --------------------------------------------------*/}
-
+const { getCurrentCompany, filterCompanyService, getCompanyPerson, getCompanyPersons, getCompanyServices, filterCompanyPerson } = require("../controllers/companyController");
 /* COMPANY ROUTES */
-// router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
-// router.get("/get-current-company", authenticateMiddleware, checkCompanyMiddleware, getCurrentCompany);
-// router.get("/company/get-services", authenticateMiddleware, checkCompanyMiddleware, getServices);
-// router.get("/company/get-doses", authenticateMiddleware, checkCompanyMiddleware, getAllPatientDoses);
-// router.get("/company/:id/persons", authenticateMiddleware, checkCompanyMiddleware, getPersons);
-// router.get("/company/:id/person/:id", authenticateMiddleware, checkCompanyMiddleware, getPerson);
+router.post("/sign-up/company", signUpMiddleware, companyMiddleware, signUpCompany);
+router.get("/company", authenticateMiddleware, getCurrentCompany);
+router.get("/company/person/:id", authenticateMiddleware, getCompanyPerson); // user id
+router.get("/company/persons", authenticateMiddleware, getCompanyPersons);
+router.get("/company/services", authenticateMiddleware, getCompanyServices);
+// search ou filter
+router.post("/company/filter/person", authenticateMiddleware, filterCompanyPerson);
+router.post("/company/filter/services", authenticateMiddleware, filterCompanyService);
+// statistique
+
+
 
 {/* -------------------------------------------------- End Company --------------------------------------------------*/}
 
