@@ -1,6 +1,9 @@
 const express = require("express");
 const hospitalModel = require("../../models/hospitalModel");
 const personModel = require("../../models/personModel");
+const companyModel = require("../../models/companyModel");
+const patientModel = require("../../models/patientModel");
+const serviceModel = require("../../models/serviceModel");
 
 const searchHospital = async (req, res) => {
   try {
@@ -64,6 +67,24 @@ const searchPerson = async (req, res) => {
 
 const searchCompany = async (req, res) => {
   try {
+    const { search } = req.query; // search text
+
+    let companies;
+    if (search) {
+      companies = await companyModel.find({
+        $or: [
+          { ville: { $regex: search, $options: "i" } },
+          { phone: { $regex: search, $options: "i" } },
+          { region: { $regex: search, $options: "i" } },
+          { designation : { $regex: search, $options: "i" } },
+        ],
+      });
+    } else companies = await companyModel.find();
+
+    res.status(200).json({
+      message: "success",
+      data: companies
+    });
 
   } catch (e) {
     res.status(500).send({
@@ -74,6 +95,24 @@ const searchCompany = async (req, res) => {
 
 const searchService = async (req, res) => {
   try {
+    const { search } = req.query; // search text
+
+    let services;
+    if (search) {
+      services = await serviceModel.find({
+        $or: [
+          { name: { $regex: search, $options: "i" } },
+          { equipment: { $regex: search, $options: "i" } },
+          { examen: { $regex: search, $options: "i" } },
+          { protocol : { $regex: search, $options: "i" } },
+        ],
+      });
+    } else services = await serviceModel.find();
+
+    res.status(200).json({
+      message: "success",
+      data: services
+    });
 
   } catch (e) {
     res.status(500).send({
@@ -84,6 +123,25 @@ const searchService = async (req, res) => {
 
 const searchPatient = async (req, res) => {
   try {
+    const { search } = req.query; // search text
+
+    let patients;
+    if (search) {
+      patients = await patientModel.find({
+        $or: [
+          { cin: { $regex: search, $options: "i" } },
+          { firstName: { $regex: search, $options: "i" } },
+          { lastName: { $regex: search, $options: "i" } },
+          { phone: { $regex: search, $options: "i" } },
+          { email: { $regex: search, $options: "i" } },
+        ],
+      });
+    } else patients = await patientModel.find();
+
+    res.status(200).json({
+      message: "success",
+      data: patients
+    });
 
   } catch (e) {
     res.status(500).send({
