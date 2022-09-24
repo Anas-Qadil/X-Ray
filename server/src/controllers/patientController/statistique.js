@@ -18,9 +18,8 @@ const SP_hospital = async (req, res) => {
         path: "hospital"
       }
     });
-    const uniqueHospitals = [...new Set(traitement.map(item => item.service.hospital))];
     
-    uniqueHospitals.map(doc => {
+    traitement.map(doc => {
       const currDate = moment(doc.createdAt, "YYYY-MM-DD");
       if (currDate.isBetween(startDate, endDate)) {
         data.push(doc);
@@ -62,10 +61,9 @@ const SP_region = async (req, res) => {
         path: "hospital"
       }
     });
-    const uniqueHospitals = [...new Set(traitement.map(item => item.service.hospital))];
 
     let hospitalsInRegion=  []
-    uniqueHospitals.map(doc => {
+    traitement.map(doc => {
       if (doc.region === region) {
         hospitalsInRegion.push(doc);
       }

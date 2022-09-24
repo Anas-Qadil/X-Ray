@@ -20,9 +20,7 @@ const SPerson_hospital = async (req, res) => {
       }
      });
 
-    const uniqueHospitals = [...new Set(traitements.map(item => item.service.hospital))];
-
-    uniqueHospitals.map(doc => {
+    traitements.map(doc => {
       const currDate = moment(doc.createdAt, "YYYY-MM-DD");
       if (currDate.isBetween(startDate, endDate)) {
         data.push(doc);

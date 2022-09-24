@@ -3,7 +3,7 @@ const router = express.Router();
 const { signUpController, signUpPatient, signUpHospital, signUpCompany, signUpPerson } = require("../controllers/authController/signUpController");
 const { signUpMiddleware, patientMiddleware, signUpPersonMiddleware, companyMiddleware } = require("../middlewares/authMiddleware/signUpMiddleware");
 const { getAllHospitals, getHospitalById, getHospitalPatients, getHospitalServices, hospitalDoes, addService } = require("../controllers/hospitalController");
-const { getAllPatients, getPatientById, getPatientServices, getPatientDoses, getPatientHospital } = require("../controllers/patientController");
+const { getAllPatients, currentPatient, getPatientById, getPatientServices, getPatientDoses, getPatientHospital } = require("../controllers/patientController");
 const loginController = require("../controllers/authController/loginController");
 const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware");
 const usersModel = require("../models/usersModel");
@@ -85,6 +85,7 @@ router.get("/traitement/:id", authenticateMiddleware, getTraitementById);
 // @route GET api/patients
 router.post("/sign-up/patient", signUpMiddleware, patientMiddleware, signUpPatient);
 router.get("/get-all-patients", authenticateMiddleware, getAllPatients);
+router.get("/patient", authenticateMiddleware, currentPatient);
 router.get("/patient/:id", authenticateMiddleware, getPatientById);
 router.get("/patient/:id/services", authenticateMiddleware, getPatientServices);
 router.get("/patient/:id/doses", authenticateMiddleware, getPatientDoses);

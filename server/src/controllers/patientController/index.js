@@ -25,6 +25,29 @@ const getAllPatients = async (req, res) => {
 	}
 }
 
+const currentPatient = async (req, res) => {
+  try {
+    const user = req.user;
+    const patient = await patientModel.findOne({ _id: user.patient });
+    if (!patient) {
+      return res.status(400).json({
+        status: "failure",
+        message: "No patient found",
+      });
+    }
+    res.status(200).send({
+      status: "success",
+      message: "patient found",
+      data: patient,
+    });
+  } catch (error) {
+    res.status(500).send({
+      status: "failure",
+      message: error.message
+    });
+  }
+}
+
 const getPatientById = async (req, res) => {
 	try {
 		const { id } = req.params;
@@ -139,5 +162,8 @@ module.exports = {
 	getPatientById,
   getPatientServices,
   getPatientDoses,
-  getPatientHospital
+  getPatientHospital,
+  currentPatient
 }
+
+
