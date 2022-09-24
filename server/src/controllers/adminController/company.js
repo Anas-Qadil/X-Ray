@@ -246,6 +246,64 @@ const getStatisticsAppareil = async (req, res) => {
   }
 }
 
+// filter
+const getFilterCompanies = async (req, res) => {
+  try {
+    const data = req.query;
+    const companies = await companyModel.find(data);
+    res.status(200).send({
+      message: "success",
+      data: companies,
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.message,
+    });
+  }
+}
+
+const getFilterServices = async (req, res) => {
+  try {
+    const data = req.query;
+    const services = await serviceModel.find(data);
+
+    const traitements = await person_traitementModel.find()
+      .populate("person");
+
+    let dataTraitements = [];
+
+    traitements.map((traitement) => {
+      services.map((service) => {
+        if (service._id.toString() === traitement.service.toString() && traitement.person.type === "technical") {
+          dataTraitements.push(traitement);
+        }
+      });
+    });
+    res.status(200).send({
+      message: "success",
+      data: dataTraitements,
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.message,
+    });
+  }
+}
+
+const getFilterPersons = async (req, res) => {
+  try {
+    const data = req.query;
+    const persons = await personModel.find(data);
+    res.status(200).send({
+      message: "success",
+      data: persons,
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.message,
+    });
+  }
+}
 
 
 module.exports = {
@@ -255,5 +313,8 @@ module.exports = {
   getStatistics,
   getStatisticsRegion,
   getStatisticsServices,
-  getStatisticsAppareil
+  getStatisticsAppareil,
+  getFilterCompanies,
+  getFilterServices,
+  getFilterPersons
 }

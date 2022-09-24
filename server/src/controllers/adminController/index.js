@@ -6,7 +6,7 @@ const { signUpAdmin } = require("./admin");
 const { adminSignUpMiddleWare } = require("../../middlewares/adminMiddleware/adminSignUpMiddle");
 
 // companies controllers and middlewares
-const { getCompanies, deleteCompany, getCompany, getStatisticsRegion, getStatistics, getStatisticsServices, getStatisticsAppareil } = require("./company");
+const { getFilterCompanies, getFilterPersons, getFilterServices, getCompanies, deleteCompany, getCompany, getStatisticsRegion, getStatistics, getStatisticsServices, getStatisticsAppareil } = require("./company");
 
 
 router.post("/sign-up", adminSignUpMiddleWare, signUpAdmin);
@@ -19,5 +19,8 @@ router.get("/statistics/company", authenticateMiddleware, getStatistics);
 router.get("/statistic/company/region", authenticateMiddleware, getStatisticsRegion);
 router.get("/statistic/company/service", authenticateMiddleware, getStatisticsServices);
 router.get("/statistic/company/appareil", authenticateMiddleware, getStatisticsAppareil);
+router.get("/filter/company", authenticateMiddleware, getFilterCompanies);
+router.get("/filter/company/services", authenticateMiddleware, getFilterServices);
+router.get("/filter/company/persons", authenticateMiddleware, getFilterPersons);
 
 module.exports = router;
