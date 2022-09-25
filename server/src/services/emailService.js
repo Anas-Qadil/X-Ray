@@ -5,27 +5,21 @@ const bcrypt = require("bcrypt");
 const path = require("path");
 
 
-const sendMail = async(email) => {
+const sendMail = async(userEmail) => {
 
-  if (!req.body.email) {
+  if (!userEmail) {
     return false;
   }
 	fs.readFile(path.join(__dirname, "../utils/emailFormat.html"), async(err, file) => {
     
 		if (err)
 			return console.log(err);
-		const matchaHost = "http://localhost:3001/";
-		// const matchaHost = "http://10.13.3.5:3001/";
-		// const confirmationUrl = matchaHost + "api/confirmEmail/?cryptedUsername=" + cryptedUsername
-		// const EmailFormat = file.toString().replace("ConfirmationLink", confirmationUrl);
-    // console.log(file.toString());
 		const email = process.env.EMAIL;
 		const password = process.env.PASSWORD;
-    	console.log({email, password});
-		const from = "matcha@team.com";
-		const EmailReciever = req.body.email;
-		const subject = "X-Ray Notification";
-		const text = "X-Ray";
+    console.log({email, password});
+		const EmailReciever = userEmail;
+		const subject = "Warning";
+		const text = "You have exceeded the limit of x-ray doses";
 		const html = file.toString();
 
 		const transporter = nodemailer.createTransport({

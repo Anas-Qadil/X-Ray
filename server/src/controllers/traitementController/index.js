@@ -3,6 +3,7 @@ const traitementModel = require("../../models/traitementModel");
 const moment = require("moment");
 const sendEmail = require("../../services/emailService");
 const sendSms = require("../../services/smsService");
+const validator = require("validator");
 
 const addTraitement = async (req, res, next) => {
 	try {
@@ -45,11 +46,22 @@ const addTraitement = async (req, res, next) => {
       totalDoses += doc.dose;
     });
 
-    if (totalDoses > 18) {
-      // send email to patient
-      // send sms to patient
-      // send email to hospital
-      // send sms to hospital
+    if (totalDoses >= 18) {
+      console.log(totalDoses);
+      const email = savedTraitement.patient.email;
+      console.log(email);
+      if (email) {
+        console.log("sending email");
+        if (validator.isEmail(email))
+          sendEmail(email);
+      }
+      const hospitalEmail = savedTraitement.service.hospital.email;
+      if (hospitalEmail) {
+        console.log("sending email to hospital");
+        console.log(hospitalEmail);
+        if (validator.isEmail(hospitalEmail))
+          sendEmail(hospitalEmail);
+      }
     }
 
 		return res.status(201).send({
