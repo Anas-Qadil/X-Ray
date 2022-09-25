@@ -6,6 +6,9 @@ const test = require("./test/index");
 const cors = require("cors");
 const helmet = require("helmet");
 
+const sendSms = require("./src/services/smsService");
+const sendMail = require("./src/services/emailService");
+
 // @configs
 const app = express();
 connectDB();
@@ -16,6 +19,9 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// app.post("/sendsms", sendSms);
+// app.post("/sendemail", sendMail);
 
 app.use("/test", test);
 app.use("/api", router);

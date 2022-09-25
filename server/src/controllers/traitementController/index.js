@@ -1,5 +1,8 @@
 const express = require("express");
 const traitementModel = require("../../models/traitementModel");
+const moment = require("moment");
+const sendEmail = require("../../services/emailService");
+const sendSms = require("../../services/smsService");
 
 const addTraitement = async (req, res, next) => {
 	try {
@@ -22,6 +25,33 @@ const addTraitement = async (req, res, next) => {
     await savedTraitement.populate("patient");
     await savedTraitement.populate("service");
     await savedTraitement.populate("service.hospital");
+    
+    // check if patient passes the limit o fx ray doses
+    const traitements = await traitementModel.find({ patient: savedTraitement.patient._id });
+    const validTraitementData = [];
+
+    traitements.map((doc) => {
+      const DocDate = moment(doc.createdAt);
+      const today = moment();
+      const TodayMinusOneYear = moment(today).subtract(1, "year");
+      // console.log({DocDate, today, TodayMinusOneYear});
+      if (DocDate.isBetween(TodayMinusOneYear, today)) {
+        validTraitementData.push(doc);
+      }
+    });
+
+    let totalDoses = 0;
+    validTraitementData.map((doc) => {
+      totalDoses += doc.dose;
+    });
+
+    if (totalDoses > 18) {
+      // send email to patient
+      // send sms to patient
+      // send email to hospital
+      // send sms to hospital
+    }
+
 		return res.status(201).send({
       status: "success",
       message: "Traitement added successfully",
