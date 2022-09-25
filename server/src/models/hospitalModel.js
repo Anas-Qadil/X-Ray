@@ -5,7 +5,7 @@ const hospitalSchema = new schema({
 	name: {
 		type: String,
     trim: true,
-		required: true,
+    default: ""
 	},
 	region: {
 		type: String,
