@@ -45,11 +45,10 @@ const addTraitement = async (req, res, next) => {
     validTraitementData.map((doc) => {
       totalDoses += doc.dose;
     });
+    console.log(totalDoses);
 
     if (totalDoses >= 18) {
-      console.log(totalDoses);
       const email = savedTraitement.patient.email;
-      console.log(email);
       if (email) {
         console.log("sending email");
         if (validator.isEmail(email))
@@ -58,9 +57,13 @@ const addTraitement = async (req, res, next) => {
       const hospitalEmail = savedTraitement.service.hospital.email;
       if (hospitalEmail) {
         console.log("sending email to hospital");
-        console.log(hospitalEmail);
         if (validator.isEmail(hospitalEmail))
           sendEmail(hospitalEmail);
+      }
+      const phoneNumber = savedTraitement.patient.phone;
+      if (phoneNumber) {
+        console.log("sending sms");
+        sendSms(phoneNumber);
       }
     }
 
