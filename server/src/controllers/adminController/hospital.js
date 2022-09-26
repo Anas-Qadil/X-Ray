@@ -296,6 +296,46 @@ const getFilterHospitalPatients = async (req, res) => {
   }
 }
 
+const getHospitalData = async (req, res) => {
+  try {
+    const hospitalID = req.params.id; // hospital id
+    if (!hospitalID) {
+      return res.status(400).send({
+        message: "hospitalID is required"
+      });
+    }
+    const hospital = await hospitalModel.findById(hospitalID);
+    const services = await serviceModel.find({hospital: hospitalID});
+    const traitements = await traitementModel.find({})
+      .populate("service")
+      .populate("patient");
+
+    let data = [];
+    let patients = [];
+    traitements.map((doc) => {
+      if (doc?.service?.hospital.toString() === hospitalID) {
+        data.push(doc);
+        patients.push(doc.patient);
+      }
+    });
+
+    res.send({
+      message: "success",
+      data: {
+        hospital: hospital,
+        services: services,
+        traitements: data,
+        patients: patients
+      }
+    });
+
+  } catch (e) {
+    res.status(500).send({
+      message: e.messsage,
+    });
+  }
+}
+
 module.exports = {
   getHospitals,
   getHospital,
@@ -306,5 +346,6 @@ module.exports = {
   getStatisticsHospitalAppareil,
   getFilterHospital,
   getFilterHospitalServices,
-  getFilterHospitalPatients
+  getFilterHospitalPatients,
+  getHospitalData
 };

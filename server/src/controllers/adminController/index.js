@@ -6,7 +6,7 @@ const { signUpAdmin } = require("./admin");
 const { adminSignUpMiddleWare } = require("../../middlewares/adminMiddleware/adminSignUpMiddle");
 
 // companies controllers and middlewares
-const { getFilterCompanies, getFilterPersons, getFilterServices, getCompanies, deleteCompany, getCompany, getStatisticsRegion, getStatistics, getStatisticsServices, getStatisticsAppareil } = require("./company");
+const { getCompanyData, getFilterCompanies, getFilterPersons, getFilterServices, getCompanies, deleteCompany, getCompany, getStatisticsRegion, getStatistics, getStatisticsServices, getStatisticsAppareil } = require("./company");
 
 
 router.post("/sign-up", adminSignUpMiddleWare, signUpAdmin);
@@ -14,6 +14,7 @@ router.post("/sign-up", adminSignUpMiddleWare, signUpAdmin);
 // companies routes
 router.get("/companies", authenticateMiddleware, getCompanies); // ucan send search query to filter companies out
 router.get("/company/:id", authenticateMiddleware, getCompany);
+router.get("/company/:id/data", authenticateMiddleware, getCompanyData);
 router.delete("/company/:id", authenticateMiddleware, deleteCompany);
 router.get("/statistics/company", authenticateMiddleware, getStatistics);
 router.get("/statistic/company/region", authenticateMiddleware, getStatisticsRegion);
@@ -24,9 +25,10 @@ router.get("/filter/company/services", authenticateMiddleware, getFilterServices
 router.get("/filter/company/persons", authenticateMiddleware, getFilterPersons);
 
 // hospitals routes
-const { getFilterHospitalPatients, getHospitals, getFilterHospitalServices, getFilterHospital, getStatisticsHospitalAppareil, getStatisticsHospitalServices, deleteHospital, getHospital, getHospitalStatistics, getStatisticsHospitalRegion } = require("./hospital");
+const { getFilterHospitalPatients, getHospitalData, getHospitals, getFilterHospitalServices, getFilterHospital, getStatisticsHospitalAppareil, getStatisticsHospitalServices, deleteHospital, getHospital, getHospitalStatistics, getStatisticsHospitalRegion } = require("./hospital");
 router.get("/hospitals", authenticateMiddleware, getHospitals);
 router.get("/hospital/:id", authenticateMiddleware, getHospital);
+router.get("/hospital/:id/data", authenticateMiddleware, getHospitalData);
 router.delete("/hospital/:id", authenticateMiddleware, deleteHospital);
 router.get("/statistics/hospital", authenticateMiddleware, getHospitalStatistics);
 router.get("/statistic/hospital/region", authenticateMiddleware, getStatisticsHospitalRegion);

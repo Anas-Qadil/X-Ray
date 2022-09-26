@@ -305,6 +305,41 @@ const getFilterPersons = async (req, res) => {
   }
 }
 
+const getCompanyData = async (req, res) => {
+  try {
+    const companyId = req.query
+
+    if (!companyId) {
+      return res.status(400).send({
+        message: "companyId is required"
+      });
+    }
+    const persons = await personModel.find({ company: companyId });
+    const company = await companyModel.findById(companyId);
+    const traitements = await person_traitementModel.find({  })
+      .populate("person");
+
+    let dataTraitements = [];
+    traitements.map((traitement) => {
+      if (traitement.person?.company?.toString() === companyId) {
+        dataTraitements.push(traitement);
+      }
+    });
+
+    res.status(200).send({
+      message: "success",
+      data: {
+        persons: persons,
+        company: company,
+        traitements: dataTraitements,
+      }
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.message,
+    });
+  }
+}
 
 module.exports = {
   getCompanies,
@@ -316,5 +351,6 @@ module.exports = {
   getStatisticsAppareil,
   getFilterCompanies,
   getFilterServices,
-  getFilterPersons
+  getFilterPersons,
+  getCompanyData
 }
