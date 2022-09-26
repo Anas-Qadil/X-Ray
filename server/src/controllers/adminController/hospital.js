@@ -63,7 +63,7 @@ const deleteHospital = async (req, res) => {
       return res.status(400).send({
         message: "id is required"
       });
-    } 
+    }
     const hospital = await hospitalModel.findById(id);
     if (!hospital) {
       return res.status(400).send({

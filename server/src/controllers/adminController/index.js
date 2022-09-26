@@ -38,4 +38,12 @@ router.get("/filter/hospital", authenticateMiddleware, getFilterHospital);
 router.get("/filter/hospital/traitements", getFilterHospitalServices);
 router.get("/filter/hospital/patients", getFilterHospitalPatients);
 
+// patients routes
+const { getPatients, getPatient, getPatientData, deletePatient, getStatisticsPatient } = require("./patient");
+router.get("/patients", authenticateMiddleware, getPatients);
+router.get("/patient/:id", authenticateMiddleware, getPatient);
+router.get("/patient/:id/data", authenticateMiddleware, getPatientData);
+router.delete("/patient/:id", authenticateMiddleware, deletePatient);
+router.get("/statistics/patients", authenticateMiddleware, getStatisticsPatient);
+
 module.exports = router;
