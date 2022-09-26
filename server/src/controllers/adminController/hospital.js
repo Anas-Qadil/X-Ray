@@ -155,10 +155,92 @@ const getStatisticsHospitalRegion = async (req, res) => {
   }
 }
 
+const getStatisticsHospitalServices = async (req, res) => {
+  try {
+    const startDate = moment(req.query.startDate, "YYYY-MM-DD");
+    const endDate = moment(req.query.endDate, "YYYY-MM-DD");
+    const service = req.query.service;
+
+    if (!service) {
+      return res.status(400).send({
+        message: "service is required"
+      });
+    } 
+
+    if (!req.query.startDate || !req.query.endDate) {
+      return res.status(400).send({
+        message: "startDate and endDate are required"
+      });
+    }
+
+    const services = await traitementModel.find({})
+      .populate("service");
+    
+    let data = [];
+    services.map((doc) => {
+      const currDate = moment(doc.createdAt, "YYYY-MM-DD");
+      if (currDate.isBetween(startDate, endDate) && doc?.service?.name === service) {
+        data.push(doc);
+      }
+    });
+
+    res.send({
+      message: "success",
+      data: data
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.messsage,
+    });
+  }
+}
+
+const getStatisticsHospitalAppareil = async (req, res) => {
+  try {
+    const startDate = moment(req.query.startDate, "YYYY-MM-DD");
+    const endDate = moment(req.query.endDate, "YYYY-MM-DD");
+    const appareil = req.query.appareil;
+
+    if (!appareil) {
+      return res.status(400).send({
+        message: "appareil is required"
+      });
+    } 
+
+    if (!req.query.startDate || !req.query.endDate) {
+      return res.status(400).send({
+        message: "startDate and endDate are required"
+      });
+    }
+
+    const services = await traitementModel.find({})
+      .populate("service");
+    
+    let data = [];
+    services.map((doc) => {
+      const currDate = moment(doc.createdAt, "YYYY-MM-DD");
+      if (currDate.isBetween(startDate, endDate) && doc?.service?.equipment === appareil) {
+        data.push(doc);
+      }
+    });
+
+    res.send({
+      message: "success",
+      data: data
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.messsage,
+    });
+  }
+}
+
 module.exports = {
   getHospitals,
   getHospital,
   deleteHospital,
   getHospitalStatistics,
-  getStatisticsHospitalRegion
+  getStatisticsHospitalRegion,
+  getStatisticsHospitalServices,
+  getStatisticsHospitalAppareil
 };

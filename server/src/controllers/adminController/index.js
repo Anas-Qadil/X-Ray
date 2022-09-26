@@ -24,11 +24,13 @@ router.get("/filter/company/services", authenticateMiddleware, getFilterServices
 router.get("/filter/company/persons", authenticateMiddleware, getFilterPersons);
 
 // hospitals routes
-const { getHospitals, deleteHospital, getHospital, getHospitalStatistics, getStatisticsHospitalRegion } = require("./hospital");
+const { getHospitals, getStatisticsHospitalAppareil, getStatisticsHospitalServices, deleteHospital, getHospital, getHospitalStatistics, getStatisticsHospitalRegion } = require("./hospital");
 router.get("/hospitals", authenticateMiddleware, getHospitals);
 router.get("/hospital/:id", authenticateMiddleware, getHospital);
 router.delete("/hospital/:id", authenticateMiddleware, deleteHospital);
 router.get("/statistics/hospital", authenticateMiddleware, getHospitalStatistics);
 router.get("/statistic/hospital/region", authenticateMiddleware, getStatisticsHospitalRegion);
+router.get("/statistic/hospital/service", getStatisticsHospitalServices);
+router.get("/statistic/hospital/appareil", getStatisticsHospitalAppareil);
 
 module.exports = router;
