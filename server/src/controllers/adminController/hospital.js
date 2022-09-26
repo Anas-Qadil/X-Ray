@@ -4,6 +4,7 @@ const usersModel = require("../../models/usersModel");
 const serviceModel = require("../../models/serviceModel");
 const moment = require("moment");
 const traitementModel = require("../../models/traitementModel");
+const patientModel = require("../../models/patientModel");
 
 const getHospitals = async (req, res) => {
 	try {
@@ -235,6 +236,66 @@ const getStatisticsHospitalAppareil = async (req, res) => {
   }
 }
 
+const getFilterHospital = async (req, res) => {
+  try {
+    const query = req.query;
+    const hospitals = await hospitalModel.find(query);
+    res.send({
+      message: "success",
+      data: hospitals
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.messsage,
+    });
+  }
+}
+
+const getFilterHospitalServices = async (req, res) => {
+  try {
+    const query = req.query;
+    const services = await serviceModel.find(query);
+
+    const traitement = await traitementModel.find({})
+      .populate("service")
+      .populate("patient");
+
+    let data = [];
+    traitement.map((doc) => {
+      services.map((service) => {
+        if (doc?.service?._id.toString() === service._id.toString()) {
+          data.push(doc);
+        }
+      });
+    });
+
+    res.send({
+      message: "success",
+      data: services
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.messsage,
+    });
+  }
+}
+
+const getFilterHospitalPatients = async (req, res) => {
+  try {
+    const query = req.query;
+    const patients = await patientModel.find(query);
+
+    res.send({
+      message: "success",
+      data: patients
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.messsage,
+    });
+  }
+}
+
 module.exports = {
   getHospitals,
   getHospital,
@@ -242,5 +303,8 @@ module.exports = {
   getHospitalStatistics,
   getStatisticsHospitalRegion,
   getStatisticsHospitalServices,
-  getStatisticsHospitalAppareil
+  getStatisticsHospitalAppareil,
+  getFilterHospital,
+  getFilterHospitalServices,
+  getFilterHospitalPatients
 };
