@@ -46,4 +46,12 @@ router.get("/patient/:id/data", authenticateMiddleware, getPatientData);
 router.delete("/patient/:id", authenticateMiddleware, deletePatient);
 router.get("/statistics/patients", authenticateMiddleware, getStatisticsPatient);
 
+// person routes
+const { getPersons, getPerson, getPersonData, deletePerson, getStatisticsPerson } = require("./person");
+router.get("/persons", authenticateMiddleware, getPersons); // search query to filter persons out
+router.get("/person/:id", authenticateMiddleware, getPerson);
+router.get("/person/:id/data", authenticateMiddleware, getPersonData);
+router.delete("/person/:id", authenticateMiddleware, deletePerson);
+router.get("/statistics/persons", authenticateMiddleware, getStatisticsPerson);
+
 module.exports = router;
