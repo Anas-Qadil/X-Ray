@@ -48,17 +48,23 @@ const addTraitement = async (req, res, next) => {
     console.log(totalDoses);
 
     if (totalDoses >= 18) {
-      const email = savedTraitement.patient.email;
+      const email = savedTraitement.patient?.email;
       if (email) {
         console.log("sending email");
         if (validator.isEmail(email))
           sendEmail(email);
       }
-      const hospitalEmail = savedTraitement.service.hospital.email;
+      const hospitalEmail = savedTraitement.service?.hospital?.email;
       if (hospitalEmail) {
         console.log("sending email to hospital");
         if (validator.isEmail(hospitalEmail))
           sendEmail(hospitalEmail);
+      }
+      const hospitalPhone = savedTraitement.service?.hospital?.phone;
+      if (hospitalPhone) {
+        console.log("sending sms to hospital");
+        if (validator.isMobilePhone(hospitalPhone))
+          sendSms(hospitalPhone);
       }
       const phoneNumber = savedTraitement.patient.phone;
       if (phoneNumber) {

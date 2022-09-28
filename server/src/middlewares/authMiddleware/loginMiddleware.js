@@ -5,6 +5,12 @@ const bcrypt = require("bcrypt")
 const loginMiddleware = async (req, res, next) => {
 	try {
     const { username, password } = req.body;
+    if (!username || !password)
+      return res.status(400).send({
+        status: "failure",
+        message: "username and password are required"
+      });
+      
     const user = await usersModel.findOne({ username });
     console.log(user);
     if (user)
