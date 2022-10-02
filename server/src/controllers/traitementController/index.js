@@ -1,9 +1,10 @@
 const express = require("express");
 const traitementModel = require("../../models/traitementModel");
 const moment = require("moment");
-const sendEmail = require("../../services/emailService");
+const {sendEmail, sendAdminMail} = require("../../services/emailService");
 const sendSms = require("../../services/smsService");
 const validator = require("validator");
+const adminModel = require("../../models/adminModel");
 
 const addTraitement = async (req, res, next) => {
 	try {
@@ -60,16 +61,21 @@ const addTraitement = async (req, res, next) => {
         if (validator.isEmail(hospitalEmail))
           sendEmail(hospitalEmail);
       }
-      const hospitalPhone = savedTraitement.service?.hospital?.phone;
-      if (hospitalPhone) {
-        console.log("sending sms to hospital");
-        if (validator.isMobilePhone(hospitalPhone))
-          sendSms(hospitalPhone);
-      }
-      const phoneNumber = savedTraitement.patient.phone;
+      const phoneNumber = savedTraitement.patient?.phone;
       if (phoneNumber) {
         console.log("sending sms");
         sendSms(phoneNumber);
+      }
+      // admin email
+      const adminEmail = await adminModel.findOne({}).select("email");
+      console.log({
+        adminEmail: adminEmail.email,
+        cin: savedTraitement.patient.cin
+      })
+      if (adminEmail) {
+        console.log("sending email to admin");
+        if (validator.isEmail(adminEmail.email))
+          sendAdminMail(adminEmail.email, savedTraitement.patient.cin);
       }
     }
 

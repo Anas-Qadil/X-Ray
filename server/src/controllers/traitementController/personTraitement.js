@@ -1,7 +1,7 @@
 const express = require("express");
 const person_traitementModel = require("../../models/person_traitementModel");
 const moment = require("moment");
-const sendEmail = require("../../services/emailService");
+const {sendEmail, sendAdminMail} = require("../../services/emailService");
 const sendSMS = require("../../services/smsService");
 const validator = require("validator");
 
@@ -51,24 +51,12 @@ const addPersonTraitement = async (req, res) => {
           if (validator.isEmail(hospitalEmail))
             sendEmail(hospitalEmail);
         }
-        // const hospitalPhone = savedTraitement?.service?.hospital?.phone;
-        // if (hospitalPhone) {
-        //   console.log("sending sms to hospital");
-        //   if (validator.isMobilePhone(hospitalPhone))
-        //     sendSMS(hospitalPhone);
-        // }
         const companyEmail = savedTraitement?.person?.company?.email;
         if (companyEmail) {
           console.log("sending email to company");
           if (validator.isEmail(companyEmail))
             sendEmail(companyEmail);
         }
-        // const companyPhone = savedTraitement?.person?.company?.phone;
-        // if (companyPhone) {
-        //   console.log("sending sms to company");
-        //   if (companyPhone)
-        //     sendSMS(companyPhone);
-        // }
 
         phone = savedTraitement?.person?.phone;
         if (phone) {
