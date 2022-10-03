@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,6 +11,10 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import "./login.css";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
+import { loginApi } from '../../api/authApi/loginApi';
+import { setData } from '../../store/index'
+import Loader from "../../components/loader";
 
 function Copyright(props) {
   return (
@@ -43,40 +45,60 @@ const theme = createTheme({
 
 const Login = () => {
 
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const userRef = useRef();
-  const errRef = useRef();
 
   const [user, setUser] = useState('');
   const [psw, setPsw] = useState('');
-  const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(false);
+
+  const [loading, setLoading] = useState(true);
   
-  useEffect(() => {
-      userRef.current.focus();
-  }, [])
-
-  useEffect(() => {
-      setErrMsg('');
-  }, [user, psw])
-
-
   const handleSubmit = async (e) =>{
-      e.preventDefault();
-
-      console.log(user, psw);
-      navigate('/patient');
+    e.preventDefault();
+    try {
+      const res = await loginApi(user, psw);
+      const data = res.data;
+      const payload = {
+        user: data.user,
+        data: data,
+        token: data.token,
+      }
+      // fill redux store with user data
+      dispatch(setData(payload));
+      // put token to local storage
+      localStorage.setItem('token', data.token);
+      // put role to local storage
+      localStorage.setItem('role', data.user.role);
+      // vide form
       setUser('');
       setPsw('');
-      setSuccess(true);
+      // redirect to patient dashboard
+      navigate(`/${data.user.role}`);
+    } catch (error) {
+      alert(error.message);
+    }
   }
+
+  // useEffect to check if user is logged in
+  const token = useSelector(state => state.data.token);
+  const role = useSelector(state => state.data.user.role);
+  useEffect(() => {
+    if (token && role) {
+      navigate(`/${role}`);
+    }
+    setLoading(false);
+  }, [token, navigate]);
+
+
+  if (loading) return <Loader />
 
   return (
     <div className="login">
       <ThemeProvider theme={theme}>
         <Container sx={{ borderRadius: '10px', bgcolor: 'secondary.light' }} component="main" maxWidth="xs">
-            <CssBaseline />
-            <Box
+          <CssBaseline />
+          <Box
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -84,13 +106,12 @@ const Login = () => {
             }}
             >
             <Avatar  sx={{ m: 1,marginTop: 5, bgcolor: 'secondary.main' }}>
-                {/* <Lock /> */}
             </Avatar>
             <Typography component="h1" variant="h5">
                 Connexion
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                <TextField
+              <TextField
                 htmlFor="username"
                 margin="normal"
                 required
@@ -103,8 +124,8 @@ const Login = () => {
                 ref={userRef} 
                 autoComplete="off" 
                 onChange={(e) => setUser(e.target.value)} value={user} 
-                />
-                <TextField
+              />
+              <TextField
                 htmlFor="password"
                 margin="normal"
                 required
@@ -115,34 +136,18 @@ const Login = () => {
                 id="password"
                 autoComplete="current-password"
                 onChange={(e) => setPsw(e.target.value)} value={psw}
-                />
-                {/* <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-                /> */}
-                <Button
+              />
+              <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                >
-                Login
-                </Button>
-                <Grid container>
-                {/* <Grid item xs>
-                    <Link href="#" variant="body2">
-                    Forgot password?
-                    </Link>
-                </Grid> */}
-                {/* <Grid item>
-                    <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                    </Link>
-                </Grid> */}
-                </Grid>
+              >
+              Login
+              </Button>
             </Box>
-            </Box>
-            <Copyright sx={{ mt: 6, pb: 4 }} />
+          </Box>
+          <Copyright sx={{ mt: 6, pb: 4 }} />
         </Container>
       </ThemeProvider>
     </div>
