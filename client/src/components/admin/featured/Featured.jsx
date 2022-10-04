@@ -16,8 +16,12 @@ const Featured = ({user}) => {
         <MoreVertIcon fontSize="small" />
       </div>
       <div className="bottom">
-        <div className="featuredChart">
-          <Avatar  sx={{ m: 1,marginTop: 5, bgcolor: 'secondary.main' }}>
+        <div className="featuredChart"
+          style={{
+            marginLeft: '55px',
+          }}
+        >
+          <Avatar  sx={{ marginTop: 5, bgcolor: 'secondary.main' }}>
           </Avatar>
         </div>
         <p className="title">Votre profile informations</p>

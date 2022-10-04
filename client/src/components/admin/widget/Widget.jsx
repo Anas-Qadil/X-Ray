@@ -5,7 +5,7 @@ import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalance
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 
-const Widget = ({ type }) => {
+const Widget = ({ type, dose }) => {
   let data;
 
   //temporary
@@ -15,9 +15,8 @@ const Widget = ({ type }) => {
   switch (type) {
     case "user":
       data = {
-        title: "USERS",
+        title: "Dose",
         isMoney: false,
-        link: "See all users",
         icon: (
           <PersonOutlinedIcon
             className="icon"
@@ -34,6 +33,7 @@ const Widget = ({ type }) => {
         title: "ORDERS",
         isMoney: false,
         link: "View all orders",
+        dose: dose,
         icon: (
           <ShoppingCartOutlinedIcon
             className="icon"
@@ -74,6 +74,22 @@ const Widget = ({ type }) => {
         ),
       };
       break;
+    case "statistics":
+      data = {
+        title: "STATISTICS",
+        link: "See details",
+        text: 'Click on the "Statistics" button to see the statistics',
+        icon: (
+          <AccountBalanceWalletOutlinedIcon
+            className="icon"
+            style={{
+              backgroundColor: "rgba(128, 0, 128, 0.2)",
+              color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
     default:
       break;
   }
@@ -83,14 +99,13 @@ const Widget = ({ type }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {data.isMoney && "$"} {amount}
+          {data.title === "Dose" && dose}
         </span>
         <span className="link">{data.link}</span>
       </div>
       <div className="right">
         <div className="percentage positive">
           <KeyboardArrowUpIcon />
-          {diff} %
         </div>
         {data.icon}
       </div>
