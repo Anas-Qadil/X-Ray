@@ -20,10 +20,15 @@ export const dataSlice = createSlice({
       if (action.payload.user) state.user = action.payload.user;
       if (action.payload.data) state.data = action.payload.data;
       if (action.payload.token) state.token = action.payload.token;
+    },
+    removeData: (state) => {
+      state.user = {};
+      state.data = {};
+      state.token = null;
     }
   },
 });
 
-export const { getData, getToken, setData } = dataSlice.actions
+export const { getData, getToken, setData, removeData } = dataSlice.actions
 
 export default dataSlice.reducer

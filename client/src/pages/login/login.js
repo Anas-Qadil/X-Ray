@@ -59,6 +59,7 @@ const Login = () => {
     try {
       const res = await loginApi(user, psw);
       const data = res.data;
+      console.log("data");
       const payload = {
         user: data.user,
         data: data,
@@ -88,7 +89,7 @@ const Login = () => {
       navigate(`/${role}`);
     }
     setLoading(false);
-  }, [token, navigate]);
+  }, []);
 
 
   if (loading) return <Loader />
