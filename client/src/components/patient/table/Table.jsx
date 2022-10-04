@@ -18,7 +18,12 @@ const List = ({data}) => {
     );
   }
 
-  const result = data.slice(data.length - 5,  data.length);
+  let result;
+
+  if (data.length > 5)
+    result = data.slice(data.length - 5,  data.length);
+  else 
+    result = data;
 
   let rows = [];
   console.log(result[0].service.equipment)

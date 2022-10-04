@@ -4,7 +4,6 @@ import Navbar from '../../../components/person/navbar/Navbar'
 import Sidebar from '../../../components/person/sidebar/Sidebar'
 import "./list.scss"
 
-
 const PersonHospitalStatistics = () => {
 	return (
     <div className="list">
