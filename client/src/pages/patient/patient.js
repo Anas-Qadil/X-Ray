@@ -40,7 +40,7 @@ const Patient = () => {
     if (!token) {
       navigate('/');
     }
-    if (!user || user?.role !== 'patient') {
+    if (user?.role !== 'patient') {
       navigate("/");
       setLoading(false);
       return ;
