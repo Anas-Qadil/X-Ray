@@ -64,7 +64,7 @@ const Sidebar = ({role}) => {
             </Link>
           {(role === "admin" || role === "company" || role === "hospital") && <p className="title">USER</p>}
             {(role === "admin") && (
-              <Link to="/service-statistics" style={{ textDecoration: "none" }}>
+              <Link to="/admin/companies" style={{ textDecoration: "none" }}>
                 <li>
                   <ApartmentIcon className="icon" />
                   <span>Companies</span>
@@ -72,15 +72,15 @@ const Sidebar = ({role}) => {
               </Link>
             )}
             {(role === "admin" || role === "hospital") && (
-              <Link to="/service-statistics" style={{ textDecoration: "none" }}>
+              <Link to="/hospital/patients" style={{ textDecoration: "none" }}>
                 <li>
                   <PersonOutlineIcon className="icon" />
                   <span>Patients</span>
                 </li>
               </Link>
             )}
-            {(role === "admin" || role === "company") && (
-              <Link to="/service-statistics" style={{ textDecoration: "none" }}>
+            {(role === "admin" || role === "company" || role === "hospital") && (
+              <Link to="/persons" style={{ textDecoration: "none" }}>
                 <li>
                   <PersonIcon className="icon" />
                   <span>Persons</span>
@@ -88,7 +88,7 @@ const Sidebar = ({role}) => {
               </Link>
             )}
             {(role === "admin" || role === "hospital") && (
-            <Link to="/service-statistics" style={{ textDecoration: "none" }}>
+            <Link to="/hospital/services" style={{ textDecoration: "none" }}>
               <li>
                 <CreditCardIcon className="icon" />
                 <span>Service</span>
@@ -96,7 +96,7 @@ const Sidebar = ({role}) => {
             </Link>
             )}
             {(role === "admin") && (
-              <Link to="/service-statistics" style={{ textDecoration: "none" }}>
+              <Link to="/admin/hospitals" style={{ textDecoration: "none" }}>
                 <li>
                   <LocalHospitalIcon className="icon" />
                   <span>Hospitals</span>

@@ -4,6 +4,10 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import ViewWeekIcon from '@mui/icons-material/ViewWeek';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 
 const Widget = ({ type, dose }) => {
   let data;
@@ -15,8 +19,9 @@ const Widget = ({ type, dose }) => {
   switch (type) {
     case "user":
       data = {
-        title: "Dose",
+        title: "GLOBAL DOSE",
         isMoney: false,
+        link: "all time dose",
         icon: (
           <PersonOutlinedIcon
             className="icon"
@@ -28,14 +33,14 @@ const Widget = ({ type, dose }) => {
         ),
       };
       break;
-    case "order":
+    case "yearly":
       data = {
-        title: "ORDERS",
+        title: "YEARLY DOSE",
         isMoney: false,
-        link: "View all orders",
+        link: "This year dose",
         dose: dose,
         icon: (
-          <ShoppingCartOutlinedIcon
+          <CalendarTodayIcon
             className="icon"
             style={{
               backgroundColor: "rgba(218, 165, 32, 0.2)",
@@ -45,26 +50,26 @@ const Widget = ({ type, dose }) => {
         ),
       };
       break;
-    case "earning":
+    case "monthly":
       data = {
-        title: "EARNINGS",
+        title: "MONTHLY DOSE",
         isMoney: true,
-        link: "View net earnings",
+        link: "This month dose",
         icon: (
-          <MonetizationOnOutlinedIcon
+          <CalendarMonthIcon
             className="icon"
             style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
           />
         ),
       };
       break;
-    case "balance":
+    case "weekly":
       data = {
-        title: "BALANCE",
+        title: "WEEKLY DOSE",
         isMoney: true,
-        link: "See details",
+        link: "This week dose",
         icon: (
-          <AccountBalanceWalletOutlinedIcon
+          <DateRangeIcon
             className="icon"
             style={{
               backgroundColor: "rgba(128, 0, 128, 0.2)",
@@ -99,7 +104,7 @@ const Widget = ({ type, dose }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {data.title === "Dose" && dose}
+          {dose}
         </span>
         <span className="link">{data.link}</span>
       </div>

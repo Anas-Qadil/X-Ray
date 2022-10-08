@@ -12,8 +12,11 @@ const Company = () => {
       <Sidebar role="company" />
       <div className="homeContainer">
         <Navbar />
-        <div className="widgets" style={{ width: "32.4%" }} >
+        <div className="widgets">
           <Widget type="user" dose={3}/>
+          <Widget type="yearly" dose={3}/>
+          <Widget type="monthly" dose={3}/>
+          <Widget type="weekly" dose={3}/>
         </div>
         <div className="charts"> 
           <Featured user={[]} />

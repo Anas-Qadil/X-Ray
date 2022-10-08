@@ -55,8 +55,11 @@ const Patient = () => {
       <Sidebar role="patient" />
       <div className="homeContainer">
         <Navbar />
-        <div className="widgets" style={{ width: "32.4%" }} >
+        <div className="widgets" >
           <Widget type="user" dose={dose}/>
+          <Widget type="yearly" dose={dose}/>
+          <Widget type="monthly" dose={dose}/>
+          <Widget type="weekly" dose={dose}/>
         </div>
         <div className="charts"> 
           <Featured user={user.patient} />

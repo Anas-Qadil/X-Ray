@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Table from "../../components/table/Table";
@@ -9,13 +9,11 @@ import Stack from '@mui/material/Stack';
 import { TextField, Select, MenuItem, FormControl, InputLabel  } from '@mui/material';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 
-const Statistics = () => {
+const Statistics = ({role}) => {
 
-  // grep token form redux
-  const token = useSelector(state => state?.data?.token);
-  const user = useSelector(state => state?.data?.data?.user);
-  const role = user?.role;
+  const navigate = useNavigate();
 
   const [hospital, setHospital] = React.useState('');
   const [region, setRegion] = React.useState('');
@@ -30,6 +28,7 @@ const Statistics = () => {
       <div className="homeContainer">
         <Navbar />
         <div className="listContainer">
+          [{role}]
           <div className="listTitleContainer">
             <TextField id="standard-basic" label="Search" variant="standard" />
             <FormControl variant="standard" sx={{ mb: 2, ml: 5, minWidth: 220 }}>

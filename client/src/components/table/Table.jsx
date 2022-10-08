@@ -18,6 +18,7 @@ const List = ({data}) => {
     result = data;
 
   let rows = [];
+
   result?.map((item, index) => {
     rows.push({
       id: index,
@@ -31,6 +32,7 @@ const List = ({data}) => {
     });
   })
 
+  console.log(rows);
   return (
     <TableContainer component={Paper} className="table">
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -51,16 +53,12 @@ const List = ({data}) => {
             <TableRow key={row.id}>
               <TableCell className="tableCell">{row?.id}</TableCell>
               <TableCell className="tableCell">{row?.date}</TableCell>
-              <TableCell className="tableCell">
-                  {row?.cin}
-              </TableCell>
+              <TableCell className="tableCell">{row?.cin}</TableCell>
               <TableCell className="tableCell">{row?.service}</TableCell>
               <TableCell className="tableCell">{row?.examen}</TableCell>
               <TableCell className="tableCell">{row?.equipement}</TableCell>
               <TableCell className="tableCell">{row?.hospital}</TableCell>
-              <TableCell className="tableCell">
-                {row?.dose}
-              </TableCell>
+              <TableCell className="tableCell">{row?.dose}</TableCell>
             </TableRow>
           ))}
         </TableBody>

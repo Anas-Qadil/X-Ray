@@ -34,7 +34,11 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="wrapper">
-          <h3>Hello, {firstName !== undefined ? firstName : "there"}</h3>
+          <h3><span className="logo" style={{
+            color: "#6439FF",
+            fontWeight: "bold",
+            fontSize: "1.5rem",
+          }}>[ {data?.role.toUpperCase()} ]</span> Hello, {firstName !== undefined ? firstName : "there"}</h3>
         <div className="items">
           <div className="item">
             <img
