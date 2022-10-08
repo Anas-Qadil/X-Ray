@@ -7,9 +7,8 @@ import Company from './pages/company/company';
 import Hospital from './pages/hospital/hospital';
 import Person from './pages/person/person';
 import NotFound from "./pages/notFound"
-import PatientHospitalStatistics from "./pages/patient/statistics/hospitalStatistics"
-import PatientServiceStatistics from "./pages/patient/statistics/serviceStatistics"
-import Sidebar from './components/sidebar/Sidebar'
+import Statistics from './pages/statistics/statistics';
+
 
 function App() {
   return (
@@ -21,8 +20,7 @@ function App() {
         <Route path="/company" element={<Company />} />
         <Route path="/hospital" element={<Hospital />} />
         <Route path="/person" element={<Person />} />
-        <Route path="/hospital-statistics" element={<PatientHospitalStatistics />} />
-        <Route path="/service-statistics" element={<PatientServiceStatistics />} />
+        <Route path="/statistics" element={<Statistics />} />
         <Route path="*" element={<NotFound/ >} />
       </Routes>
     </div>

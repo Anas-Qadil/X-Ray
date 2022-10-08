@@ -10,33 +10,24 @@ import moment from "moment";
 
 const List = ({data}) => {
 
-  if (!data || data.length === 0) {
-    return ( 
-      <div className="table">
-        <h1>No data found</h1>
-      </div>
-    );
-  }
-
   let result;
 
-  if (data.length > 5)
+  if (data?.length > 5)
     result = data.slice(data.length - 5,  data.length);
   else 
     result = data;
 
   let rows = [];
-  console.log(result[0].service.equipment)
-  result.map((item, index) => {
+  result?.map((item, index) => {
     rows.push({
       id: index,
-      date: moment(item.createdAt).format("DD/MM/YYYY HH:mm:ss"),
-      cin: item.patient.cin,
-      service: item.service.name,
-      examen: item.service.examen,
-      equipement: item.service.equipment,
-      hospital: item.service.hospital.name,
-      dose: item.dose,
+      date: moment(item?.createdAt).format("DD/MM/YYYY HH:mm:ss"),
+      cin: item?.patient?.cin,
+      service: item?.service?.name,
+      examen: item?.service?.examen,
+      equipement: item?.service?.equipment,
+      hospital: item?.service?.hospital?.name,
+      dose: item?.dose,
     });
   })
 
@@ -58,17 +49,17 @@ const List = ({data}) => {
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.id}>
-              <TableCell className="tableCell">{row.id}</TableCell>
-              <TableCell className="tableCell">{row.date}</TableCell>
+              <TableCell className="tableCell">{row?.id}</TableCell>
+              <TableCell className="tableCell">{row?.date}</TableCell>
               <TableCell className="tableCell">
-                  {row.cin}
+                  {row?.cin}
               </TableCell>
-              <TableCell className="tableCell">{row.service}</TableCell>
-              <TableCell className="tableCell">{row.examen}</TableCell>
-              <TableCell className="tableCell">{row.equipement}</TableCell>
-              <TableCell className="tableCell">{row.hospital}</TableCell>
+              <TableCell className="tableCell">{row?.service}</TableCell>
+              <TableCell className="tableCell">{row?.examen}</TableCell>
+              <TableCell className="tableCell">{row?.equipement}</TableCell>
+              <TableCell className="tableCell">{row?.hospital}</TableCell>
               <TableCell className="tableCell">
-                {row.dose}
+                {row?.dose}
               </TableCell>
             </TableRow>
           ))}

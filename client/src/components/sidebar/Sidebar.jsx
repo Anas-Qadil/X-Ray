@@ -52,43 +52,17 @@ const Sidebar = ({role}) => {
               <span>Dashboard</span>
             </li>
           </Link>
-          <p className="title">USERS</p>
-            {(role === "admin" || role === "hospital") &&  (
-              <Link to="/patients" style={{ textDecoration: "none" }}>
-                <li>
-                  <PersonOutlineIcon className="icon" />
-                  <span>Patients</span>
-                </li>
-              </Link>
-            )}
-            {(role === "admin" || role === "company") && (
-              <>
-                <Link to="/persons" style={{ textDecoration: "none" }}>
-                  <li>
-                    <PersonIcon className="icon" />
-                    <span>Persons</span>
-                  </li>
-                </Link>
-              </>
-            )}
           <p className="title">STATISTICS</p>
-            {(role === "admin") && (
-              <Link to="/service-statistics" style={{ textDecoration: "none" }}>
-                <li>
-                  <LocalHospitalIcon className="icon" />
-                  <span>Hospitals</span>
-                </li>
-              </Link>
-            )}
-            {(role === "admin" || role === "patient" || role === "person") && (
-              <Link to="/statistics" style={{ textDecoration: "none" }}>
-                <li>
-                  <CreditCardIcon className="icon" />
-                  <span>Your Statistics</span>
-                </li>
-              </Link>
-            )}
-
+            <Link to="/statistics" style={{ textDecoration: "none" }}>
+              <li>
+                <CreditCardIcon className="icon" />
+                {(role === "admin") && <span>Global Statistics</span>}
+                {(role === "company") && <span>Statistics Of Your Persons</span>}
+                {(role === "hospital") && <span>Statistics Of Your Patients</span>}
+                {(role === "person" || role === "patient") && <span>Your Statistics</span>}
+              </li>
+            </Link>
+          {(role === "admin" || role === "company" || role === "hospital") && <p className="title">USER</p>}
             {(role === "admin") && (
               <Link to="/service-statistics" style={{ textDecoration: "none" }}>
                 <li>
@@ -113,7 +87,7 @@ const Sidebar = ({role}) => {
                 </li>
               </Link>
             )}
-            {(role === "admin" || role === "hospital" || role === "company") && (
+            {(role === "admin" || role === "hospital") && (
             <Link to="/service-statistics" style={{ textDecoration: "none" }}>
               <li>
                 <CreditCardIcon className="icon" />
@@ -121,7 +95,6 @@ const Sidebar = ({role}) => {
               </li>
             </Link>
             )}
-          {(role === "admin") && <p className="title">SEARCH</p>}
             {(role === "admin") && (
               <Link to="/service-statistics" style={{ textDecoration: "none" }}>
                 <li>
@@ -130,39 +103,7 @@ const Sidebar = ({role}) => {
                 </li>
               </Link>
             )}
-            {(role === "admin") && (
-              <Link to="/service-statistics" style={{ textDecoration: "none" }}>
-                <li>
-                  <ApartmentIcon className="icon" />
-                  <span>Companies</span>
-                </li>
-              </Link>
-            )}
-            {(role === "admin" || role === "hospital") && (
-              <Link to="/service-statistics" style={{ textDecoration: "none" }}>
-                <li>
-                  <CreditCardIcon className="icon" />
-                  <span>Patients</span>
-                </li>
-              </Link>
-            )}
-            {(role === "admin" || role === "company") && (
-              <Link to="/service-statistics" style={{ textDecoration: "none" }}>
-                <li>
-                  <PersonIcon className="icon" />
-                  <span>Persons</span>
-                </li>
-              </Link>
-            )}
-            {(role === "admin" || role === "hospital" || role === "company") && (
-            <Link to="/service-statistics" style={{ textDecoration: "none" }}>
-              <li>
-                <CreditCardIcon className="icon" />
-                <span>Service</span>
-              </li>
-            </Link>
-            )}
-          <p className="title">USER</p>
+          <p className="title">Action</p>
           <li>
             <ExitToAppIcon className="icon" />
             <span

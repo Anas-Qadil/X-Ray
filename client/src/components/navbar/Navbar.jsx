@@ -22,7 +22,6 @@ const Navbar = () => {
   else if (data?.role === "hospital") firstName = data?.hospital?.firstName;
   else if (data?.role === "company") firstName = data?.company?.firstName;
 
-  console.log(firstName);
 
   const handleLogout = () => {
     dispatch(removeData());

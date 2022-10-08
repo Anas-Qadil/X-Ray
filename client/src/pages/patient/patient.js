@@ -55,11 +55,7 @@ const Patient = () => {
       <Sidebar role="patient" />
       <div className="homeContainer">
         <Navbar />
-        <div className="widgets"
-          style={{
-            width: "32.4%",
-          }}
-        >
+        <div className="widgets" style={{ width: "32.4%" }} >
           <Widget type="user" dose={dose}/>
         </div>
         <div className="charts"> 
