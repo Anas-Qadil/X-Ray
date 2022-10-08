@@ -2,16 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/loader";
-import Sidebar from "../../components/person/sidebar/Sidebar";
-import Widget from "../../components/person/widget/Widget";
-import Featured from "../../components/person/featured/Featured";
-import Chart from "../../components/person/chart/Chart";
-import Table from "../../components/person/table/Table";
-import Navbar from "../../components/person/navbar/Navbar";
 import "./home.scss";
-import { getPatientDoses } from "../../api/servicesApi";
-import { removeData } from "../../store/index";
 import { useDispatch } from "react-redux";
+import Sidebar from "../../components/sidebar/Sidebar";
+import Navbar from "../../components/navbar/Navbar";
 
 const Person = () => {
 
@@ -38,24 +32,9 @@ const Person = () => {
   if (loading) return <Loader />
   return (
     <div className="home">
-      <Sidebar role={'person'}/>
+      <Sidebar role="person" />
       <div className="homeContainer">
         <Navbar />
-        <div className="widgets"
-          style={{
-            width: "32.4%",
-          }}
-        >
-          <Widget type="user" dose={100}/>
-        </div>
-        <div className="charts"> 
-          <Featured user={user.person} />
-          <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
-        </div>
-        <div className="listContainer">
-          <div className="listTitle">Latest Operations</div>
-          <Table data={[]} /> {/* pass latest 5 services */}
-        </div>
       </div>
     </div>
   );

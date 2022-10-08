@@ -105,7 +105,14 @@ const getPatientServices = async (req, res) => {
 const getPatientDoses = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await traitementModel.find({ patient: id });
+    const data = await traitementModel.find({ patient: id })
+    .populate("patient")
+    .populate({
+      path: "service",
+      populate: {
+        path: "hospital"
+      }
+    });
   
     let doses = 0;
     data.map((service) => {

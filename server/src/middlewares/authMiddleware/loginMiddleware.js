@@ -12,7 +12,6 @@ const loginMiddleware = async (req, res, next) => {
       });
       
     const user = await usersModel.findOne({ username });
-    console.log(user);
     if (user)
     {
       const match = await bcrypt.compare(password, user.password);
@@ -24,6 +23,7 @@ const loginMiddleware = async (req, res, next) => {
       switch (user.role) {
         case "patient":
           await user.populate("patient");
+          console.log(user);
           break;
         case "hospital":
           await user.populate("hospital");

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/loader";
-import Sidebar from "../../components/patient/sidebar/Sidebar";
-import Widget from "../../components/patient/widget/Widget";
-import Featured from "../../components/patient/featured/Featured";
-import Chart from "../../components/patient/chart/Chart";
-import Table from "../../components/patient/table/Table";
-import Navbar from "../../components/patient/navbar/Navbar";
+import Sidebar from "../../components/sidebar/Sidebar";
+import Widget from "../../components/widget/Widget";
+import Featured from "../../components/featured/Featured";
+import Chart from "../../components/chart/Chart";
+import Table from "../../components/table/Table";
+import Navbar from "../../components/navbar/Navbar";
 import "./home.scss";
 import { getPatientDoses } from "../../api/servicesApi";
 import { removeData } from "../../store/index";
@@ -52,7 +52,7 @@ const Patient = () => {
   if (loading) return <Loader />
   return (
     <div className="home">
-      <Sidebar role={user.role}/>
+      <Sidebar role="patient" />
       <div className="homeContainer">
         <Navbar />
         <div className="widgets"

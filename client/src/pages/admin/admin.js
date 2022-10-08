@@ -1,9 +1,14 @@
 import React from "react";
+import Sidebar from "../../components/sidebar/Sidebar";
+import Navbar from "../../components/navbar/Navbar";
 
 const Admin = () => {
   return (
-    <div>
-      <h1>Admin</h1>
+    <div className="home">
+      <Sidebar role="admin" />
+      <div className="homeContainer">
+        <Navbar />
+      </div>
     </div>
   );
 }
