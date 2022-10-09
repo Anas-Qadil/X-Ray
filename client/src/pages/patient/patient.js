@@ -12,16 +12,18 @@ import "./home.scss";
 import { getPatientDoses } from "../../api/servicesApi";
 import { removeData } from "../../store/index";
 import { useDispatch } from "react-redux";
+import logUserOut from "../../utils/logOut";
 
 const Patient = () => {
 
-  const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [dose, setDose] = useState();
   const [doseData, setDoseData] = useState([]);
+
   // get user data from redux store
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
+
   // get patient doses
   const getDoses = async () => {
    try {
@@ -32,9 +34,9 @@ const Patient = () => {
     alert('patient ' + error.message);
    }
   }
-  // check if user is logged in
+
   useEffect(() => {
-    if (token && user?.role === 'patient')
+    if (user?.patient?._id)  
       getDoses();
     setLoading(false);
   }, [user]);

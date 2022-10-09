@@ -15,7 +15,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DataSaverOnIcon from '@mui/icons-material/DataSaverOn';
 
-
 const Sidebar = ({role}) => {
 
   // get user data

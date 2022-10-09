@@ -25,17 +25,17 @@ function App() {
 
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch()
+  const navigate = useNavigate();
+
   // grep user form redux
   const ReduxToken = useSelector(state => state?.data?.token);
   const ReduxUser = useSelector(state => state?.data?.data?.user);
   const role = ReduxUser?.role;
 
-  const navigate = useNavigate();
 
   const relogin = async (token) => {
     try {
       const res = await reloginApi(token);
-      // console.log(res);
       const data = res.data;
       const payload = {
         user: data.user,
@@ -51,7 +51,7 @@ function App() {
       // redirect to patient dashboard
       navigate(`/${data?.user?.role}`);
     } catch (error) {
-      // alert(error.message);
+      alert(error.message);
     }
   }
 
@@ -70,7 +70,6 @@ function App() {
   }, []);
 
   if (loading) return <Loader />
-
 
   return (
     <div className="App">
