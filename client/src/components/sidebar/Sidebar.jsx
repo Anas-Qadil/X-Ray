@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import PersonIcon from '@mui/icons-material/Person';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import DataSaverOnIcon from '@mui/icons-material/DataSaverOn';
 
 
 const Sidebar = ({role}) => {
@@ -104,6 +106,24 @@ const Sidebar = ({role}) => {
               </Link>
             )}
           <p className="title">Action</p>
+          {(role === "admin" || role === "hospital") && (
+            <Link to="/add-traitement" style={{ textDecoration: "none" }}>
+              <li>
+                <DataSaverOnIcon className="icon" />
+                <span>Add Traitement</span>
+              </li>
+            </Link>
+          )}
+          {(role === "admin" || role === "company" || role === "hospital") && (
+            <Link to="/create-account" style={{ textDecoration: "none" }}>
+              <li>
+                <PersonAddIcon className="icon" />
+                {role === "hospital" &&<span>Add Patient/Person</span>}
+                {role === "company" &&<span>Add Person</span>}
+                {role === "admin" &&<span>Add User</span>}
+              </li>
+            </Link>
+          )}
           <li>
             <ExitToAppIcon className="icon" />
             <span

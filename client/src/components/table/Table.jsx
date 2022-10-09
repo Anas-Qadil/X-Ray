@@ -40,11 +40,13 @@ const List = ({data}) => {
           <TableRow>
             <TableCell className="tableCell">ID</TableCell>
             <TableCell className="tableCell">Date</TableCell>
-            <TableCell className="tableCell">CIN</TableCell>
+            <TableCell className="tableCell">Region</TableCell>
+            <TableCell className="tableCell">Ville</TableCell>
+            <TableCell className="tableCell">Hospital</TableCell>
             <TableCell className="tableCell">Service</TableCell>
             <TableCell className="tableCell">Examen</TableCell>
+            <TableCell className="tableCell">Protocole</TableCell>
             <TableCell className="tableCell">Equipement</TableCell>
-            <TableCell className="tableCell">Hospital</TableCell>
             <TableCell className="tableCell">Dose</TableCell>
           </TableRow>
         </TableHead>

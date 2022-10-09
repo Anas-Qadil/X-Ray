@@ -14,6 +14,9 @@ import { useSelector } from "react-redux";
 import {useNavigate} from 'react-router-dom';
 import Hospitals from "./pages/admin/hospitals";
 import Companies from "./pages/admin/companies";
+import AddTraitement from './pages/actions/addTraitement';
+import CreateAccount from './pages/actions/createAccount';
+
 
 function App() {
 
@@ -48,6 +51,9 @@ function App() {
         {/* Admin Part */}
         <Route path="/admin/hospitals" element={<Hospitals role={role} />} />
         <Route path="/admin/companies" element={<Companies role={role} />} />
+        {/* Actions */}
+        <Route path="/add-traitement" element={<AddTraitement role={role} />} />
+        <Route path="/create-account" element={<CreateAccount role={role} />} />
 
         <Route path="*" element={<NotFound/ >} />
       </Routes>

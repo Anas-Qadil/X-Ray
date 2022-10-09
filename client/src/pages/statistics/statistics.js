@@ -18,6 +18,7 @@ const Statistics = ({role}) => {
   const [hospital, setHospital] = React.useState('');
   const [region, setRegion] = React.useState('');
   const [service, setService] = React.useState('');
+  const [appareil, setAppareil] = React.useState('');
   const [startDate, setStartDate] = React.useState(moment().subtract(1, 'year').format('YYYY-MM-DD'));
   const [endDate, setEndDate] = React.useState(moment().format('YYYY-MM-DD'));
 
@@ -31,7 +32,7 @@ const Statistics = ({role}) => {
           [{role}]
           <div className="listTitleContainer">
             <TextField id="standard-basic" label="Search" variant="standard" />
-            <FormControl variant="standard" sx={{ mb: 2, ml: 5, minWidth: 220 }}>
+            <FormControl variant="standard" sx={{ mb: 2, ml: 5, minWidth: 160 }}>
               <InputLabel id="demo-select-small">Hospital</InputLabel>
               <Select
                 labelId="demo-simple-select-standard-label"
@@ -48,7 +49,7 @@ const Statistics = ({role}) => {
                 <MenuItem value={30}>Thirty</MenuItem>
               </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ mb: 2, ml: 5, minWidth: 220 }}>
+            <FormControl variant="standard" sx={{ mb: 2, ml: 5, minWidth: 160 }}>
               <InputLabel id="demo-select-small">Region</InputLabel>
               <Select
                 labelId="demo-simple-select-standard-label"
@@ -65,7 +66,7 @@ const Statistics = ({role}) => {
                 <MenuItem value={30}>Thirty</MenuItem>
               </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ mb: 2, ml: 5, minWidth: 220 }}>
+            <FormControl variant="standard" sx={{ mb: 2, ml: 5, minWidth: 160 }}>
               <InputLabel id="demo-select-small">Service</InputLabel>
               <Select
                 labelId="demo-simple-select-standard-label"
@@ -82,11 +83,28 @@ const Statistics = ({role}) => {
                 <MenuItem value={30}>Thirty</MenuItem>
               </Select>
             </FormControl>
-            <FormControl variant="standard" sx={{ mb: 2, ml: 5, minWidth: 220 }}>
+            <FormControl variant="standard" sx={{ mb: 2, ml: 5, minWidth: 160 }}>
+              <InputLabel id="demo-select-small">Appareil</InputLabel>
+              <Select
+                labelId="demo-simple-select-standard-label"
+                id="demo-simple-select-standard"
+                value={appareil}
+                onChange={(e) => setAppareil(e.target.value)}
+                label="Service"
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl variant="standard" sx={{ mb: 2, ml: 5, minWidth: 160 }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Stack spacing={3}>
                 <DesktopDatePicker
-                  label="Date desktop"
+                  label="From"
                   inputFormat="MM/DD/YYYY"
                   value={startDate}
                   onChange={(e) => setStartDate(e.format('YYYY-MM-DD'))}
@@ -95,11 +113,11 @@ const Statistics = ({role}) => {
                 </Stack>
               </LocalizationProvider>
             </FormControl>
-            <FormControl variant="standard" sx={{ mb: 1, ml: 5, minWidth: 220 }}>
+            <FormControl variant="standard" sx={{ mb: 1, ml: 5, minWidth: 160 }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Stack spacing={2}>
                 <DesktopDatePicker
-                  label="Date desktop"
+                  label="To"
                   inputFormat="MM/DD/YYYY"
                   value={endDate}
                   onChange={(e) => setEndDate(e.format('YYYY-MM-DD'))}
