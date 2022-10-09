@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Widget from "../../components/widget/Widget";
 import Featured from "../../components/featured/Featured";
 import Chart from "../../components/chart/Chart";
 import Table from "../../components/table/Table";
+import Loader from "../../components/loader";
 
 const Admin = () => {
 
+  const [loading, setLoading] = React.useState(true);
   const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
 
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  if (loading) return <Loader />
   return (
     <div className="home">
       <Sidebar role="admin" />

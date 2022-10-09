@@ -41,7 +41,9 @@ const { SP_hospital, SP_region, SP_service, SP_appareil } = require("../controll
 const { SPM_patient } = require("../middlewares/patientMiddleware/statistiqueMiddleware");
 
 // @route POST api/login
+const relogMiddleware = require("../middlewares/authMiddleware/relogMiddleware");
 router.post("/login", loginMiddleware, loginController); // turn this on
+router.post("/relogin", relogMiddleware, loginController);
 // router.post("/login", loginController); // just for test
 
 // @route POST api/signup

@@ -18,24 +18,10 @@ const Person = () => {
   // get user data from redux store
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
-  // console.log(user);
-  // get patient doses
-
-  // check if user is logged in
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!token) {
-      navigate('/');
-    }
-    if (user?.role !== 'person') {
-      navigate("/");
-    }
-    setLoading(false);
-  }, [])
+  
 
   const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
 
-  if (loading) return <Loader />
   return (
     <div className="home">
       <Sidebar role="person" />

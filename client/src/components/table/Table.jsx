@@ -9,8 +9,8 @@ import Paper from "@mui/material/Paper";
 import moment from "moment";
 
 const List = ({data, labels}) => {
-
-  return (
+  // console.log(data);
+  return ( 
     <TableContainer component={Paper} className="table">
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -21,9 +21,9 @@ const List = ({data, labels}) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
-            <TableRow key={row.id}>
-              {Object.keys(row).map((key, index) => (
+          {data?.map((row) => (
+            <TableRow key={row?.id}>
+              {Object?.keys(row)?.map((key, index) => (
                 <TableCell className="tableCell" key={index}>{row[key]}</TableCell>
               ))}
             </TableRow>

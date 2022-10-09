@@ -9,3 +9,13 @@ export const loginApi = async (username, password) => {
     }
   });
 }
+
+export const reloginApi = async (token) => {
+  return axios.post(`${links.localhost}/api/relogin`,{} ,{
+    headers: {
+      Accept: "application/json",
+        "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}

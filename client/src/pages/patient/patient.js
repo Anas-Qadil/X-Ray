@@ -22,32 +22,22 @@ const Patient = () => {
   // get user data from redux store
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
-  // console.log(user);
   // get patient doses
   const getDoses = async () => {
    try {
      const res = await getPatientDoses(token, user?.patient?._id);
       setDoseData(res.data);
-      setDose(res?.data?.doses);
+      setDose(res.data.doses);
    } catch (error) {
     alert('patient ' + error.message);
    }
   }
-
   // check if user is logged in
-  const navigate = useNavigate();
   useEffect(() => {
-    if (!token) {
-      navigate('/');
-    }
-    if (user?.role !== 'patient') {
-      navigate("/");
-      setLoading(false);
-      return ;
-    }
-    getDoses();
+    if (token && user?.role === 'patient')
+      getDoses();
     setLoading(false);
-  }, []);
+  }, [user]);
 
   const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
 
@@ -64,12 +54,12 @@ const Patient = () => {
           <Widget type="weekly" dose={dose}/>
         </div>
         <div className="charts"> 
-          <Featured user={user.patient} />
+          <Featured user={user?.patient} />
           <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
         </div>
         <div className="listContainer">
           <div className="listTitle">Latest Operations</div>
-          <Table data={doseData.data} labels={labels} />
+          <Table data={[]} labels={labels} />
         </div>
       </div>
     </div>

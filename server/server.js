@@ -13,6 +13,8 @@ const sendMail = require("./src/services/emailService");
 const app = express();
 connectDB();
 app.use(cors()); // dont forget to make only the front end can access this api
+
+
 app.use(helmet()); // for security and check it out after project is done
 const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT || 5000;

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, Link } from "react-router-dom";
 import Login from './pages/login/login';
 import Patient from './pages/patient/patient';
@@ -11,27 +11,67 @@ import Statistics from './pages/statistics/statistics';
 import HospitalPatient from './pages/hospital/hospitalPatient';
 import HospitalService from './pages/hospital/hospitalService';
 import { useSelector } from "react-redux";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Hospitals from "./pages/admin/hospitals";
 import Companies from "./pages/admin/companies";
 import AddTraitement from './pages/actions/addTraitement';
 import CreateAccount from './pages/actions/createAccount';
-
+import Loader from "./components/loader";
+import { reloginApi } from './api/authApi/loginApi';
+import { useDispatch } from "react-redux";
+import { setData } from './store/index';
 
 function App() {
 
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch()
   // grep user form redux
-  const token = useSelector(state => state?.data?.token);
-  const user = useSelector(state => state?.data?.data?.user);
-  const role = user?.role;
+  const ReduxToken = useSelector(state => state?.data?.token);
+  const ReduxUser = useSelector(state => state?.data?.data?.user);
+  const role = ReduxUser?.role;
 
   const navigate = useNavigate();
 
+  const relogin = async (token) => {
+    try {
+      const res = await reloginApi(token);
+      // console.log(res);
+      const data = res.data;
+      const payload = {
+        user: data.user,
+        data: data,
+        token: data.token,
+      }
+      // fill redux store with user data
+      dispatch(setData(payload));
+      // put token to local storage
+      localStorage.setItem('token', data?.token);
+      // put role to local storage
+      localStorage.setItem('role', data?.user?.role);
+      // redirect to patient dashboard
+      navigate(`/${data?.user?.role}`);
+    } catch (error) {
+      // alert(error.message);
+    }
+  }
+
   useEffect(() => {
-    if (!token || !role || !user) {
+    setLoading(true);
+    const token = localStorage.getItem('token');
+    const LocalRole = localStorage.getItem('role');
+    if (token && LocalRole)
+    {
+      relogin(token);
+      setLoading(false);
+    } else {
       navigate('/');
+      setLoading(false);
     }
   }, []);
+
+  if (loading) return <Loader />
+
+
   return (
     <div className="App">
       <Routes>

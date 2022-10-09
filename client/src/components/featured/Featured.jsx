@@ -8,7 +8,6 @@ import Avatar from '@mui/material/Avatar';
 
 const Featured = ({user}) => {
 
-  console.log(user);
   return (
     <div className="featured">
       <div className="top">

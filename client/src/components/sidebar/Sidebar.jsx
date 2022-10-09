@@ -28,8 +28,6 @@ const Sidebar = ({role}) => {
     navigate("/");
   }
 
-  console.log("role is " + role);
-
   const handleLogout = () => {
     dispatch(removeData());
     localStorage.removeItem("token");

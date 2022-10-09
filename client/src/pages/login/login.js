@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { loginApi } from '../../api/authApi/loginApi';
 import { setData } from '../../store/index'
 import Loader from "../../components/loader";
+import { reloginApi } from '../../api/authApi/loginApi';
 
 function Copyright(props) {
   return (
@@ -44,7 +45,10 @@ const theme = createTheme({
 });
 
 const Login = () => {
-
+  
+  const [loading, setLoading] = useState(true);
+  const ReduxToken = useSelector(state => state.data.token);
+  const ReduxRole = useSelector(state => state.data.user.role);
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const userRef = useRef();
@@ -52,7 +56,6 @@ const Login = () => {
   const [user, setUser] = useState('');
   const [psw, setPsw] = useState('');
 
-  const [loading, setLoading] = useState(true);
   
   const handleSubmit = async (e) =>{
     e.preventDefault();
@@ -82,13 +85,13 @@ const Login = () => {
   }
 
   // useEffect to check if user is logged in
-  const token = useSelector(state => state.data.token);
-  const role = useSelector(state => state.data.user.role);
   useEffect(() => {
-    if (token && role) {
-      navigate(`/${role}`);
-    }
-    setLoading(false);
+    setLoading(true);
+    if (ReduxToken && ReduxRole) {
+      navigate(`/${ReduxRole}`);
+      setLoading(false);
+      return ;
+    } else setLoading(false);
   }, []);
 
 
