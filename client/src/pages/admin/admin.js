@@ -6,8 +6,10 @@ import Featured from "../../components/featured/Featured";
 import Chart from "../../components/chart/Chart";
 import Table from "../../components/table/Table";
 
-
 const Admin = () => {
+
+  const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
+
   return (
     <div className="home">
       <Sidebar role="admin" />
@@ -25,7 +27,7 @@ const Admin = () => {
         </div>
         <div className="listContainer">
           <div className="listTitle">Latest Operations</div>
-          <Table data={[]} />
+          <Table data={[]} labels={labels} />
         </div>
       </div>
     </div>

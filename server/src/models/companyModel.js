@@ -23,6 +23,7 @@ const companySchema = new Schema({
   },
   email: {
     type: String,
+    trim: true
   }
 }, { timestamps: true });
 

@@ -47,7 +47,9 @@ const Patient = () => {
     }
     getDoses();
     setLoading(false);
-  }, [])
+  }, []);
+
+  const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
 
   if (loading) return <Loader />
   return (
@@ -67,7 +69,7 @@ const Patient = () => {
         </div>
         <div className="listContainer">
           <div className="listTitle">Latest Operations</div>
-          <Table data={doseData.data} />
+          <Table data={doseData.data} labels={labels} />
         </div>
       </div>
     </div>

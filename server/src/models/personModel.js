@@ -64,6 +64,10 @@ const personSchema = new Schema({
     required: true,
     trim: true,
   },
+  poids: {
+    type: String,
+    default: '',
+  },
   company: {
     type: Schema.Types.ObjectId,
     ref: "companyModel",

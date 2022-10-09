@@ -2,6 +2,8 @@ import React from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Table from "../../components/table/Table";
+import { TextField } from '@mui/material';
+
 
 const HospitalService = ({role}) => {
 
@@ -11,10 +13,11 @@ const HospitalService = ({role}) => {
     cin: "12345678",
     service: "Vaccination",
     examen: "Covid-19",
-    equipement: "Pfizer",
-    hospital: "CHU",
-    dose: 1,
-  }]
+  }];
+
+  const labels = ["Name", "Equipement", "Examen", "Protocol", "Hopital"]
+
+  if (role === "admin") labels.push("Action");
 
 	return (
 	<div className="home">
@@ -22,9 +25,18 @@ const HospitalService = ({role}) => {
 	  <div className="homeContainer">
       <Navbar />
       <div className="listContainer">
-          <div className="listTitle">[{role}] Latest Operations</div>
-          <Table data={data} />
+        <div className="listTitle">[{role}] Latest Operations</div>
+        <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <TextField id="standard-basic" label="Search" variant="standard" 
+            style={{
+              width: "50%",
+              display: "flex",
+              justifyContent: "center",
+            }}/>
         </div>
+        <br />
+        <Table data={data} labels={labels} />
+      </div>
 	  </div>
 	</div>
   );

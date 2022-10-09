@@ -2,19 +2,46 @@ import React from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Table from "../../components/table/Table";
+import { TextField } from '@mui/material';
+
 
 const Companies = ({role}) => {
 
-  const data = [{
-    id: 1,
-    data: "01/01/2021",
-    cin: "12345678",
-    service: "Vaccination",
-    examen: "Covid-19",
-    equipement: "Pfizer",
-    hospital: "CHU",
-    dose: 1,
-  }]
+  const data = [
+    {
+      id: 1,
+      data: "01/01/2021",
+      cin: "12345678",
+      service: "Vaccination",
+      examen: "Covid-19",
+      equipement: "Pfizer",
+    },
+    {
+      id: 2,
+      data: "01/01/2021",
+      cin: "12345678",
+      service: "Vaccination",
+      examen: "Covid-19",
+      equipement: "Pfizer",
+    },
+    {
+      id: 3,
+      data: "01/01/2021",
+      cin: "12345678",
+      service: "Vaccination",
+      examen: "Covid-19",
+      equipement: "Pfizer",
+    },
+    {
+      id: 4,
+      data: "01/01/2021",
+      cin: "12345678",
+      service: "Vaccination",
+      examen: "Covid-19",
+      equipement: "Pfizer",
+    },
+  ]
+  const labels = ["ID", "Region", "Ville", "Designation", "Phone", "Email", "Action"];
 
 	return (
 	<div className="home">
@@ -22,9 +49,18 @@ const Companies = ({role}) => {
 	  <div className="homeContainer">
       <Navbar />
       <div className="listContainer">
-          <div className="listTitle">[Admin] Companies</div>
-          <Table data={data} />
+        <div className="listTitle">[{role}] Companies</div>
+        <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <TextField id="standard-basic" label="Search" variant="standard" 
+            style={{
+              width: "50%",
+              display: "flex",
+              justifyContent: "center",
+            }}/>
         </div>
+        <br />
+        <Table data={data} labels={labels} />
+      </div>
 	  </div>
 	</div>
   );
