@@ -2,6 +2,7 @@ const patientModel = require("../../models/patientModel");
 const serviceModel = require("../../models/serviceModel");
 const traitementModel = require("../../models/traitementModel");
 const ObjectId = require("mongoose").Types.ObjectId;
+const moment = require("moment");
 
 const getAllPatients = async (req, res) => {
 	try {
@@ -105,6 +106,10 @@ const getPatientServices = async (req, res) => {
 const getPatientDoses = async (req, res) => {
   try {
     const { id } = req.params;
+    let lastMonthDose = 0;
+    let lastWeekDose = 0;
+    let lastyearDose = 0;
+
     const data = await traitementModel.find({ patient: id })
     .populate("patient")
     .populate({
@@ -115,8 +120,23 @@ const getPatientDoses = async (req, res) => {
     });
   
     let doses = 0;
-    data.map((service) => {
-      const dose = parseInt(service.dose);
+    data.map((doc) => {
+      const DocDate = moment(doc.createdAt);  
+      const today = moment();
+      const TodayMinusOneMonth = moment(today).subtract(1, "month");
+      const TodayMinusOneWeek = moment(today).subtract(1, "week");
+      const TodayMinusOneYear = moment(today).subtract(1, "year");
+      if (DocDate.isBetween(TodayMinusOneMonth, today)) {
+        lastMonthDose += doc.dose;
+      }
+      if (DocDate.isBetween(TodayMinusOneWeek, today)) {
+        lastWeekDose += doc.dose;
+      }
+      if (DocDate.isBetween(TodayMinusOneYear, today)) {
+        lastyearDose += doc.dose;
+      }
+
+      const dose = parseInt(doc.dose);
       doses += dose;
     });
     if (!data) {
@@ -130,8 +150,12 @@ const getPatientDoses = async (req, res) => {
       message: "Services found",
       data: data,
       doses: doses,
+      lastMonthDose,
+      lastWeekDose,
+      lastyearDose,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).send({
       status: "failure",
       message: error.message

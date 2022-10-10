@@ -79,14 +79,48 @@ const addPersonTraitement = async (req, res) => {
 const getPersonTraitements = async (req, res) => {
   try {
     const person = req.params.id; // person id
+    let lastMonthDose = 0;
+    let lastWeekDose = 0;
+    let lastyearDose = 0;
+    let totalDose = 0;
     const traitements = await person_traitementModel.find({ person: person })
-      .populate("person")
-      .populate("service");
+    .populate("person")
+    .populate({
+      path: "service",
+      populate: {
+        path: "hospital",
+      }
+    });
+
     if (!traitements)
       return res.status(400).send({ message: "Traitements not found" });
+    
+    traitements.map((doc) => {
+      const DocDate = moment(doc.createdAt);  
+      const today = moment();
+      const TodayMinusOneMonth = moment(today).subtract(1, "month");
+      const TodayMinusOneWeek = moment(today).subtract(1, "week");
+      const TodayMinusOneYear = moment(today).subtract(1, "year");
+      // console.log({DocDate, today, TodayMinusOneMonth});
+      if (DocDate.isBetween(TodayMinusOneMonth, today)) {
+        lastMonthDose += doc.dose;
+      }
+      if (DocDate.isBetween(TodayMinusOneWeek, today)) {
+        lastWeekDose += doc.dose;
+      }
+      if (DocDate.isBetween(TodayMinusOneYear, today)) {
+        lastyearDose += doc.dose;
+      }
+      totalDose += doc.dose;
+    });
+
     res.status(200).send({
       message: "Traitements found successfully",
-      traitements: traitements
+      traitements: traitements,
+      lastMonthDose,
+      lastWeekDose,
+      lastyearDose,
+      totalDose
     });
   } catch (e) {
     res.status(500).send({

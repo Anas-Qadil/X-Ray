@@ -4,6 +4,7 @@ const companyModel = require("../../models/companyModel");
 const serviceModel = require("../../models/serviceModel");
 const personModel = require("../../models/personModel");
 const person_traitementModel = require("../../models/person_traitementModel");
+const moment = require("moment");
 
 const getCurrentCompany = async (req, res) => {
   try {
@@ -103,7 +104,19 @@ const getCompanyServices = async (req, res) => {
     }
     let data =[];
     const services = await person_traitementModel.find({})
-      .populate("person")
+      .populate({
+        path: "person",
+        populate: {
+          path: "company",
+        }
+      })
+      .populate({
+        path: "service",
+        populate: {
+          path: "hospital",
+        },
+      });
+
 
     if (!services) {
       return res.status(200).json({
@@ -111,17 +124,46 @@ const getCompanyServices = async (req, res) => {
       });
     }
     services.map(doc => {
-      if (String(doc?.person?.company) === String(company?.company)) {
+      if (String(doc?.person?.company?._id) === String(company?.company)) {
         data.push(doc);
       }
-    })
+    });
+
+    let lastMonthDose = 0;
+    let lastWeekDose = 0;
+    let lastyearDose = 0;
+    let totalDose = 0;
+
+    data.map(doc => {
+      const DocDate = moment(doc.createdAt);  
+      const today = moment();
+      const TodayMinusOneMonth = moment(today).subtract(1, "month");
+      const TodayMinusOneWeek = moment(today).subtract(1, "week");
+      const TodayMinusOneYear = moment(today).subtract(1, "year");
+
+      if (DocDate.isBetween(TodayMinusOneMonth, today)) {
+        lastMonthDose += doc.dose;
+      }
+      if (DocDate.isBetween(TodayMinusOneWeek, today)) {
+        lastWeekDose += doc.dose;
+      }
+      if (DocDate.isBetween(TodayMinusOneYear, today)) {
+        lastyearDose += doc.dose;
+      }
+      totalDose += doc.dose;
+    });
 
     res.status(200).send({
       message: "services found",
       data: data,
+      lastMonthDose,
+      lastWeekDose,
+      lastyearDose,
+      totalDose,
     });
 
   } catch (e) {
+    console.log(e);
     res.status(500).json({
       message: e.message,
     });

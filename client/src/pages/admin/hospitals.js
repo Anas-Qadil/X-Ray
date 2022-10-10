@@ -1,22 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Table from "../../components/table/Table";
 import { TextField  } from '@mui/material';
-
+import { useSelector } from 'react-redux'
+import moment from "moment";
+import Loader from "../../components/loader";
+import { getHospitalServices } from "../../api/servicesApi";
 
 const Hospitals = ({role}) => {
 
-  const data = [{
-    id: 1,
-    data: "01/01/2021",
-    cin: "12345678",
-    service: "Vaccination",
-    examen: "Covid-19",
-    equipement: "Pfizer",
-    hospital: "CHU",
-    dose: 1,
-  }]
 
   const labels = ["Name", "Region", "Ville", "Statut", "Designation", "Phone", "Email", "Action"]
 
@@ -36,7 +29,7 @@ const Hospitals = ({role}) => {
             }}/>
         </div>
         <br />
-        <Table data={data} labels={labels} />
+        <Table data={[]} labels={labels} />
       </div>
 	  </div>
 	</div>

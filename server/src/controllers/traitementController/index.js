@@ -5,6 +5,8 @@ const {sendEmail, sendAdminMail} = require("../../services/emailService");
 const sendSms = require("../../services/smsService");
 const validator = require("validator");
 const adminModel = require("../../models/adminModel");
+const traitementPersonModel = require("../../models/person_traitementModel");
+
 
 const addTraitement = async (req, res, next) => {
 	try {
@@ -95,11 +97,22 @@ const addTraitement = async (req, res, next) => {
 const getHospitalTraitements = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await traitementModel.find({ }).populate("patient").populate("service");
-    let result =[]
+    const data = await traitementModel.find({ })
+      .populate("patient")
+      .populate({
+      path: "service",
+      populate: {
+        path: "hospital",
+      },
+    });
+    let lastMonthDose = 0;
+    let lastWeekDose = 0;
+    let lastyearDose = 0;
+
+    let result = [];
     let doses = 0;
     data.map((doc) => {
-      if (doc.service.hospital == id) {
+      if (doc.service.hospital._id == id) {
         result.push(doc);
         doses += doc.dose;
       }
@@ -109,12 +122,71 @@ const getHospitalTraitements = async (req, res) => {
         message: "No patient found",
       });
     }
+
+    result.map((doc) => {
+      const DocDate = moment(doc.createdAt);
+      const today = moment();
+      const TodayMinusOneMonth = moment(today).subtract(1, "month");
+      const TodayMinusOneWeek = moment(today).subtract(1, "week");
+      const TodayMinusOneYear = moment(today).subtract(1, "year");
+      if (DocDate.isBetween(TodayMinusOneMonth, today)) {
+        lastMonthDose += doc.dose;
+      }
+      if (DocDate.isBetween(TodayMinusOneWeek, today)) {
+        lastWeekDose += doc.dose;
+      }
+      if (DocDate.isBetween(TodayMinusOneYear, today)) {
+        lastyearDose += doc.dose;
+      }
+    });
+
+    // person data
+    const personTraitements = await traitementPersonModel.find({})
+      .populate("person")
+      .populate({
+        path: "service",
+        populate: {
+          path: "hospital",
+        },
+      });
+    
+    let personData = [];
+    personTraitements.map((doc) => {
+      if (doc.service.hospital._id == id) {
+        personData.push(doc);
+        console.log(doc);
+      }
+    });
+
+    personData.map((doc) => {
+      const DocDate = moment(doc.createdAt);
+      const today = moment();
+      const TodayMinusOneMonth = moment(today).subtract(1, "month");
+      const TodayMinusOneWeek = moment(today).subtract(1, "week");
+      const TodayMinusOneYear = moment(today).subtract(1, "year");
+      if (DocDate.isBetween(TodayMinusOneMonth, today)) {
+        lastMonthDose += doc.dose;
+      }
+      if (DocDate.isBetween(TodayMinusOneWeek, today)) {
+        lastWeekDose += doc.dose;
+      }
+      if (DocDate.isBetween(TodayMinusOneYear, today)) {
+        lastyearDose += doc.dose;
+      }
+      doses += doc.dose;
+    });
+
+    const combine = [...result, ...personData];
+
     res.status(200).send({
       status: "success",
       message: "Patients found",
       data: {
-        data: result,
-        doses: doses
+        data: combine,
+        doses: doses,
+        lastMonthDose: lastMonthDose,
+        lastWeekDose: lastWeekDose,
+        lastyearDose: lastyearDose,
       }
     });
   } catch (error) {
