@@ -336,6 +336,21 @@ const getHospitalData = async (req, res) => {
   }
 }
 
+const getAllServices = async (req, res) => {
+  try {
+    const services = await serviceModel.find({})
+      .populate("hospital");
+    res.send({
+      message: "success",
+      data: services
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.messsage,
+    });
+  }
+}
+
 module.exports = {
   getHospitals,
   getHospital,
@@ -347,5 +362,6 @@ module.exports = {
   getFilterHospital,
   getFilterHospitalServices,
   getFilterHospitalPatients,
-  getHospitalData
+  getHospitalData,
+  getAllServices
 };

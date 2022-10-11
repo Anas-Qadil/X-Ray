@@ -57,10 +57,10 @@ const CreateAccount = ({role}) => {
         <br />
         <hr />
         <br />
-        {accountType === "person" && <CreatePerson />}
-        {accountType === "patient" && <CreatePatient />}
-        {accountType === "hospital" && <CreateHospital />}
-        {accountType === "company" && <CreateCompany />}
+        {accountType === "person" && <CreatePerson role={role} />}
+        {accountType === "patient" && <CreatePatient role={role}  />}
+        {accountType === "hospital" && <CreateHospital role={role} />}
+        {accountType === "company" && <CreateCompany role={role} />}
       </Container>
       </div>
   </div>

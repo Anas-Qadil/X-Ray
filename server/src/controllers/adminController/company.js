@@ -19,7 +19,7 @@ const getCompanies = async (req, res) => {
           { email: { $regex: search, $options: "i" } },
         ],
       });
-    } else companies = await companyModel.find();
+    } else companies = await companyModel.find({});
 
     res.send({
       message: "sucess",

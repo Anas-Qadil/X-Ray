@@ -28,6 +28,7 @@
     "recharts": "^2.1.14",
     "redux": "^4.2.0",
     "sass": "^1.55.0",
+    "validator": "^13.7.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../components/sidebar/Sidebar"
 import Navbar from "../../components/navbar/Navbar"
-import { FormControl, InputLabel, Input, FormHelperText, Select, MenuItem } from '@mui/material';
-import { Container, TableContainer, Table, TableHead, TableCell, TableRow, TableBody } from '@mui/material';
+import { FormControl, InputLabel, Input, Select, MenuItem } from '@mui/material';
+import { Container } from '@mui/material';
 import Paper from "@mui/material/Paper";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import moment from "moment";
-
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import { getPatients, getPersons } from "../../api/servicesApi";
+import { useSelector } from "react-redux";
+import { getAllServices } from "../../api/servicesApi";
 
 const AddTraitement = ({role}) => {
   
+  const token = useSelector(state => state?.data?.token);
+  const user = useSelector(state => state?.data?.data?.user);
+  const [patients, setPatients] = React.useState([]);
+  const [persons, setPersons] = React.useState([]);
+  const [services, setServices] = React.useState([]);
   const [traitementType, setTraitementType] = React.useState('patient'); // patient or person
   const [traitementData, setTraitementData] = React.useState({
     patient: null,
@@ -20,7 +29,82 @@ const AddTraitement = ({role}) => {
     dose: '',
   }); // form data
 
-  console.log(traitementData);
+  const getAllPatients = async () => {
+    try {
+      const res = await getPatients(token, '');
+      const options = [];
+      res.data.patients.map((patient) => {
+        options.push({
+          label: patient.firstName + ' ' + patient.lastName + ' - ' + patient.cin,
+          data: patient,
+        })
+      });
+      setPatients(options);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getHospitalPatients = async () => {
+    try {
+      
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getServices = async () => {
+    try {
+      const res = await getAllServices(token);
+      console.log(res.data.data);
+      const options = [];
+      res.data.data.map((service) => {
+        options.push({
+          label: service.name + ' ' + service.equipment + ' ' + service.examen +' - ' + service.hospital.designation,
+          data: service,
+        })
+      }
+      );
+      console.log(options);
+      setServices(options);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const getAllPersons = async () => {
+    try {
+      const res = await getPersons(token, '');
+      const options = [];
+      res.data.data.map((person) => {
+        options.push({
+          label: person.firstName + ' ' + person.lastName + ' - ' + person.cin,
+          data: person,
+        })
+      });
+      setPersons(options);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const AddTraitement = async () => {
+    try {
+      console.log(traitementData);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    if (role === "admin") {
+      getAllPatients();
+      getAllPersons();
+    } else if (role === "hospital") {
+      getHospitalPatients();
+    }
+    getServices();
+  }, []);
 
 	return (
   <div className="home">
@@ -59,51 +143,63 @@ const AddTraitement = ({role}) => {
         <hr />
         <br />
         {traitementType === "patient" && (
-          <FormControl fullWidth style={{marginBottom: "20px"}}>
-            <InputLabel id="demo-simple-select-label">Patient</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={traitementData.patient}
-              label="Patient"
-              onChange={(e) => setTraitementData({...traitementData, patient: e.target.value})}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
+          <Autocomplete
+            style={{marginBottom: "20px"}}
+            disablePortal
+            id="combo-box-demo"
+            options={patients}
+            onChange={(e, value) => {
+              console.log(value);
+              setTraitementData({
+                ...traitementData,
+                patient: value,
+              });
+            }}
+            renderInput={(params) => <TextField {...params} label="Patient" />}
+          />
         )}
         {traitementType === "person" && (
-          <FormControl fullWidth style={{marginBottom: "20px"}}>
-            <InputLabel id="demo-simple-select-label">Person</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={traitementData.person}
-              label="Person"
-              onChange={(e) => setTraitementData({...traitementData, person: e.target.value})}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
+          // <FormControl fullWidth style={{marginBottom: "20px"}}>
+          //   <InputLabel id="demo-simple-select-label">Person</InputLabel>
+          //   <Select
+          //     labelId="demo-simple-select-label"
+          //     id="demo-simple-select"
+          //     value={traitementData.person}
+          //     label="Person"
+          //     onChange={(e) => setTraitementData({...traitementData, person: e.target.value})}
+          //   >
+          //     <MenuItem value={10}>Ten</MenuItem>
+          //     <MenuItem value={20}>Twenty</MenuItem>
+          //     <MenuItem value={30}>Thirty</MenuItem>
+          //   </Select>
+          // </FormControl>
+          <Autocomplete
+            style={{marginBottom: "20px"}}
+            disablePortal
+            id="combo-box-demo"
+            options={persons}
+            onChange={(e, value) => {
+              setTraitementData({
+                ...traitementData,
+                person: value,
+              });
+            }}
+            renderInput={(params) => <TextField {...params} label="Person" />}
+          />
         )}
-        <FormControl fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel id="demo-simple-select-label">Service</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={traitementData.service}
-            label="Service"
-            onChange={(e) => setTraitementData({...traitementData, service: e.target.value})}
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+        <Autocomplete
+            style={{marginBottom: "20px"}}
+            disablePortal
+            id="combo-box-demo"
+            options={services}
+            onChange={(e, value) => {
+              setTraitementData({
+                ...traitementData,
+                service: value,
+              });
+            }}
+            renderInput={(params) => <TextField {...params} label="Services" />}
+          />
         <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input">Dose Value</InputLabel>
           <Input type="number" id="my-input" 

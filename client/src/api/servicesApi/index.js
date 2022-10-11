@@ -41,3 +41,59 @@ export const getHospitalServices = async (token, id) => {
     },
   })
 }
+
+export const getCompanies = async (token) => {
+  return await axios.get(`${links.localhost}/api/admin/companies`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const getHospitals = async (token) => {
+  return await axios.get(`${links.localhost}/api/admin/hospitals`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const getPatients = async (token, search) => {
+  return await axios.get(`${links.localhost}/api/admin/patients`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      search,
+    },
+  })
+}
+
+export const getAllServices = async (token) => {
+  return await axios.get(`${links.localhost}/api/admin/services`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const getPersons = async (token, search) => {
+  return await axios.get(`${links.localhost}/api/admin/persons`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      search,
+    },
+  })
+}
