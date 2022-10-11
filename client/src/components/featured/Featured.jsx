@@ -20,7 +20,7 @@ const Featured = ({user, role}) => {
             marginLeft: '55px',
           }}
         >
-          <Avatar  sx={{ marginTop: 5, bgcolor: 'secondary.main' }}>
+          <Avatar  sx={{ marginTop: 5, bgcolor: '#00A7E1' }}>
           </Avatar>
         </div>
         <p className="title">Votre profile informations</p>

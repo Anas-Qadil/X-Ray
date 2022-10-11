@@ -35,7 +35,7 @@ const Navbar = () => {
     <div className="navbar">
       <div className="wrapper">
           <h3><span className="logo" style={{
-            color: "#6439FF",
+            color: "#00A7E1",
             fontWeight: "bold",
             fontSize: "1.5rem",
           }}>[ {data?.role.toUpperCase()} ]</span> Hello, {firstName !== undefined ? firstName : "there"}</h3>
