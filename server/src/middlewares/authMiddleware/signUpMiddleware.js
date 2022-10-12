@@ -99,29 +99,6 @@ const patientMiddleware = async (req, res, next) => {
       });
     }
 
-    //@validate poids
-    if (data.poids)
-    {
-      if (typeof data.poids !== "number")
-      {
-        return res.status(400).json({
-          message: "poids must be a number"
-        });
-      }
-      else if (data.poids < 0)
-      {
-        return res.status(400).json({
-          message: "poids must be positive"
-        });
-      }
-      else if (data.poids > 500)
-      {
-        return res.status(400).json({
-          message: "poids must be less than 500"
-        });
-      }
-    }
-
     //@validate address
     if (data.address)
     {

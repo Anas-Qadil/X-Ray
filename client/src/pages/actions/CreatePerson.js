@@ -65,7 +65,6 @@ const CreatePerson = ({role}) => {
         console.log(res);
       }
     } catch (e) {
-      console.log(e);
       alert(e.response?.data?.message);
     }
   }
@@ -176,7 +175,7 @@ const CreatePerson = ({role}) => {
         </Select>
       </FormControl>)}
       <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>
           <Input type="text" id="my-input" 
             error={error.username}
@@ -191,7 +190,7 @@ const CreatePerson = ({role}) => {
 
           />
         </FormControl>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.password}>Passwrod</InputLabel>
           <Input type="text" id="my-input" 
             error={error.password}
@@ -229,7 +228,7 @@ const CreatePerson = ({role}) => {
             <MenuItem value="private">Private</MenuItem>
           </Select>
         </FormControl>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.fonction}>Fonction</InputLabel>
           <Input type="text" id="my-input" 
              error={error.fonction}
@@ -246,7 +245,7 @@ const CreatePerson = ({role}) => {
         </FormControl>
       </div>
       <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.firstName}>FIRST NAME</InputLabel>
           <Input type="text" id="my-input" 
             error={error.firstName}
@@ -260,7 +259,7 @@ const CreatePerson = ({role}) => {
             })}}
           />
         </FormControl>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.lastName}>LAST NAME</InputLabel>
           <Input type="text" id="my-input" 
             error={error.lastName}
@@ -323,7 +322,7 @@ const CreatePerson = ({role}) => {
         </LocalizationProvider>
       </div>
       <div style={{display: "flex"}}> {/* phone and age */}
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.phone}>PHONE</InputLabel>
           <Input type="number" id="my-input" 
             error={error.phone}
@@ -339,7 +338,7 @@ const CreatePerson = ({role}) => {
             })}}
           />
         </FormControl>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}} disabled>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}} disabled>
           <InputLabel htmlFor="my-input">{personData?.age || "Age"}</InputLabel>
           <Input type="text" id="my-input" 
             aria-describedby="my-helper-text" 
@@ -348,7 +347,7 @@ const CreatePerson = ({role}) => {
         </FormControl>
       </div>
       <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.address}>ADDRESS</InputLabel>
           <Input type="text" id="my-input" 
             error={error.address}
@@ -364,7 +363,7 @@ const CreatePerson = ({role}) => {
             })}}
           />
         </FormControl>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.email}>EMAIL</InputLabel>
           <Input type="email" id="my-input"
             error={error.email} 
@@ -382,7 +381,7 @@ const CreatePerson = ({role}) => {
         </FormControl>
       </div>
       <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.cin}>CIN</InputLabel>
           <Input type="text" id="my-input" 
             error={error.cin}
@@ -398,7 +397,7 @@ const CreatePerson = ({role}) => {
             })}}
           />
         </FormControl>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.poids} >POIDS</InputLabel>
           <Input type="text" id="my-input" 
              error={error.poids}
@@ -416,8 +415,8 @@ const CreatePerson = ({role}) => {
         </FormControl>
       </div>
       <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
-        <Button variant="outlined" fullWidth="true">Cancel</Button>
-        <Button onClick={addPerson} variant="contained" fullWidth="true">Add {personData.type} Person</Button>
+        <Button variant="outlined" fullWidth>Cancel</Button>
+        <Button onClick={addPerson} variant="contained" fullWidth>Add {personData.type} Person</Button>
       </Stack>
 		</>
   );

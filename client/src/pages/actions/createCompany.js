@@ -1,86 +1,168 @@
-import React from "react";
-import Sidebar from "../../components/sidebar/Sidebar"
-import Navbar from "../../components/navbar/Navbar"
-import { FormControl, InputLabel, Input, FormHelperText, Select, MenuItem } from '@mui/material';
-import { Container } from '@mui/material';
-import Paper from "@mui/material/Paper";
+import React, { useState, useEffect } from "react";
+import { FormControl, InputLabel, Input } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import moment from "moment";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import TextField from '@mui/material/TextField';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-
+import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+import checkCompany from "../../utils/checkCompany";
+import { signUpCompany } from "../../api/authApi/signUp";
 
 const CreateCompany = ({role}) => {
-  
-  const [accountType, setAccountType] = React.useState('patient'); // patient or person
-  const [traitementData, setTraitementData] = React.useState({
-    patient: null,
-    person: null,
-    service: null,
-    date: moment().format("YYYY-MM-DD"),
-    dose: '',
-  }); // form data
 
+  const navigate = useNavigate();
+  const token = useSelector(state => state?.data?.token);
+  const [error, setError] = useState({
+    username: false,
+    password: false,
+    region: false,
+    ville: false,
+    designation: false,
+    email: false,
+    phone: false,
+  });
+  const [companyData, setCompanyData] = useState({
+    username: '',
+    password: '',
+    region: '',
+    ville: '',
+    designation: '',
+    email: '',
+    phone: '',
+  });
+
+
+  const addCompany =  async () => {
+    try {
+      if (!checkCompany(companyData, setError)) {
+        const res = await signUpCompany(token, companyData);
+        if (res.status === 200 || res.status === 201) {
+          navigate(`/${role}`);
+        }
+      }
+    } catch (e) {
+      alert(e.response.data.message);
+    }
+  }
 
 	return (
 		<>
       <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input">REGION</InputLabel>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>
           <Input type="text" id="my-input" 
+            error={error.username}
             aria-describedby="my-helper-text" 
-            style={{width: "90%"}} 
-            // onChange={(e) => setTraitementData({...traitementData, dose: e.target.value})}
-            // value={traitementData.dose}
+            style={{width: "90%"}}
+            value={companyData.username}
+            onChange={(e) => {
+              setError({
+                ...error,
+                username: false,
+              });
+              setCompanyData({...companyData, username: e.target.value})}}
           />
         </FormControl>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input">VILLE</InputLabel>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.password}>Password</InputLabel>
           <Input type="text" id="my-input" 
+            error={error.password}
             aria-describedby="my-helper-text" 
-            style={{width: "90%"}} 
-            // onChange={(e) => setTraitementData({...traitementData, dose: e.target.value})}
-            // value={traitementData.dose}
-          />
-        </FormControl>
-      </div>
-      <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input">DESIGNATION</InputLabel>
-          <Input type="text" id="my-input" 
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}} 
-            // onChange={(e) => setTraitementData({...traitementData, dose: e.target.value})}
-            // value={traitementData.dose}
-          />
-        </FormControl>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input">PHONE</InputLabel>
-          <Input type="text" id="my-input" 
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}} 
-            // onChange={(e) => setTraitementData({...traitementData, dose: e.target.value})}
-            // value={traitementData.dose}
+            style={{width: "90%"}}
+            value={companyData.password}
+            onChange={(e) => {
+              setError({
+                ...error,
+                password: false,
+              });
+              setCompanyData({...companyData, password: e.target.value})}}
           />
         </FormControl>
       </div>
       <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input">EMAIL</InputLabel>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.region}>REGION</InputLabel>
           <Input type="text" id="my-input" 
+            error={error.region}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={companyData.region}
+            onChange={(e) => {
+              setError({
+                ...error,
+                region: false,
+              });
+              setCompanyData({...companyData, region: e.target.value})}}
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.ville}>VILLE</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.ville}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={companyData.ville}
+            onChange={(e) => {
+              setError({
+                ...error,
+                ville: false,
+              });
+              setCompanyData({...companyData, ville: e.target.value})}}
+          />
+        </FormControl>
+      </div>
+      <div style={{display: "flex"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.designation}>DESIGNATION</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.designation}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={companyData.designation}
+            onChange={(e) => {
+              setError({
+                ...error,
+                designation: false,
+              });
+              setCompanyData({...companyData, designation: e.target.value})}}
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.phone}>PHONE</InputLabel>
+          <Input type="number" id="my-input" 
+            error={error.phone}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={companyData.phone}
+            onChange={(e) => {
+              setError({
+                ...error,
+                phone: false,
+              });
+              setCompanyData({...companyData, phone: e.target.value})}}
+          />
+        </FormControl>
+      </div>
+      <div style={{display: "flex"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.email}>EMAIL</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.email}
             aria-describedby="my-helper-text" 
             style={{width: "95%"}} 
-            // onChange={(e) => setTraitementData({...traitementData, dose: e.target.value})}
-            // value={traitementData.dose}
+            value={companyData.email}
+            onChange={(e) => {
+              setError({
+                ...error,
+                email: false,
+              });
+              setCompanyData({...companyData, email: e.target.value})}}
           />
         </FormControl>
       </div>
       <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
-        <Button variant="outlined" fullWidth="true">Cancel</Button>
-        <Button variant="contained" fullWidth="true">Add Traitement</Button>
+        <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
+        <Button variant="contained" onClick={addCompany} fullWidth>Add Traitement</Button>
       </Stack>
 		</>
   );

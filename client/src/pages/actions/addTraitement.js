@@ -12,15 +12,25 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { getPatients, getPersons } from "../../api/servicesApi";
 import { useSelector } from "react-redux";
 import { getAllServices } from "../../api/servicesApi";
+import checkifEmpty from "../../utils/checkIfEmpty";
+import { useNavigate } from "react-router-dom";
+import { addPersonTraitement, addPatientTraitement } from "../../api/servicesApi";
 
 const AddTraitement = ({role}) => {
   
+  const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const [patients, setPatients] = React.useState([]);
   const [persons, setPersons] = React.useState([]);
   const [services, setServices] = React.useState([]);
   const [traitementType, setTraitementType] = React.useState('patient'); // patient or person
+  const [error, setError] = React.useState({
+    patient: false,
+    person: false,
+    service: false,
+    dose: false,
+  });
   const [traitementData, setTraitementData] = React.useState({
     patient: null,
     person: null,
@@ -56,7 +66,6 @@ const AddTraitement = ({role}) => {
   const getServices = async () => {
     try {
       const res = await getAllServices(token);
-      console.log(res.data.data);
       const options = [];
       res.data.data.map((service) => {
         options.push({
@@ -65,7 +74,6 @@ const AddTraitement = ({role}) => {
         })
       }
       );
-      console.log(options);
       setServices(options);
     } catch (e) {
       console.log(e);
@@ -90,7 +98,19 @@ const AddTraitement = ({role}) => {
 
   const AddTraitement = async () => {
     try {
-      console.log(traitementData);
+      if(!checkifEmpty(traitementData, setError)) {
+        if (traitementType === 'person') {
+          const res = await addPersonTraitement(token, traitementData);
+          if (res.status === 200) {
+            navigate(`/${role}`);
+          }
+        } else {
+          const res = await addPatientTraitement(token, traitementData);
+          if (res.status === 200 || res.status === 201) {
+            navigate(`/${role}`);
+          }
+        }
+      }
     } catch (e) {
       console.log(e);
     }
@@ -128,7 +148,7 @@ const AddTraitement = ({role}) => {
                 patient: null,
                 person: null,
                 service: null,
-                date: null,
+                date: moment().format("YYYY-MM-DD"),
                 dose: '',
               });
               setTraitementType(e.target.value)
@@ -149,42 +169,29 @@ const AddTraitement = ({role}) => {
             id="combo-box-demo"
             options={patients}
             onChange={(e, value) => {
-              console.log(value);
+              setError({ ...error, patient: false });
               setTraitementData({
                 ...traitementData,
-                patient: value,
+                patient: value?.data?._id,
               });
             }}
-            renderInput={(params) => <TextField {...params} label="Patient" />}
+            renderInput={(params) => <TextField error={error.patient}  {...params} label="Patient" />}
           />
         )}
         {traitementType === "person" && (
-          // <FormControl fullWidth style={{marginBottom: "20px"}}>
-          //   <InputLabel id="demo-simple-select-label">Person</InputLabel>
-          //   <Select
-          //     labelId="demo-simple-select-label"
-          //     id="demo-simple-select"
-          //     value={traitementData.person}
-          //     label="Person"
-          //     onChange={(e) => setTraitementData({...traitementData, person: e.target.value})}
-          //   >
-          //     <MenuItem value={10}>Ten</MenuItem>
-          //     <MenuItem value={20}>Twenty</MenuItem>
-          //     <MenuItem value={30}>Thirty</MenuItem>
-          //   </Select>
-          // </FormControl>
           <Autocomplete
             style={{marginBottom: "20px"}}
             disablePortal
             id="combo-box-demo"
             options={persons}
             onChange={(e, value) => {
+              setError({ ...error, person: false });
               setTraitementData({
                 ...traitementData,
-                person: value,
+                person: value?.data?._id,
               });
             }}
-            renderInput={(params) => <TextField {...params} label="Person" />}
+            renderInput={(params) => <TextField error={error.person} {...params} label="Person" />}
           />
         )}
         <Autocomplete
@@ -193,25 +200,32 @@ const AddTraitement = ({role}) => {
             id="combo-box-demo"
             options={services}
             onChange={(e, value) => {
+              setError({ ...error, service: false });
               setTraitementData({
                 ...traitementData,
-                service: value,
+                service: value?.data?._id,
               });
             }}
-            renderInput={(params) => <TextField {...params} label="Services" />}
+            renderInput={(params) => <TextField error={error.service} {...params} label="Services" />}
           />
-        <FormControl color="primary" fullWidth="true" style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input">Dose Value</InputLabel>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.dose}>Dose Value</InputLabel>
           <Input type="number" id="my-input" 
             aria-describedby="my-helper-text" 
             style={{width: "50%"}} 
-            onChange={(e) => setTraitementData({...traitementData, dose: e.target.value})}
+            onChange={(e) => {
+              setError({
+                ...error,
+                dose: false,
+              });
+              setTraitementData({...traitementData, dose: e.target.value})}}
             value={traitementData.dose}
+            error={error.dose}
           />
         </FormControl>
         <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
-          <Button variant="outlined" fullWidth="true">Cancel</Button>
-          <Button variant="contained" fullWidth="true">Add Traitement</Button>
+          <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
+          <Button variant="contained" onClick={AddTraitement} fullWidth>Add Traitement</Button>
         </Stack>
       </Container>
       </div>

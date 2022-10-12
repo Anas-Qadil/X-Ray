@@ -22,7 +22,6 @@ const Sidebar = ({role}) => {
   const navigate = useNavigate();
   if (!role)
   {
-    console.log("role is undefined");
     dispatch(removeData());
     navigate("/");
   }
