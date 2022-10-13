@@ -350,6 +350,49 @@ const getAllServices = async (req, res) => {
     });
   }
 }
+const getAllSearchServices = async (req, res) => {
+  try {
+    const { search, hospitalSearch }  = req.query; 
+    const services = await serviceModel.find({
+      $or: [
+        {name: {$regex: search, $options: "i"}},
+        {equipment: {$regex: search, $options: "i"}},
+        {examen: {$regex: search, $options: "i"}},
+        {protocol: {$regex: search, $options: "i"}},
+      ],
+    })
+      .populate("hospital");
+
+    const hospitals = await hospitalModel.find({
+      $or: [
+        {name: {$regex: hospitalSearch, $options: "i"}},
+        {region: {$regex: hospitalSearch, $options: "i"}},
+        {ville: {$regex: hospitalSearch, $options: "i"}},
+        {statut: {$regex: hospitalSearch, $options: "i"}},
+        {designation: {$regex: hospitalSearch, $options: "i"}},
+        {phone: {$regex: hospitalSearch, $options: "i"}},
+        {email: {$regex: hospitalSearch, $options: "i"}},
+      ],
+    });
+
+    let data = [];
+    services.map((service) => {
+      hospitals.map((hospital) => {
+        if (service.hospital._id.toString() === hospital._id.toString()) {
+          data.push(service);
+        }
+      });
+    });
+    res.send({
+      message: "success",
+      data: data
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.messsage,
+    });
+  }
+}
 
 module.exports = {
   getHospitals,
@@ -363,5 +406,6 @@ module.exports = {
   getFilterHospitalServices,
   getFilterHospitalPatients,
   getHospitalData,
-  getAllServices
+  getAllServices,
+  getAllSearchServices
 };

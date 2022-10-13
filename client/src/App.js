@@ -20,6 +20,7 @@ import Loader from "./components/loader";
 import { reloginApi } from './api/authApi/loginApi';
 import { useDispatch } from "react-redux";
 import { setData } from './store/index';
+import Persons from "./pages/person/persons";
 
 function App() {
 
@@ -86,7 +87,7 @@ function App() {
         {/* Users management */}
         <Route path="/hospital/patients" element={<HospitalPatient role={role} />} />
         <Route path="/hospital/services" element={<HospitalService role={role} />} />
-        <Route path="/persons" element={<HospitalPatient role={role} />} />
+        <Route path="/persons" element={<Persons role={role} />} />
         {/* Admin Part */}
         <Route path="/admin/hospitals" element={<Hospitals role={role} />} />
         <Route path="/admin/companies" element={<Companies role={role} />} />

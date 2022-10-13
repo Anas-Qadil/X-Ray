@@ -6,19 +6,17 @@ const getPersons = async (req, res) => {
 	try {
     const { search } = req.query;
     let persons;
-    if (search) {
-      persons = await personModel.find({
-        $or: [
-          { firstName: { $regex: search, $options: "i" } },
-          { lastName: { $regex: search, $options: "i" } },
-          { email: { $regex: search, $options: "i" } },
-          { phone: { $regex: search, $options: "i" } },
-          { cin: { $regex: search, $options: "i" } },
-          { secteur: { $regex: search, $options: "i" } },
-          { type: { $regex: search, $options: "i" } },
-        ]
-      });
-    } persons = await personModel.find();
+    persons = await personModel.find({
+      $or: [
+        { firstName: { $regex: search, $options: "i" } },
+        { lastName: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+        { cin: { $regex: search, $options: "i" } },
+        { secteur: { $regex: search, $options: "i" } },
+        { type: { $regex: search, $options: "i" } },
+      ]
+    });
     res.status(200).json({
       status: "success",
       data: persons,

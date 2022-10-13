@@ -61,10 +61,10 @@ router.use("/admin", adminRouter);
 // @route api/hospitals
 router.post("/sign-up/hospital", signUpMiddleware, signUpHospitalMiddleware, signUpHospital); // todo: when u finish admin parte make sure to check who can access this route
 router.get("/get-all-hospitals", authenticateMiddleware, hospitalMiddleware, getAllHospitals);
+router.get("/hospital/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);
 router.get("/hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospitalById);
-router.get("/hospital/:id/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);
 // hospital services
-router.get("/hospital/:id/services", authenticateMiddleware, hospitalMiddleware, getHospitalServices);
+router.get("/hospital/service/services", authenticateMiddleware, hospitalMiddleware, getHospitalServices);
 router.post("/hospital/add-service", authenticateMiddleware, addServiceMiddleware, addService); // add service to hospital | todo: make sure to check who can access this route
 // hospital traitements
 router.post("/hospital/add-traitement", authenticateMiddleware, traitementMiddleware, addTraitement);

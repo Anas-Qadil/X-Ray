@@ -13,8 +13,10 @@ const getPatients = async (req, res) => {
       { phone: { $regex: search, $options: "i" } },
       { cin: { $regex: search, $options: "i" } },
       { address: { $regex: search, $options: "i" } },
+      { gender: { $regex: search, $options: "i" } },
+
     ] });
-    res.status(200).json({ patients });
+    res.status(200).json({ data: patients });
   } catch (error) {
       res.status(500).json({ error: error.message });
   }

@@ -9,65 +9,69 @@ import { useSelector } from 'react-redux'
 import moment from "moment";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getPatientForHospitlRole } from "../../api/servicesApi";
+import { getPersons } from "../../api/servicesApi";
 
-const HospitalPatient = ({role}) => {
+const Persons = ({role}) => {
 
   const token = useSelector(state => state?.data?.token);
   const [data, setData] = React.useState([]);
   const [search, setSearch] = React.useState("");
 
   const location = useLocation();
-
   let labels;
-  if (location.pathname === "/persons") 
-    labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Address", "Phone", "Email", "Secteur", "Fonction", "Type"]
+  if (role === "admin") 
+	  labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Address", "Phone", "Email", "Secteur", "Fonction", "Type", "action"]
   else 
-    labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Address", "Phone", "Email"]
-  if (role === "admin") labels.push("Action");
+	  labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Address", "Phone", "Email", "Secteur", "Fonction", "Type"]
 
-  const getPatinets = async () => {
+    console.log(search);
+  const getAllPersons = async () => {
     try {
-      const patientsData = [];
       let res;
       let i = 0;
-      if (role === "admin") {
-        res = await getPatients(token, search);
-      } else if (role === "hospital") {
-        res = await getPatientForHospitlRole(token, search);
+      let PersonsData = [];
+      if (role === "admin")
+      {
+        res = await getPersons(token, search);
         console.log(res);
+      } else {
+
       }
-      res?.data?.data?.map((patient) => {
+      res?.data?.data?.map((person) => {
         i++;
         let obj = {
           id: i,
-          createdAt: moment(patient.createdAt).format("YYYY-MM-DD"),
-          firstName: patient.firstName,
-          lastName: patient.lastName,
-          cin: patient.cin,
-          gender: patient.gender,
-          birthDate: moment(patient.birthDate).format("YYYY-MM-DD"),
-          age: patient.age,
-          poids: patient.poids,
-          address: patient.address,
-          phone: patient.phone,
-          email: patient.email,
+          createdAt: moment(person.createdAt).format("YYYY-MM-DD"),
+          firstName: person.firstName,
+          lastName: person.lastName,
+          cin: person.cin,
+          gender: person.gender,
+          birthDate: moment(person.birthDate).format("YYYY-MM-DD"),
+          age: person.age,
+          poids: person.poids,
+          address: person.address,
+          phone: person.phone,
+          email: person.email,
+          secteur: person.secteur,
+          fonction: person.fonction,
+          type: person.type,
         }
         if (role === "admin") {
           obj.action = ( <IconButton aria-label="delete" size="large">
-            <DeleteIcon />
-          </IconButton>)
+            <DeleteIcon fontSize="inherit" />
+            </IconButton>);
         }
-        patientsData.push(obj);
+        PersonsData.push(obj);
       });
-      setData(patientsData);
+      setData(PersonsData);
+
     } catch (error) {
       console.log(error);
     }
   }
 
   useEffect(() => {
-    getPatinets();
+    getAllPersons();
   }, [search]);
 
 	return (
@@ -95,4 +99,4 @@ const HospitalPatient = ({role}) => {
   );
 }
 
-export default HospitalPatient;
+export default Persons;

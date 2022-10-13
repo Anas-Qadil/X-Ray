@@ -25,7 +25,7 @@ router.get("/filter/company/services", authenticateMiddleware, getFilterServices
 router.get("/filter/company/persons", authenticateMiddleware, getFilterPersons);
 
 // hospitals routes
-const { getAllServices, getFilterHospitalPatients, getHospitalData, getHospitals, getFilterHospitalServices, getFilterHospital, getStatisticsHospitalAppareil, getStatisticsHospitalServices, deleteHospital, getHospital, getHospitalStatistics, getStatisticsHospitalRegion } = require("./hospital");
+const { getAllServices, getAllSearchServices, getFilterHospitalPatients, getHospitalData, getHospitals, getFilterHospitalServices, getFilterHospital, getStatisticsHospitalAppareil, getStatisticsHospitalServices, deleteHospital, getHospital, getHospitalStatistics, getStatisticsHospitalRegion } = require("./hospital");
 router.get("/hospitals", authenticateMiddleware, getHospitals);
 router.get("/hospital/:id", authenticateMiddleware, getHospital);
 router.get("/hospital/:id/data", authenticateMiddleware, getHospitalData);
@@ -38,6 +38,7 @@ router.get("/filter/hospital", authenticateMiddleware, getFilterHospital);
 router.get("/filter/hospital/traitements", getFilterHospitalServices);
 router.get("/filter/hospital/patients", getFilterHospitalPatients);
 router.get("/services", getAllServices);
+router.get("/search-services", getAllSearchServices);
 
 // patients routes
 const { getPatients, getPatient, getPatientData, deletePatient, getStatisticsPatient } = require("./patient");

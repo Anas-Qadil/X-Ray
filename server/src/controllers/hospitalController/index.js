@@ -47,23 +47,40 @@ const getHospitalById = async (req, res) => {
 
 const getHospitalPatients = async (req, res) => {
 	try {
-		const { id } = req.params;
-    const data = await traitementModel.find({ }).populate("patient").populate("service");
+		const id = String(req.user.hospital);
+    const search = '';
+    const patients = await patientModel.find({ 
+      $or: [
+        { firstName: { $regex: search, $options: "i" } },
+        { lastName: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+        { gender: { $regex: search, $options: "i" } },
+        { address: { $regex: search, $options: "i" } },
+      ]
+    });
+    const data = await traitementModel.find({}).populate("patient").populate("service");
     let result =[]
     data.map((doc) => {
       if (doc.service.hospital == id) {
         result.push(doc)
       }
     });
-    if (!data) {
-      return res.status(400).json({
-        message: "No patient found",
-      });
-    }
+    let final = [];
+    result.map((doc) => {
+      patients.map((patient) => {
+        if (String(doc.patient._id) == String(patient._id)) {
+          if (!final.includes(patient)) {
+            final.push(patient)
+          }
+        }
+      })
+    });
+
     res.status(200).send({
       status: "success",
       message: "Patients found",
-      data: result,
+      data: final,
     });
 	} catch (error) {
 		res.status(500).send({
@@ -75,14 +92,16 @@ const getHospitalPatients = async (req, res) => {
 
 const getHospitalServices = async (req, res) => {
   try {
-    const { id } = req.params;
-    const data = await serviceModel.find({ hospital: id });
+    const id = String(req.user.hospital);
+    const data = await serviceModel.find({ hospital: id })
+    .populate("hospital");
     if (!data) {
       return res.status(400).json({
         status: "failure",
         message: "No services found",
       });
     }
+    console.log(data);
     res.status(200).send({
       message: "Services found",
       data: data,

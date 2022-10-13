@@ -142,3 +142,37 @@ export const getAllHospitals = async (token, search) => {
   })
 }
 
+export const getAllServicesApi = async (token, search, hospitalSearch) => {
+  return await axios.get(`${links.localhost}/api/admin/search-services`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      search,
+      hospitalSearch
+    },
+  })
+}
+export const getAllHospitalServices = async (token) => {
+  return await axios.get(`${links.localhost}/api/hospital/service/services`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+export const getPatientForHospitlRole = async (token, search) => {
+  return await axios.get(`${links.localhost}/api/hospital/patients`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      search,
+    },
+  })
+}
