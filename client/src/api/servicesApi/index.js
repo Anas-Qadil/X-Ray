@@ -116,3 +116,29 @@ export const addPatientTraitement = async (token, data) => {
     },
   })
 }
+
+export const getAllCompanies = async (token, search) => {
+  return await axios.get(`${links.localhost}/api/admin/companies`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      search,
+    },
+  })
+}
+export const getAllHospitals = async (token, search) => {
+  return await axios.get(`${links.localhost}/api/admin/hospitals`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      search,
+    },
+  })
+}
+

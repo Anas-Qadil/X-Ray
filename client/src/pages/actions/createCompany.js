@@ -162,7 +162,7 @@ const CreateCompany = ({role}) => {
       </div>
       <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
         <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-        <Button variant="contained" onClick={addCompany} fullWidth>Add Traitement</Button>
+        <Button variant="contained" onClick={addCompany} fullWidth>Add Company</Button>
       </Stack>
 		</>
   );

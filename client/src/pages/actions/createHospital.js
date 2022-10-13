@@ -178,7 +178,7 @@ const CreateHospital = ({role}) => {
       </div>
       <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
         <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-        <Button variant="contained" onClick={addHospital} fullWidth>Add Traitement</Button>
+        <Button variant="contained" onClick={addHospital} fullWidth>Add Hospital</Button>
       </Stack>
 		</>
   );
