@@ -11,9 +11,11 @@ import { getCompanies, getHospitals } from "../../api/servicesApi";
 import { useSelector } from 'react-redux'
 import { signUpPerson } from "../../api/authApi/signUp";
 import validatePersonData from "../../utils/addPersonValidation";
+import { useNavigate } from "react-router-dom";
 
 const CreatePerson = ({role}) => {
 
+  const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const [companies, setCompanies] = React.useState([]);
@@ -59,10 +61,16 @@ const CreatePerson = ({role}) => {
 
   const addPerson = async () => {
     try {
+      if (role === "company")
+        setPersonData({...personData, company: user?.company?._id});
+      else if (role === "hospital")
+        setPersonData({...personData, hospital: user?.hospital?._id});
       const validation = validatePersonData(personData, error, setError);
       if (validation === 1) {
         const res = await signUpPerson(token, personData);
-        console.log(res);
+        if (res?.status === 200) {
+          navigate(`/${role}`);
+        }
       }
     } catch (e) {
       alert(e.response?.data?.message);
@@ -128,7 +136,7 @@ const CreatePerson = ({role}) => {
             type: e.target.value,
           })}}
         >
-          <MenuItem value="medical">Medical</MenuItem>
+          { (role === "admin" || role === "patient") && <MenuItem value="medical">Medical</MenuItem>}
           <MenuItem value="technical">Technical</MenuItem>
         </Select>
       </FormControl>
@@ -301,7 +309,6 @@ const CreatePerson = ({role}) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Stack spacing={1} style={{width: "90%", marginRight: "40px"}} error={error.birthDate}>
             <DesktopDatePicker
-              error={error.birthDate}
               label="Date desktop"
               inputFormat="YYYY-MM-DD"
               value={personData.birthDate}
@@ -316,7 +323,7 @@ const CreatePerson = ({role}) => {
                   age: age,
                 });
               }}             
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => <TextField {...params} error={error.birthDate} />}
             />
           </Stack>
         </LocalizationProvider>

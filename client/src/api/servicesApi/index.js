@@ -176,3 +176,16 @@ export const getPatientForHospitlRole = async (token, search) => {
     },
   })
 }
+
+export const getPersonForCompanyRole = async (token, search) => {
+  return await axios.get(`${links.localhost}/api/company/persons`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      search,
+    },
+  })
+}

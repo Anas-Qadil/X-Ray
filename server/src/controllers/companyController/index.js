@@ -72,6 +72,7 @@ const getCompanyPerson = async (req, res) => {
 const getCompanyPersons = async (req, res) => {
   try {
     const company = req.user;
+    const search = req.query.search;
     if (!company) {
       return res.status(400).json({
         message: "company not found",
@@ -79,7 +80,18 @@ const getCompanyPersons = async (req, res) => {
     }
 
     const persons = await personModel.find({
-      company: company.company
+      company: company.company,
+      $or: [
+        { firstName: { $regex: search, $options: "i" } },
+        { lastName: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+        { cin: { $regex: search, $options: "i" } },
+        { secteur: { $regex: search, $options: "i" } },
+        { type: { $regex: search, $options: "i" } },
+        { fonction: { $regex: search, $options: "i" } },
+        { poids: { $regex: search, $options: "i" } },
+      ],
     });
 
     res.status(200).send({

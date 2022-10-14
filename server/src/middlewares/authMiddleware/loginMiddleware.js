@@ -23,7 +23,6 @@ const loginMiddleware = async (req, res, next) => {
       switch (user.role) {
         case "patient":
           await user.populate("patient");
-          console.log(user);
           break;
         case "hospital":
           await user.populate("hospital");

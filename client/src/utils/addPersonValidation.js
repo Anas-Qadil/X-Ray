@@ -21,35 +21,42 @@ const validatePersonData = (personData, error, setError) => {
     poids: false,
   }
 
-  if (!validator.isEmail(personData.email)) 
-    errorObject.email = true;
-  if (validator.isEmpty(personData.poids)) 
+  if (personData.email) {
+    if (!validator.isEmail(personData.email)) 
+      errorObject.email = true;
+  }
+  if (!personData.poids) 
     errorObject.poids = true;
-  if (validator.isEmpty(personData.firstName)) 
+  if (!personData.firstName) 
     errorObject.firstName = true;
-  if (validator.isEmpty(personData.lastName)) 
+  if (!personData.lastName) 
     errorObject.lastName = true;
-  if (validator.isEmpty(personData.cin))
+  if (!personData.cin)
     errorObject.cin = true;
-  if (validator.isEmpty(personData.username))
+  if (!personData.username)
     errorObject.username = true;
-  if (validator.isEmpty(personData.password))
+  if (!personData.password)
     errorObject.password = true;
-  if (validator.isEmpty(personData.gender))
+  if (!personData.gender)
     errorObject.gender = true;
-  if (validator.isEmpty(personData.birthDate))
+  if (!personData.birthDate)
     errorObject.birthDate = true;
+  else {
+    const age = new Date().getFullYear() - new Date(personData.birthDate).getFullYear();
+    if (age < 1)
+      errorObject.birthDate = true;
+  }
   if (!personData.age)
     errorObject.age = true;
-  if (validator.isEmpty(personData.address))
+  if (!personData.address)
     errorObject.address = true;
-  if (validator.isEmpty(personData.phone))
+  if (!personData.phone)
     errorObject.phone = true;
-  if (validator.isEmpty(personData.secteur))
+  if (!personData.secteur)
     errorObject.secteur = true;
-  if (validator.isEmpty(personData.fonction))
+  if (!personData.fonction)
     errorObject.fonction = true;
-  if (validator.isEmpty(personData.type))
+  if (!personData.type)
     errorObject.type = true;
   if (personData.type === "technical" && ( !personData.company || validator.isEmpty(personData.company) ))
     errorObject.company = true;

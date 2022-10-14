@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import moment from "moment";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getPersons } from "../../api/servicesApi";
+import { getPersons, getPersonForCompanyRole } from "../../api/servicesApi";
 
 const Persons = ({role}) => {
 
@@ -17,14 +17,12 @@ const Persons = ({role}) => {
   const [data, setData] = React.useState([]);
   const [search, setSearch] = React.useState("");
 
-  const location = useLocation();
   let labels;
   if (role === "admin") 
 	  labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Address", "Phone", "Email", "Secteur", "Fonction", "Type", "action"]
   else 
 	  labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Address", "Phone", "Email", "Secteur", "Fonction", "Type"]
 
-    console.log(search);
   const getAllPersons = async () => {
     try {
       let res;
@@ -35,7 +33,7 @@ const Persons = ({role}) => {
         res = await getPersons(token, search);
         console.log(res);
       } else {
-
+        res = await getPersonForCompanyRole(token, search);
       }
       res?.data?.data?.map((person) => {
         i++;
