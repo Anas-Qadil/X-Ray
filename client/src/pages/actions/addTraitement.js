@@ -43,7 +43,8 @@ const AddTraitement = ({role}) => {
     try {
       const res = await getPatients(token, '');
       const options = [];
-      res.data.patients.map((patient) => {
+      console.log(res);
+      res.data?.data?.map((patient) => {
         options.push({
           label: patient.firstName + ' ' + patient.lastName + ' - ' + patient.cin,
           data: patient,
