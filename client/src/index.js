@@ -6,13 +6,16 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import { store } from './store/configureStore'
 import { Provider } from 'react-redux'
+import { SnackbarProvider, useSnackbar } from 'notistack'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <SnackbarProvider maxSnack={5}>
+          <App />
+        </SnackbarProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode>

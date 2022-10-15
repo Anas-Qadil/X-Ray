@@ -10,8 +10,12 @@ import moment from "moment";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getPersons, getPersonForCompanyRole } from "../../api/servicesApi";
+import { useSnackbar } from 'notistack'
+
 
 const Persons = ({role}) => {
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const token = useSelector(state => state?.data?.token);
   const [data, setData] = React.useState([]);
@@ -63,8 +67,8 @@ const Persons = ({role}) => {
       });
       setData(PersonsData);
 
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -76,7 +80,7 @@ const Persons = ({role}) => {
 	<div className="home">
 	  <Sidebar role={role} />
 	  <div className="homeContainer">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="listContainer">
         <div className="listTitle">[{role}] Latest Operations</div>
         <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>

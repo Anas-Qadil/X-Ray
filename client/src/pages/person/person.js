@@ -12,8 +12,12 @@ import Chart from "../../components/chart/Chart";
 import Table from "../../components/table/Table";
 import { getPersonTraitements } from "../../api/servicesApi";
 import moment from 'moment';
+import { useSnackbar } from 'notistack'
+
 
 const Person = () => {
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
   const token = useSelector(state => state?.data?.token);
@@ -26,10 +30,14 @@ const Person = () => {
   const getDoses = async () => {
     try {
       const res = await getPersonTraitements(token, user?.person?._id);
-      setPersonTraitementData(res?.data);
-      formatData(res?.data?.traitements);
+      if (res.status === 200) {
+        if (res.data.lastyearDose >= 18)
+          enqueueSnackbar("You Have exceeded The Does Rate Limit.", { variant: 'warning' });
+        setPersonTraitementData(res?.data);
+        formatData(res?.data?.traitements);
+      }
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
 
   }
@@ -53,7 +61,7 @@ const Person = () => {
     }
     setMainPageData(data);
   }
-  console.log(user)
+
   useEffect(() => {
     if (user?.person?._id)
       getDoses();
@@ -68,7 +76,8 @@ const Person = () => {
     <div className="home">
       <Sidebar role="person" />
       <div className="homeContainer">
-        <Navbar />
+        {/* <Navbar /> */}
+        
         <div className="widgets">
           <Widget type="user" dose={personTraitementData?.totalDose}/>
           <Widget type="yearly" dose={personTraitementData?.lastyearDose}/>
@@ -76,13 +85,13 @@ const Person = () => {
           <Widget type="weekly" dose={personTraitementData?.lastWeekDose}/>
         </div>
         <div className="charts"> 
-          <Featured user={user?.person} role="person" />
-          <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
+          {/* <Featured user={user?.person} role="person" /> */}
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} />
         </div>
-        <div className="listContainer">
+        {/* <div className="listContainer">
           <div className="listTitle">Latest Operations</div>
           <Table data={mainPageData} labels={labels} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

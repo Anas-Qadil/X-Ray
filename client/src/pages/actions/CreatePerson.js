@@ -12,10 +12,12 @@ import { useSelector } from 'react-redux'
 import { signUpPerson } from "../../api/authApi/signUp";
 import validatePersonData from "../../utils/addPersonValidation";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from 'notistack'
 
 const CreatePerson = ({role}) => {
 
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar()
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const [companies, setCompanies] = React.useState([]);
@@ -69,11 +71,13 @@ const CreatePerson = ({role}) => {
       if (validation === 1) {
         const res = await signUpPerson(token, personData);
         if (res?.status === 200) {
+          enqueueSnackbar('Professional Healthcare was created successfully', {variant: 'success'})
           navigate(`/${role}`);
         }
-      }
+      } else 
+        enqueueSnackbar('Please Check your inputs', {variant: 'error'})
     } catch (e) {
-      alert(e.response?.data?.message);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -82,7 +86,7 @@ const CreatePerson = ({role}) => {
       const res = await getCompanies(token);
       setCompanies(res?.data?.data);
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -91,7 +95,7 @@ const CreatePerson = ({role}) => {
       const res = await getHospitals(token);
       setHospitals(res?.data?.data);
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -103,12 +107,12 @@ const CreatePerson = ({role}) => {
 	return (
 		<>
       <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-        <InputLabel id="demo-simple-select-label" error={error.type}>Person Type</InputLabel>
+        <InputLabel id="demo-simple-select-label" error={error.type}>Professional Healthcare Type</InputLabel>
         <Select
           error={error.type}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          label="Person Type"
+          label="Professional Healthcare Type"
           style={{width: "95%"}}
           value={personData.type}
           onChange={(e) => {

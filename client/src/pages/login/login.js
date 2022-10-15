@@ -16,6 +16,8 @@ import { loginApi } from '../../api/authApi/loginApi';
 import { setData } from '../../store/index'
 import Loader from "../../components/loader";
 import { reloginApi } from '../../api/authApi/loginApi';
+import { useSnackbar } from 'notistack'
+
 
 function Copyright(props) {
   return (
@@ -45,6 +47,8 @@ const theme = createTheme({
 });
 
 const Login = () => {
+
+  const { enqueueSnackbar } = useSnackbar()
   
   const [loading, setLoading] = useState(true);
   const ReduxToken = useSelector(state => state.data.token);
@@ -79,8 +83,8 @@ const Login = () => {
       setPsw('');
       // redirect to patient dashboard
       navigate(`/${data.user.role}`);
-    } catch (error) {
-      alert(error.message);
+    } catch (e) {
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 

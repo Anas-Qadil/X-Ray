@@ -10,8 +10,11 @@ import moment from "moment";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getPatientForHospitlRole } from "../../api/servicesApi";
+import { useSnackbar } from 'notistack'
 
 const HospitalPatient = ({role}) => {
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const token = useSelector(state => state?.data?.token);
   const [data, setData] = React.useState([]);
@@ -61,8 +64,8 @@ const HospitalPatient = ({role}) => {
         patientsData.push(obj);
       });
       setData(patientsData);
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -74,7 +77,7 @@ const HospitalPatient = ({role}) => {
 	<div className="home">
 	  <Sidebar role={role} />
 	  <div className="homeContainer">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="listContainer">
         <div className="listTitle">[{role}] Latest Operations</div>
         <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>

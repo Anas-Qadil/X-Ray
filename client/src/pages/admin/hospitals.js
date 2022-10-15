@@ -7,8 +7,12 @@ import { useSelector } from 'react-redux'
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getAllHospitals } from "../../api/servicesApi";
+import { useSnackbar } from 'notistack'
+
 
 const Hospitals = ({role}) => {
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const token = useSelector(state => state?.data?.token);
   const [search, setSearch] = useState("");
@@ -38,8 +42,8 @@ const Hospitals = ({role}) => {
         });
       });
       setHospitals(hospitalsData);
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -51,7 +55,7 @@ const Hospitals = ({role}) => {
 	<div className="home">
 	  <Sidebar role={role} />
 	  <div className="homeContainer">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="listContainer">
         <div className="listTitle">[{role}] Hospitals</div>
         <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>

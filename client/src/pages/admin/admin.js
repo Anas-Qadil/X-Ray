@@ -21,7 +21,7 @@ const Admin = () => {
     <div className="home">
       <Sidebar role="admin" />
       <div className="homeContainer">
-        <Navbar />
+        {/* <Navbar /> */}
         <div className="widgets">
           <Widget type="user" dose={3}/>
           <Widget type="yearly" dose={3}/>
@@ -29,13 +29,13 @@ const Admin = () => {
           <Widget type="weekly" dose={3}/>
         </div>
         <div className="charts"> 
-          <Featured user={[]} />
-          <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
+          {/* <Featured user={[]} /> */}
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} />
         </div>
-        <div className="listContainer">
+        {/* <div className="listContainer">
           <div className="listTitle">Latest Operations</div>
           <Table data={[]} labels={labels} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

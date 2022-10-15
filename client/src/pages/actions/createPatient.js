@@ -15,13 +15,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import checkPatientData from "../../utils/checkPatient";
 import { signUpPatient } from "../../api/authApi/signUp";
-
-
+import { useSnackbar } from 'notistack'
 
 const CreatePatient = ({role}) => {
 
+  const { enqueueSnackbar } = useSnackbar()
+
   const token = useSelector(state => state?.data?.token);
-  const user = useSelector(state => state?.data?.data?.user);
   const navigate = useNavigate();
   const [error, setError] = React.useState({
     username: false,
@@ -57,11 +57,13 @@ const CreatePatient = ({role}) => {
       if (!checkPatientData(patientData, setError)) {
         const res = await signUpPatient(token, patientData);
         if (res.status === 200 || res.status === 201) {
+          enqueueSnackbar('Patient was created successfully', {variant: 'success'})
           navigate(`/${role}`);
         }
-      }
+      } else 
+        enqueueSnackbar('Please Check your inputs', {variant: 'error'})
     } catch (e) {
-      alert(e.response.data.message);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 

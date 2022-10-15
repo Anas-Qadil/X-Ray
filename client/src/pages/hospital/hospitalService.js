@@ -8,8 +8,11 @@ import moment from "moment";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelector } from 'react-redux'
+import { useSnackbar } from 'notistack'
 
 const HospitalService = ({role}) => {
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const [data, setData] = React.useState([]);
   const [search, setSearch] = React.useState("");
@@ -48,8 +51,8 @@ const HospitalService = ({role}) => {
         servicesData.push(obj);
       });
       setData(servicesData);
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   };
   useEffect(() => {
@@ -60,7 +63,7 @@ const HospitalService = ({role}) => {
 	<div className="home">
 	  <Sidebar role={role} />
 	  <div className="homeContainer">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="listContainer">
         <div className="listTitle">[{role}] Latest Operations</div>
         <div style={{display: "flex" }}>

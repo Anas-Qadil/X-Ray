@@ -27,7 +27,7 @@ const Statistics = ({role}) => {
     <div className="home">
       <Sidebar role={role} />
       <div className="homeContainer">
-        <Navbar />
+        {/* <Navbar /> */}
         <div className="listContainer">
           [{role}]
           <div className="listTitleContainer">

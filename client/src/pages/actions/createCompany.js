@@ -7,9 +7,11 @@ import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import checkCompany from "../../utils/checkCompany";
 import { signUpCompany } from "../../api/authApi/signUp";
+import { useSnackbar } from 'notistack'
 
 const CreateCompany = ({role}) => {
 
+  const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
   const [error, setError] = useState({
@@ -37,11 +39,14 @@ const CreateCompany = ({role}) => {
       if (!checkCompany(companyData, setError)) {
         const res = await signUpCompany(token, companyData);
         if (res.status === 200 || res.status === 201) {
+          enqueueSnackbar('Company was created successfully', {variant: 'success'})
           navigate(`/${role}`);
         }
+      } else {
+        enqueueSnackbar('Please Check your inputs', {variant: 'error'})
       }
     } catch (e) {
-      alert(e.response.data.message);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 

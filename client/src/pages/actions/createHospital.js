@@ -6,9 +6,13 @@ import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
 import checkHospital from "../../utils/checkHospital";
 import { signUpHospital } from "../../api/authApi/signUp";
+import { useSnackbar } from 'notistack'
+
 
 const CreateHospital = ({role}) => {
   
+  const { enqueueSnackbar } = useSnackbar()
+
   const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
   const [error, setError] = useState({
@@ -39,11 +43,13 @@ const CreateHospital = ({role}) => {
       if (!checkHospital(hospitalData, setError)) {
         const res = await signUpHospital(token, hospitalData);
         if (res.status === 200 || res.status === 201) {
+          enqueueSnackbar('Hospital was created successfully', {variant: 'success'})
           navigate(`/${role}`); 
         }
-      }
+      } else 
+        enqueueSnackbar('Please Check your inputs', {variant: 'error'})
     } catch (e) {
-      alert(e.response.data.message);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -178,7 +184,9 @@ const CreateHospital = ({role}) => {
       </div>
       <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
         <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
+        {/* <SnackbarProvider /> */}
         <Button variant="contained" onClick={addHospital} fullWidth>Add Hospital</Button>
+        {/* <Button variant="contained" onClick={() => enqueueSnackbar('I love hooks', {variant: 'success'})} fullWidth>Add Hospital</Button> */}
       </Stack>
 		</>
   );

@@ -11,8 +11,12 @@ import Navbar from "../../components/navbar/Navbar";
 import "./home.scss";
 import { getPatientDoses } from "../../api/servicesApi";
 import moment from "moment";
+import { useSnackbar } from 'notistack'
+
 
 const Patient = () => {
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const [loading, setLoading] = useState(true);
   const [doseData, setDoseData] = useState([]);
@@ -25,12 +29,15 @@ const Patient = () => {
   // get patient doses
   const getDoses = async () => {
    try {
-     const res = await getPatientDoses(token, user?.patient?._id);
-      // console.log(res?.data);
-      formatData(res?.data?.data);
-      setDoseData(res.data);
-   } catch (error) {
-    alert('patient ' + error.message);
+      const res = await getPatientDoses(token, user?.patient?._id);
+      if (res.status === 200) {
+        if (res.data.lastyearDose >= 18)
+          enqueueSnackbar("You Have exceeded The Does Rate Limit.", {variant: 'warning'})
+        formatData(res?.data?.data);
+        setDoseData(res.data);
+      }
+   } catch (e) {
+     enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
    }
   }
 
@@ -69,7 +76,7 @@ const Patient = () => {
     <div className="home">
       <Sidebar role="patient" />
       <div className="homeContainer">
-        <Navbar />
+        {/* <Navbar /> */}
         <div className="widgets" >
         <Widget type="user" dose={doseData?.doses}/>
           <Widget type="yearly" dose={doseData?.lastyearDose}/>
@@ -77,13 +84,13 @@ const Patient = () => {
           <Widget type="weekly" dose={doseData?.lastWeekDose}/>
         </div>
         <div className="charts"> 
-          <Featured user={user?.patient} role="patient" />
-          <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
+          {/* <Featured user={user?.patient} role="patient" /> */}
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} />
         </div>
-        <div className="listContainer">
+        {/* <div className="listContainer">
           <div className="listTitle">Latest Operations</div>
           <Table data={mainPageData} labels={labels} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

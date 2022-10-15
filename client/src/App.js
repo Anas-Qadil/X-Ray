@@ -21,8 +21,12 @@ import { reloginApi } from './api/authApi/loginApi';
 import { useDispatch } from "react-redux";
 import { setData } from './store/index';
 import Persons from "./pages/person/persons";
+import { useSnackbar } from 'notistack'
+
 
 function App() {
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch()
@@ -51,8 +55,8 @@ function App() {
       localStorage.setItem('role', data?.user?.role);
       // redirect to patient dashboard
       navigate(`/${data?.user?.role}`);
-    } catch (error) {
-      alert(error.message);
+    } catch (e) {
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 

@@ -9,8 +9,12 @@ import { useSelector } from 'react-redux'
 import moment from "moment";
 import Loader from "../../components/loader";
 import { getHospitalServices } from "../../api/servicesApi";
+import { useSnackbar } from 'notistack'
+
 
 const Hospital = () => {
+
+  const { enqueueSnackbar } = useSnackbar()
 
   const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
   const token = useSelector(state => state?.data?.token);
@@ -25,7 +29,7 @@ const Hospital = () => {
       setData(res?.data.data);
       formatData(res?.data.data.data);
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -68,7 +72,7 @@ const Hospital = () => {
     <div className="home">
       <Sidebar role="hospital" />
       <div className="homeContainer">
-        <Navbar />
+        {/* <Navbar /> */}
         <div className="widgets">
           <Widget type="user" dose={data?.doses}/>
           <Widget type="yearly" dose={data?.lastyearDose}/>
@@ -76,13 +80,13 @@ const Hospital = () => {
           <Widget type="weekly" dose={data?.lastWeekDose}/>
         </div>
         <div className="charts"> 
-          <Featured user={user?.hospital} role="hospital" />
-          <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
+          {/* <Featured user={user?.hospital} role="hospital" /> */}
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} />
         </div>
-        <div className="listContainer">
+        {/* <div className="listContainer">
           <div className="listTitle">Latest Operations</div>
           <Table data={mainPageData} labels={labels} />
-        </div>
+        </div> */}
       </div>
     </div>
   );

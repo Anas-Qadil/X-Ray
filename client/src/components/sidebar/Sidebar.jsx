@@ -14,6 +14,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import PersonIcon from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DataSaverOnIcon from '@mui/icons-material/DataSaverOn';
+import LOGO from '../../assets/LOGO.png';
 
 const Sidebar = ({role}) => {
 
@@ -35,9 +36,19 @@ const Sidebar = ({role}) => {
 
   return (
     <div className="sidebar">
-      <div className="top">
-        <Link to={(`/${role}`)} style={{ textDecoration: "none" }}>
-          <span className="logo">X-Ray</span>
+      <div className="top"
+        style={{
+          height: "130px",
+        }}
+      >
+        <Link to={(`/${role}`)} style={{ textDecoration: "none"}}>
+          <img
+            src={LOGO}
+            width="200px"
+            alt=""
+            className="avatar"
+          />
+        
         </Link>
       </div>
       <hr />
@@ -127,6 +138,9 @@ const Sidebar = ({role}) => {
                 handleLogout();
               }}
             >Logout</span>
+          </li>
+          <li>
+            <span>{role}</span>
           </li>
         </ul>
       </div>

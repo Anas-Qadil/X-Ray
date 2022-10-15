@@ -15,9 +15,13 @@ import { getAllServices } from "../../api/servicesApi";
 import checkifEmpty from "../../utils/checkIfEmpty";
 import { useNavigate } from "react-router-dom";
 import { addPersonTraitement, addPatientTraitement } from "../../api/servicesApi";
+import { useSnackbar } from 'notistack'
+
 
 const AddTraitement = ({role}) => {
   
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
@@ -52,7 +56,7 @@ const AddTraitement = ({role}) => {
       });
       setPatients(options);
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -60,7 +64,7 @@ const AddTraitement = ({role}) => {
     try {
       
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -77,7 +81,7 @@ const AddTraitement = ({role}) => {
       );
       setServices(options);
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -93,7 +97,7 @@ const AddTraitement = ({role}) => {
       });
       setPersons(options);
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -102,18 +106,22 @@ const AddTraitement = ({role}) => {
       if(!checkifEmpty(traitementData, setError)) {
         if (traitementType === 'person') {
           const res = await addPersonTraitement(token, traitementData);
-          if (res.status === 200) {
+          if (res.status === 200 || res.status === 201) {
+            enqueueSnackbar('Traitement was Added successfully', {variant: 'success'})
             navigate(`/${role}`);
           }
         } else {
           const res = await addPatientTraitement(token, traitementData);
           if (res.status === 200 || res.status === 201) {
+            enqueueSnackbar('Traitement was Added successfully', {variant: 'success'})
             navigate(`/${role}`);
           }
         }
+      } else {
+        enqueueSnackbar('Please Check your inputs', {variant: 'error'})
       }
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong...', {variant: 'error'})
     }
   }
 
@@ -131,19 +139,19 @@ const AddTraitement = ({role}) => {
   <div className="home">
     <Sidebar role={role} />
     <div className="homeContainer">
-      <Navbar />
+      {/* <Navbar /> */}
       <Container  component={Paper} maxWidth="md" style={{marginTop: "60px", paddingBottom: "60px"}}>
         <h1 style={{display: "flex", justifyContent: "center"}}>Add Traitement</h1>
         <br />
         <br />
         <br />
         <FormControl fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel id="demo-simple-select-label">Choose Person Or Patient</InputLabel>
+          <InputLabel id="demo-simple-select-label">Choose Professional Healthcare Or Patient</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={traitementType}
-            label="Choose Person Or Patient"
+            label="Choose Professional Healthcare Or Patient"
             onChange={(e) => {
               setTraitementData({
                 patient: null,
@@ -156,7 +164,7 @@ const AddTraitement = ({role}) => {
             }}
           >
             <MenuItem value="patient">Patient</MenuItem>
-            <MenuItem value="person">Person</MenuItem>
+            <MenuItem value="person">Professional Healthcare</MenuItem>
           </Select>
         </FormControl>
         <br />
@@ -192,7 +200,7 @@ const AddTraitement = ({role}) => {
                 person: value?.data?._id,
               });
             }}
-            renderInput={(params) => <TextField error={error.person} {...params} label="Person" />}
+            renderInput={(params) => <TextField error={error.person} {...params} label="Professional Healthcare" />}
           />
         )}
         <Autocomplete
