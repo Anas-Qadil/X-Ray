@@ -239,3 +239,13 @@ export const deleteServiceAPI = async (token, id) => {
     },
   })
 }
+
+export const getAllTraitementApi = async (token) => {
+  return await axios.get(`${links.localhost}/api/admin/all-traitements`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}

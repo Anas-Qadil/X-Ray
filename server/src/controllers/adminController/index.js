@@ -57,7 +57,8 @@ router.delete("/person/:id", authenticateMiddleware, deletePerson);
 router.get("/statistics/persons", authenticateMiddleware, getStatisticsPerson);
 
 //services
-const { deleteService } = require("./service");
+const { deleteService, getAllTraitements } = require("./service");
 router.delete("/service/:id", authenticateMiddleware, deleteService);
+router.get("/all-traitements", authenticateMiddleware, getAllTraitements);
 
 module.exports = router;
