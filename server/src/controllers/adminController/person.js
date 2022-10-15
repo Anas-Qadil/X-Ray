@@ -1,6 +1,7 @@
 const express = require("express");
 const personModel = require("../../models/personModel");
 const person_traitementModel = require("../../models/person_traitementModel");
+const usersModel = require("../../models/usersModel");
 
 const getPersons = async (req, res) => {
 	try {
@@ -83,9 +84,10 @@ const deletePerson = async (req, res) => {
     if (!id) {
       return res.status(400).json({ error: "id is required" });
     }
-
-    const person = await personModel.findByIdAndDelete(id);
-    res.status(200).json({ person });
+    await usersModel.findOneAndDelete({ person: id });
+    await personModel.findOneAndDelete({ _id: id });
+    await person_traitementModel.deleteMany({ person: id });
+    res.status(200).json({ message: "Deleted Successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Table from "../../components/table/Table";
@@ -7,9 +7,9 @@ import { useSelector } from 'react-redux'
 import moment from "moment";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getPersons, getPersonForCompanyRole } from "../../api/servicesApi";
+import { getPersons, getPersonForCompanyRole, deletePersonAPI } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
-
+import Model from "../../components/popups/index";
 
 const Persons = ({role}) => {
 
@@ -19,6 +19,11 @@ const Persons = ({role}) => {
   const [data, setData] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [dataLoading, setDataLoading] = React.useState(true);
+
+  // model
+  const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [id, setId] = useState("");
 
   let labels;
   if (role === "admin") 
@@ -58,7 +63,7 @@ const Persons = ({role}) => {
           type: person.type,
         }
         if (role === "admin") {
-          obj.action = ( <IconButton aria-label="delete" size="large">
+          obj.action = ( <IconButton onClick={() => checkDelete(person?._id)} aria-label="delete" size="large">
             <DeleteIcon fontSize="inherit" />
             </IconButton>);
         }
@@ -67,8 +72,25 @@ const Persons = ({role}) => {
       setData(PersonsData);
       setDataLoading(false);
     } catch (e) {
-      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
+  }
+
+  const deletePerson = async (id) => {
+    try {
+      const res = await deletePersonAPI(token, id);
+      if (res.status === 200) {
+        enqueueSnackbar("Person Deleted Successfully", {variant: 'success'})
+        getAllPersons();
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
+  const checkDelete = (id) => {
+    setId(id);
+    setOpen(true);
   }
 
   useEffect(() => {
@@ -93,6 +115,7 @@ const Persons = ({role}) => {
             }}/>
         </div>
         <br />
+        <Model open={open} setOpen={setOpen} deleteThis={deletePerson} id={id} />
         <Table data={data} labels={labels} DataLoading={dataLoading} />
       </div>
 	  </div>

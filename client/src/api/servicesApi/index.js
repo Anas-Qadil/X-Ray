@@ -219,3 +219,23 @@ export const deletePatientAPI = async (token, id) => {
     },
   })
 }
+
+export const deletePersonAPI = async (token, id) => {
+  return await axios.delete(`${links.localhost}/api/admin/person/${id}`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const deleteServiceAPI = async (token, id) => {
+  return await axios.delete(`${links.localhost}/api/admin/service/${id}`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}

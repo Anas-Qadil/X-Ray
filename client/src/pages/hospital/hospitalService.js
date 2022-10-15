@@ -1,14 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Table from "../../components/table/Table";
 import { TextField } from '@mui/material';
-import { getAllServicesApi, getHospitalServices, getAllHospitalServices } from "../../api/servicesApi";
+import { getAllServicesApi, getAllHospitalServices, deleteServiceAPI } from "../../api/servicesApi";
 import moment from "moment";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
+import Model from "../../components/popups/index";
+
 
 const HospitalService = ({role}) => {
 
@@ -21,6 +23,11 @@ const HospitalService = ({role}) => {
   const token = useSelector(state => state?.data?.token);
   const labels = ["ID", "Name", "Equipement", "Examen", "Protocol", "Hospital Designation", "Hospital Region"];
   if (role === "admin") labels.push("Action");
+
+  // model
+  const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [id, setId] = useState("");
 
   const getServices = async () => {
     try {
@@ -45,7 +52,7 @@ const HospitalService = ({role}) => {
           region: service.hospital?.region,
         }
         if (role === "admin") {
-          obj.action = ( <IconButton aria-label="delete" size="large">
+          obj.action = ( <IconButton onClick={() => checkDelete(service?._id)} aria-label="delete" size="large">
             <DeleteIcon />
           </IconButton>)
         }
@@ -57,6 +64,24 @@ const HospitalService = ({role}) => {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   };
+
+  const deleteService = async (id) => {
+    try {
+      const res = await deleteServiceAPI(token, id);
+      if (res.status === 200) {
+        enqueueSnackbar('Service Deleted Successfully', {variant: 'success'})
+        getServices();
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
+  const checkDelete = (id) => {
+    setId(id);
+    setOpen(true);
+  }
+
   useEffect(() => {
     getServices();
   }, [search, hospitalSearch]);
@@ -65,7 +90,6 @@ const HospitalService = ({role}) => {
 	<div className="home">
 	  <Sidebar role={role} />
 	  <div className="homeContainer">
-      {/* <Navbar /> */}
       <div className="listContainer">
         <div className="listTitle">[{role}] Latest Operations</div>
         <div style={{display: "flex" }}>
@@ -95,6 +119,7 @@ const HospitalService = ({role}) => {
           }
         </div>
         <br />
+        <Model open={open} setOpen={setOpen} deleteThis={deleteService} id={id} />
         <Table data={data} labels={labels} DataLoading={dataLoading} />
       </div>
 	  </div>
