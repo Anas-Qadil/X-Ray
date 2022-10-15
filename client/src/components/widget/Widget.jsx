@@ -8,6 +8,8 @@ import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import LineLoader from "../loader/lineLoader";
+import CircleLoader from "../loader/circleLoader";
 
 const Widget = ({ type, dose }) => {
   let data;
@@ -104,7 +106,7 @@ const Widget = ({ type, dose }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {dose}
+          {dose ? dose : <LineLoader />}
         </span>
         <span className="link">{data.link}</span>
       </div>

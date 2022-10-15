@@ -7,6 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import moment from "moment";
+import LineLoader from "../loader/lineLoader";
 
 const List = ({data, labels}) => {
   // console.log(data);
@@ -28,9 +29,11 @@ const List = ({data, labels}) => {
                 <TableCell className="tableCell" key={index}>{row[key]}</TableCell>
               ))}
             </TableRow>
-          ))}
+          )) 
+          }
         </TableBody>
       </Table>
+      { data.length <= 0 && <LineLoader />}
     </TableContainer>
   );
 };

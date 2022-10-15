@@ -12,6 +12,7 @@ import "./home.scss";
 import { getPatientDoses } from "../../api/servicesApi";
 import moment from "moment";
 import { useSnackbar } from 'notistack'
+import LineLoader from "../../components/loader/lineLoader";
 
 
 const Patient = () => {
@@ -59,7 +60,6 @@ const Patient = () => {
       data.push(formatedData);
       i++;
     }
-    console.log(data);
     setMainPageData(data);
   }
 
@@ -78,14 +78,14 @@ const Patient = () => {
       <div className="homeContainer">
         {/* <Navbar /> */}
         <div className="widgets" >
-        <Widget type="user" dose={doseData?.doses}/>
+          <Widget type="user" dose={doseData?.doses}/>
           <Widget type="yearly" dose={doseData?.lastyearDose}/>
           <Widget type="monthly" dose={doseData?.lastMonthDose}/>
           <Widget type="weekly" dose={doseData?.lastWeekDose}/>
         </div>
         <div className="charts"> 
           {/* <Featured user={user?.patient} role="patient" /> */}
-          <Chart title="Last Year (Doses)" aspect={2.6 / 1} />
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} color={doseData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} />
         </div>
         {/* <div className="listContainer">
           <div className="listTitle">Latest Operations</div>

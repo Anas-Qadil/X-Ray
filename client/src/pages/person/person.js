@@ -86,7 +86,7 @@ const Person = () => {
         </div>
         <div className="charts"> 
           {/* <Featured user={user?.person} role="person" /> */}
-          <Chart title="Last Year (Doses)" aspect={2.6 / 1} />
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} color={personTraitementData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} />
         </div>
         {/* <div className="listContainer">
           <div className="listTitle">Latest Operations</div>
