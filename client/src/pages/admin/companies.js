@@ -8,16 +8,23 @@ import { useSelector } from 'react-redux'
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSnackbar } from 'notistack'
-
+import { deleteCompanyAPI } from '../../api/servicesApi'
+import Model from "../../components/popups/index";
 
 const Companies = ({role}) => {
 
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
 
   const token = useSelector(state => state?.data?.token);
   const [search, setSearch] = useState("");
   const [companies, setCompanies] = useState([]);
   const labels = ["ID", "Region", "Ville", "Designation", "Phone", "Email", "Action"];
+  const [dataLoading, setDataLoading] = React.useState(true);
+
+  // model
+  const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [id, setId] = useState("");
 
   const getCompanies = async () => {
     try {
@@ -33,15 +40,34 @@ const Companies = ({role}) => {
           designation: company.designation,
           phone: company.phone,
           email: company.email,
-          action: <IconButton aria-label="delete" size="large">
+          action: <IconButton onClick={() => checkDelete(company?._id)} aria-label="delete" size="large">
           <DeleteIcon fontSize="inherit" />
         </IconButton>
         });
       });
       setCompanies(companiesData);
+      setDataLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
+  }
+
+  const deleteCompany = async (id) => {
+    try {
+      // let res;
+      const res = await deleteCompanyAPI(token, id);
+      if (res.status === 200) {
+        enqueueSnackbar('Company Deleted Successfully', {variant: 'success'})
+        getCompanies();
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
+  const checkDelete = (id) => {
+    setId(id);
+    setOpen(true);
   }
 
   useEffect(() => {
@@ -66,7 +92,8 @@ const Companies = ({role}) => {
             }}/>
         </div>
         <br />
-        <Table data={companies} labels={labels} />
+        <Model open={open} setOpen={setOpen} deleteThis={deleteCompany} id={id} />
+        <Table data={companies} labels={labels} DataLoading={dataLoading} />
       </div>
 	  </div>
 	</div>

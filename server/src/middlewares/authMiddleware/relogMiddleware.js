@@ -31,7 +31,6 @@ const relogMiddleware = async (req, res, next) => {
 	  switch (user?.role) {
       case "patient":
         await user.populate("patient");
-        console.log(user);
         break;
       case "hospital":
         await user.populate("hospital");
@@ -51,7 +50,6 @@ const relogMiddleware = async (req, res, next) => {
           message: "user role not found"
         });
     }
-    console.log(user);
     req.user = user;
     next();
   } catch (e) {

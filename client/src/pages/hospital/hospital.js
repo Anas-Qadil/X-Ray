@@ -15,12 +15,12 @@ import { useSnackbar } from 'notistack'
 const Hospital = () => {
 
   const { enqueueSnackbar } = useSnackbar()
-
   const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [dataLoading, setDataLoading] = useState(true);
   const [mainPageData, setMainPageData] = useState([]);
 
   const getServices = async () => {
@@ -28,12 +28,12 @@ const Hospital = () => {
       const res = await getHospitalServices(token, user?.hospital?._id);
       setData(res?.data.data);
       formatData(res?.data.data.data);
+      setDataLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
-  // console.log(user);
 
   const formatData = (traitements) => {
     let data = [];
@@ -53,11 +53,9 @@ const Hospital = () => {
       data.push(formatedData);
       i++;
     }
-    console.log(data);
     setMainPageData(data);
   }
 
-  // console.log(user);
 
   useEffect(() => {
     if (user?.hospital?._id)  
@@ -74,10 +72,10 @@ const Hospital = () => {
       <div className="homeContainer">
         {/* <Navbar /> */}
         <div className="widgets">
-          <Widget type="user" dose={data?.doses}/>
-          <Widget type="yearly" dose={data?.lastyearDose}/>
-          <Widget type="monthly" dose={data?.lastMonthDose}/>
-          <Widget type="weekly" dose={data?.lastWeekDose}/>
+          <Widget type="user" dose={data?.doses} DataLoading={dataLoading} />
+          <Widget type="yearly" dose={data?.lastyearDose} DataLoading={dataLoading}/>
+          <Widget type="monthly" dose={data?.lastMonthDose} DataLoading={dataLoading}/>
+          <Widget type="weekly" dose={data?.lastWeekDose} DataLoading={dataLoading} />
         </div>
         <div className="charts"> 
           {/* <Featured user={user?.hospital} role="hospital" /> */}

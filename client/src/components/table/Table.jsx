@@ -8,9 +8,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import moment from "moment";
 import LineLoader from "../loader/lineLoader";
+import NoData from "../../assets/No data-amico.png";
 
-const List = ({data, labels}) => {
-  // console.log(data);
+const List = ({data, labels, DataLoading}) => {
   return ( 
     <TableContainer component={Paper} className="table"
     >
@@ -33,7 +33,18 @@ const List = ({data, labels}) => {
           }
         </TableBody>
       </Table>
-      { data.length <= 0 && <LineLoader />}
+      {DataLoading && <LineLoader />}
+      {!DataLoading && data.length === 0 && (
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+          }}>
+            <img src={NoData} width="50%" style={{
+              height: "100%",
+              marginTop: "-100px",
+            }} />
+          </div>
+      )}
     </TableContainer>
   );
 };

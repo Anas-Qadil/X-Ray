@@ -3,8 +3,6 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Table from "../../components/table/Table";
 import { TextField } from '@mui/material';
-import { useLocation } from "react-router";
-import { getPatients } from "../../api/servicesApi";
 import { useSelector } from 'react-redux'
 import moment from "moment";
 import IconButton from '@mui/material/IconButton';
@@ -20,6 +18,7 @@ const Persons = ({role}) => {
   const token = useSelector(state => state?.data?.token);
   const [data, setData] = React.useState([]);
   const [search, setSearch] = React.useState("");
+  const [dataLoading, setDataLoading] = React.useState(true);
 
   let labels;
   if (role === "admin") 
@@ -66,7 +65,7 @@ const Persons = ({role}) => {
         PersonsData.push(obj);
       });
       setData(PersonsData);
-
+      setDataLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
@@ -94,7 +93,7 @@ const Persons = ({role}) => {
             }}/>
         </div>
         <br />
-        <Table data={data} labels={labels} />
+        <Table data={data} labels={labels} DataLoading={dataLoading} />
       </div>
 	  </div>
 	</div>

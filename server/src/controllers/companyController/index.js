@@ -71,16 +71,32 @@ const getCompanyPerson = async (req, res) => {
 
 const getCompanyPersons = async (req, res) => {
   try {
-    const company = req.user;
+    const user = req.user;
     const search = req.query.search;
-    if (!company) {
+    if (!user) {
       return res.status(400).json({
-        message: "company not found",
+        message: "user not found",
       });
     }
-
-    const persons = await personModel.find({
-      company: company.company,
+    let persons = [];
+    if (user.role !== "company") {
+       persons = await personModel.find({
+        company: user.company,
+        $or: [
+          { firstName: { $regex: search, $options: "i" } },
+          { lastName: { $regex: search, $options: "i" } },
+          { email: { $regex: search, $options: "i" } },
+          { phone: { $regex: search, $options: "i" } },
+          { cin: { $regex: search, $options: "i" } },
+          { secteur: { $regex: search, $options: "i" } },
+          { type: { $regex: search, $options: "i" } },
+          { fonction: { $regex: search, $options: "i" } },
+          { poids: { $regex: search, $options: "i" } },
+        ],
+      });
+  } else {
+    persons = await personModel.find({
+      hospital: user.hospital,
       $or: [
         { firstName: { $regex: search, $options: "i" } },
         { lastName: { $regex: search, $options: "i" } },
@@ -93,6 +109,8 @@ const getCompanyPersons = async (req, res) => {
         { poids: { $regex: search, $options: "i" } },
       ],
     });
+  }
+
 
     res.status(200).send({
       message: "persons found",

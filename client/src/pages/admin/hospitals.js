@@ -6,9 +6,9 @@ import { TextField  } from '@mui/material';
 import { useSelector } from 'react-redux'
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getAllHospitals } from "../../api/servicesApi";
+import { getAllHospitals, deleteHospitalAPI } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
-
+import Model from "../../components/popups/index";
 
 const Hospitals = ({role}) => {
 
@@ -18,7 +18,12 @@ const Hospitals = ({role}) => {
   const [search, setSearch] = useState("");
   const [hospitals, setHospitals] = useState([]);
   const labels = ["ID", "Name", "Region", "Ville", "Statut", "Designation", "Phone", "Email", "Action"]
+  const [dataLoading, setDataLoading] = React.useState(true);
 
+  // model
+  const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [id, setId] = useState("");
 
   const getHospitals = async () => {
     try {
@@ -36,15 +41,33 @@ const Hospitals = ({role}) => {
           designation: hospital.designation,
           phone: hospital.phone,
           email: hospital.email,
-          action: <IconButton aria-label="delete" size="large">
-          <DeleteIcon fontSize="inherit" />
-        </IconButton>
+          action: <IconButton onClick={() => checkDelete(hospital?._id)} aria-label="delete" size="large">
+                <DeleteIcon fontSize="inherit" />
+              </IconButton>
         });
       });
       setHospitals(hospitalsData);
+      setDataLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
+  }
+
+  const deleteHospital = async (id) => {
+    try {
+      const res = await deleteHospitalAPI(token, id);
+      if (res.status === 200) {
+        enqueueSnackbar(res.data.message, {variant: 'success'})
+        getHospitals();
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
+  const checkDelete = (id) => {
+    setId(id);
+    setOpen(true);
   }
 
   useEffect(() => {
@@ -69,7 +92,8 @@ const Hospitals = ({role}) => {
             }}/>
         </div>
         <br />
-        <Table data={hospitals} labels={labels} />
+        <Model open={open} setOpen={setOpen} deleteThis={deleteHospital} id={id} />
+        <Table data={hospitals} labels={labels} DataLoading={dataLoading} />
       </div>
 	  </div>
 	</div>

@@ -11,7 +11,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import LineLoader from "../loader/lineLoader";
 import CircleLoader from "../loader/circleLoader";
 
-const Widget = ({ type, dose }) => {
+const Widget = ({ type, dose, DataLoading }) => {
   let data;
 
   //temporary
@@ -106,7 +106,7 @@ const Widget = ({ type, dose }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {dose ? dose : <LineLoader />}
+          {DataLoading === false ? dose : <LineLoader />}
         </span>
         <span className="link">{data.link}</span>
       </div>

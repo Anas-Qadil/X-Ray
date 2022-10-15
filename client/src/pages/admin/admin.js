@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Widget from "../../components/widget/Widget";
@@ -11,9 +11,11 @@ const Admin = () => {
 
   const [loading, setLoading] = React.useState(true);
   const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
+  const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
     setLoading(false);
+    setDataLoading(false);
   }, []);
 
   if (loading) return <Loader />
@@ -23,10 +25,10 @@ const Admin = () => {
       <div className="homeContainer">
         {/* <Navbar /> */}
         <div className="widgets">
-          <Widget type="user" dose={3}/>
-          <Widget type="yearly" dose={3}/>
-          <Widget type="monthly" dose={3}/>
-          <Widget type="weekly" dose={3}/>
+          <Widget type="user" dose={3} DataLoading={dataLoading} />
+          <Widget type="yearly" dose={3} DataLoading={dataLoading}/>
+          <Widget type="monthly" dose={3} DataLoading={dataLoading}/>
+          <Widget type="weekly" dose={3} DataLoading={dataLoading}/>
         </div>
         <div className="charts"> 
           {/* <Featured user={[]} /> */}

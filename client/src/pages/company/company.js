@@ -16,6 +16,7 @@ const Company = () => {
 
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
+  const [dataLoading, setDataLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [mainPageData, setMainPageData] = useState([]);
@@ -27,6 +28,7 @@ const Company = () => {
       const res = await getCompanyServices(token);
       setData(res?.data);
       formatData(res?.data.data);
+      setDataLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
@@ -66,10 +68,10 @@ const Company = () => {
       <div className="homeContainer">
         {/* <Navbar /> */}
         <div className="widgets">
-          <Widget type="user" dose={data.totalDose}/>
-          <Widget type="yearly" dose={data.lastyearDose}/>
-          <Widget type="monthly" dose={data.lastMonthDose}/>
-          <Widget type="weekly" dose={data.lastWeekDose}/>
+          <Widget type="user" dose={data.totalDose} DataLoading={dataLoading} />
+          <Widget type="yearly" dose={data.lastyearDose} DataLoading={dataLoading} />
+          <Widget type="monthly" dose={data.lastMonthDose} DataLoading={dataLoading} />
+          <Widget type="weekly" dose={data.lastWeekDose} DataLoading={dataLoading} />
         </div>
         <div className="charts"> 
           {/* <Featured user={user?.company} role="company" /> */}

@@ -17,6 +17,7 @@ const HospitalService = ({role}) => {
   const [data, setData] = React.useState([]);
   const [search, setSearch] = React.useState("");
   const [hospitalSearch, setHospitalSearch] = React.useState("");
+  const [dataLoading, setDataLoading] = React.useState(true);
   const token = useSelector(state => state?.data?.token);
   const labels = ["ID", "Name", "Equipement", "Examen", "Protocol", "Hospital Designation", "Hospital Region"];
   if (role === "admin") labels.push("Action");
@@ -40,8 +41,8 @@ const HospitalService = ({role}) => {
           equipement: service.equipment,
           examen: service.examen, 
           protocol: service.protocol,
-          hospital: service.hospital.designation,
-          region: service.hospital.region,
+          hospital: service.hospital?.designation,
+          region: service.hospital?.region,
         }
         if (role === "admin") {
           obj.action = ( <IconButton aria-label="delete" size="large">
@@ -51,8 +52,9 @@ const HospitalService = ({role}) => {
         servicesData.push(obj);
       });
       setData(servicesData);
+      setDataLoading(false);
     } catch (e) {
-      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   };
   useEffect(() => {
@@ -93,7 +95,7 @@ const HospitalService = ({role}) => {
           }
         </div>
         <br />
-        <Table data={data} labels={labels} />
+        <Table data={data} labels={labels} DataLoading={dataLoading} />
       </div>
 	  </div>
 	</div>

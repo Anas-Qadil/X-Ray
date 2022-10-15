@@ -26,7 +26,7 @@ const Patient = () => {
   // get user data from redux store
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
-
+  const [DataLoading, setDataLoading] = useState(true);
   // get patient doses
   const getDoses = async () => {
    try {
@@ -36,6 +36,7 @@ const Patient = () => {
           enqueueSnackbar("You Have exceeded The Does Rate Limit.", {variant: 'warning'})
         formatData(res?.data?.data);
         setDoseData(res.data);
+        setDataLoading(false);
       }
    } catch (e) {
      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
@@ -78,19 +79,14 @@ const Patient = () => {
       <div className="homeContainer">
         {/* <Navbar /> */}
         <div className="widgets" >
-          <Widget type="user" dose={doseData?.doses}/>
-          <Widget type="yearly" dose={doseData?.lastyearDose}/>
-          <Widget type="monthly" dose={doseData?.lastMonthDose}/>
-          <Widget type="weekly" dose={doseData?.lastWeekDose}/>
+          <Widget type="user" dose={doseData?.doses} DataLoading={DataLoading} />
+          <Widget type="yearly" dose={doseData?.lastyearDose} DataLoading={DataLoading}/>
+          <Widget type="monthly" dose={doseData?.lastMonthDose} DataLoading={DataLoading} />
+          <Widget type="weekly" dose={doseData?.lastWeekDose} DataLoading={DataLoading} />
         </div>
         <div className="charts"> 
-          {/* <Featured user={user?.patient} role="patient" /> */}
           <Chart title="Last Year (Doses)" aspect={2.6 / 1} color={doseData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} />
         </div>
-        {/* <div className="listContainer">
-          <div className="listTitle">Latest Operations</div>
-          <Table data={mainPageData} labels={labels} />
-        </div> */}
       </div>
     </div>
   );

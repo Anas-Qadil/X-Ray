@@ -19,7 +19,7 @@ const HospitalPatient = ({role}) => {
   const token = useSelector(state => state?.data?.token);
   const [data, setData] = React.useState([]);
   const [search, setSearch] = React.useState("");
-
+  const [dataLoading, setDataLoading] = React.useState(true);
   const location = useLocation();
 
   let labels;
@@ -38,7 +38,6 @@ const HospitalPatient = ({role}) => {
         res = await getPatients(token, search);
       } else if (role === "hospital") {
         res = await getPatientForHospitlRole(token, search);
-        console.log(res);
       }
       res?.data?.data?.map((patient) => {
         i++;
@@ -64,6 +63,7 @@ const HospitalPatient = ({role}) => {
         patientsData.push(obj);
       });
       setData(patientsData);
+      setDataLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
@@ -91,7 +91,7 @@ const HospitalPatient = ({role}) => {
             }}/>
         </div>
         <br />
-        <Table data={data} labels={labels} />
+        <Table data={data} labels={labels} DataLoading={dataLoading} />
       </div>
 	  </div>
 	</div>

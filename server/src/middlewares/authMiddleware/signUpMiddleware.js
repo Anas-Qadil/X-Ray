@@ -151,7 +151,6 @@ const patientMiddleware = async (req, res, next) => {
       const phone = await patientModel.findOne({ phone: data.phone });
       if (phone)
       {
-        console.log(phone);
         return res.status(400).json({
           message: "phone already exists"
         });

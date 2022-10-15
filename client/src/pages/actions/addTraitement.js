@@ -16,7 +16,8 @@ import checkifEmpty from "../../utils/checkIfEmpty";
 import { useNavigate } from "react-router-dom";
 import { addPersonTraitement, addPatientTraitement } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
-
+import { getPatientForHospitlRole } from "../../api/servicesApi";
+import { getPersonForCompanyRole } from "../../api/servicesApi";
 
 const AddTraitement = ({role}) => {
   
@@ -24,7 +25,6 @@ const AddTraitement = ({role}) => {
 
   const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
-  const user = useSelector(state => state?.data?.data?.user);
   const [patients, setPatients] = React.useState([]);
   const [persons, setPersons] = React.useState([]);
   const [services, setServices] = React.useState([]);
@@ -47,7 +47,6 @@ const AddTraitement = ({role}) => {
     try {
       const res = await getPatients(token, '');
       const options = [];
-      console.log(res);
       res.data?.data?.map((patient) => {
         options.push({
           label: patient.firstName + ' ' + patient.lastName + ' - ' + patient.cin,
@@ -62,26 +61,36 @@ const AddTraitement = ({role}) => {
 
   const getHospitalPatients = async () => {
     try {
-      
+      const res = await getPatientForHospitlRole(token);
+      const options = [];
+      res.data?.data?.map((patient) => {
+        options.push({
+          label: patient.firstName + ' ' + patient.lastName + ' - ' + patient.cin,
+          data: patient,
+        })
+      });
+      setPatients(options);
     } catch (e) {
-      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'});
     }
   }
 
   const getServices = async () => {
     try {
       const res = await getAllServices(token);
+      console.log(res.data.data)
       const options = [];
-      res.data.data.map((service) => {
-        options.push({
-          label: service.name + ' ' + service.equipment + ' ' + service.examen +' - ' + service.hospital.designation,
-          data: service,
-        })
+      if (res.status === 200) {
+        res?.data?.data?.map((service) => {
+          options.push({
+            label: service.name + ' ' + service.equipment + ' ' + service.examen +' - ' + service?.hospital?.designation,
+            data: service,
+          })
+        });
       }
-      );
       setServices(options);
     } catch (e) {
-      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
@@ -128,10 +137,10 @@ const AddTraitement = ({role}) => {
   useEffect(() => {
     if (role === "admin") {
       getAllPatients();
-      getAllPersons();
     } else if (role === "hospital") {
       getHospitalPatients();
     }
+    getAllPersons();
     getServices();
   }, []);
 

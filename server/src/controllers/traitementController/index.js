@@ -112,7 +112,7 @@ const getHospitalTraitements = async (req, res) => {
     let result = [];
     let doses = 0;
     data.map((doc) => {
-      if (doc.service.hospital._id == id) {
+      if (doc.service?.hospital?._id == id) {
         result.push(doc);
         doses += doc.dose;
       }
@@ -152,7 +152,7 @@ const getHospitalTraitements = async (req, res) => {
     
     let personData = [];
     personTraitements.map((doc) => {
-      if (doc.service.hospital._id == id) {
+      if (doc.service?.hospital?._id == id) {
         personData.push(doc);
         console.log(doc);
       }

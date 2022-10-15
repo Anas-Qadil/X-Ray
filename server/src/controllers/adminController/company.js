@@ -56,6 +56,11 @@ const getCompany = async (req, res) => {
 const deleteCompany = async (req, res) => {
   try {
     const { id } = req.params;
+    if (!id) {
+      return res.status(400).send({
+        message: "id is required"
+      });
+    }
     const company = await companyModel.findByIdAndDelete(id);
     if (!company)
       return res.status(400).send({
@@ -66,7 +71,7 @@ const deleteCompany = async (req, res) => {
       return res.status(400).send({
         message: "user not found",
       });
-    res.send({
+    res.status(200).send({
       message: "success",
       data: company,
     });

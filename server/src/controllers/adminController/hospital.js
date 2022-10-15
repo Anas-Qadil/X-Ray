@@ -378,7 +378,7 @@ const getAllSearchServices = async (req, res) => {
     let data = [];
     services.map((service) => {
       hospitals.map((hospital) => {
-        if (service.hospital._id.toString() === hospital._id.toString()) {
+        if (service?.hospital?._id.toString() === hospital?._id.toString()) {
           data.push(service);
         }
       });

@@ -189,3 +189,23 @@ export const getPersonForCompanyRole = async (token, search) => {
     },
   })
 }
+
+export const deleteCompanyAPI = async (token, id) => {
+  return await axios.delete(`${links.localhost}/api/admin/company/${id}`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const deleteHospitalAPI = async (token, id) => {
+  return await axios.delete(`${links.localhost}/api/admin/hospital/${id}`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}

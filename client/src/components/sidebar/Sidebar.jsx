@@ -131,16 +131,9 @@ const Sidebar = ({role}) => {
               </li>
             </Link>
           )}
-          <li>
+          <li onClick={() => { handleLogout() }}>
             <ExitToAppIcon className="icon" />
-            <span
-              onClick={() => {
-                handleLogout();
-              }}
-            >Logout</span>
-          </li>
-          <li>
-            <span>{role}</span>
+            <span>Logout</span>
           </li>
         </ul>
       </div>

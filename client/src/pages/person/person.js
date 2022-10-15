@@ -26,6 +26,7 @@ const Person = () => {
   const [loading, setLoading] = useState(true);
   const [personTraitementData, setPersonTraitementData] = useState({});
   const [mainPageData, setMainPageData] = useState([]);
+  const [DataLoading, setDataLoading] = useState(true);
 
   const getDoses = async () => {
     try {
@@ -36,6 +37,7 @@ const Person = () => {
         setPersonTraitementData(res?.data);
         formatData(res?.data?.traitements);
       }
+      setDataLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
@@ -76,22 +78,15 @@ const Person = () => {
     <div className="home">
       <Sidebar role="person" />
       <div className="homeContainer">
-        {/* <Navbar /> */}
-        
         <div className="widgets">
-          <Widget type="user" dose={personTraitementData?.totalDose}/>
-          <Widget type="yearly" dose={personTraitementData?.lastyearDose}/>
-          <Widget type="monthly" dose={personTraitementData?.lastMonthDose}/>
-          <Widget type="weekly" dose={personTraitementData?.lastWeekDose}/>
+          <Widget type="user" dose={personTraitementData?.totalDose} DataLoading={DataLoading}/>
+          <Widget type="yearly" dose={personTraitementData?.lastyearDose} DataLoading={DataLoading}/>
+          <Widget type="monthly" dose={personTraitementData?.lastMonthDose} DataLoading={DataLoading}/>
+          <Widget type="weekly" dose={personTraitementData?.lastWeekDose} DataLoading={DataLoading}/>
         </div>
         <div className="charts"> 
-          {/* <Featured user={user?.person} role="person" /> */}
           <Chart title="Last Year (Doses)" aspect={2.6 / 1} color={personTraitementData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} />
         </div>
-        {/* <div className="listContainer">
-          <div className="listTitle">Latest Operations</div>
-          <Table data={mainPageData} labels={labels} />
-        </div> */}
       </div>
     </div>
   );
