@@ -92,7 +92,7 @@ const Sidebar = ({role}) => {
               <Link to="/persons" style={{ textDecoration: "none" }}>
                 <li>
                   <PersonIcon className="icon" />
-                  <span>Persons</span>
+                  <span>Professionals Healthcare</span>
                 </li>
               </Link>
             )}
@@ -100,7 +100,7 @@ const Sidebar = ({role}) => {
             <Link to="/hospital/services" style={{ textDecoration: "none" }}>
               <li>
                 <CreditCardIcon className="icon" />
-                <span>Service</span>
+                <span>Services</span>
               </li>
             </Link>
             )}
