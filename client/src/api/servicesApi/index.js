@@ -209,3 +209,13 @@ export const deleteHospitalAPI = async (token, id) => {
     },
   })
 }
+
+export const deletePatientAPI = async (token, id) => {
+  return await axios.delete(`${links.localhost}/api/admin/patient/${id}`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}

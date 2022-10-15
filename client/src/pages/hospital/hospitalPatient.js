@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Table from "../../components/table/Table";
@@ -9,8 +9,9 @@ import { useSelector } from 'react-redux'
 import moment from "moment";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getPatientForHospitlRole } from "../../api/servicesApi";
+import { getPatientForHospitlRole, deletePatientAPI } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
+import Model from "../../components/popups/index";
 
 const HospitalPatient = ({role}) => {
 
@@ -21,6 +22,11 @@ const HospitalPatient = ({role}) => {
   const [search, setSearch] = React.useState("");
   const [dataLoading, setDataLoading] = React.useState(true);
   const location = useLocation();
+
+  // model
+  const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [id, setId] = useState("");
 
   let labels;
   if (location.pathname === "/persons") 
@@ -56,7 +62,7 @@ const HospitalPatient = ({role}) => {
           email: patient.email,
         }
         if (role === "admin") {
-          obj.action = ( <IconButton aria-label="delete" size="large">
+          obj.action = ( <IconButton onClick={() => checkDelete(patient?._id)} aria-label="delete" size="large">
             <DeleteIcon />
           </IconButton>)
         }
@@ -67,6 +73,23 @@ const HospitalPatient = ({role}) => {
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
+  }
+
+  const deletePatient = async (id) => {
+    try {
+      const res = await deletePatientAPI(token, id);
+      if (res.status === 200) {
+        enqueueSnackbar('Patient Deleted Successfully', {variant: 'success'})
+        getPatinets();
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
+  const checkDelete = (id) => {
+    setId(id);
+    setOpen(true);
   }
 
   useEffect(() => {
@@ -91,6 +114,7 @@ const HospitalPatient = ({role}) => {
             }}/>
         </div>
         <br />
+        <Model open={open} setOpen={setOpen} deleteThis={deletePatient} id={id} />
         <Table data={data} labels={labels} DataLoading={dataLoading} />
       </div>
 	  </div>

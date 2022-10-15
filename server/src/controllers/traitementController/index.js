@@ -54,19 +54,19 @@ const addTraitement = async (req, res, next) => {
       const email = savedTraitement.patient?.email;
       if (email) {
         console.log("sending email");
-        if (validator.isEmail(email))
-          sendEmail(email);
+        // if (validator.isEmail(email))
+        //   sendEmail(email);
       }
       const hospitalEmail = savedTraitement.service?.hospital?.email;
       if (hospitalEmail) {
         console.log("sending email to hospital");
-        if (validator.isEmail(hospitalEmail))
-          sendEmail(hospitalEmail);
+        // if (validator.isEmail(hospitalEmail))
+        //   sendEmail(hospitalEmail);
       }
       const phoneNumber = savedTraitement.patient?.phone;
       if (phoneNumber) {
         console.log("sending sms");
-        sendSms(phoneNumber);
+        // sendSms(phoneNumber);
       }
       // admin email
       const adminEmail = await adminModel.findOne({}).select("email");
@@ -76,8 +76,8 @@ const addTraitement = async (req, res, next) => {
       })
       if (adminEmail) {
         console.log("sending email to admin");
-        if (validator.isEmail(adminEmail.email))
-          sendAdminMail(adminEmail.email, savedTraitement.patient.cin);
+        // if (validator.isEmail(adminEmail.email))
+        //   sendAdminMail(adminEmail.email, savedTraitement.patient.cin);
       }
     }
 

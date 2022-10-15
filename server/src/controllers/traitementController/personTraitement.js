@@ -42,26 +42,26 @@ const addPersonTraitement = async (req, res) => {
         const email = savedTraitement.person.email;
         if (email) {
           console.log("sending email");
-          if (validator.isEmail(email))
-            sendEmail(email);
+          // if (validator.isEmail(email))
+          //   sendEmail(email);
         }
         const hospitalEmail = savedTraitement?.service?.hospital?.email;
         if (hospitalEmail) {
           console.log("sending email to hospital");
-          if (validator.isEmail(hospitalEmail))
-            sendEmail(hospitalEmail);
+          // if (validator.isEmail(hospitalEmail))
+          //   sendEmail(hospitalEmail);
         }
         const companyEmail = savedTraitement?.person?.company?.email;
         if (companyEmail) {
           console.log("sending email to company");
-          if (validator.isEmail(companyEmail))
-            sendEmail(companyEmail);
+          // if (validator.isEmail(companyEmail))
+          //   sendEmail(companyEmail);
         }
 
         phone = savedTraitement?.person?.phone;
         if (phone) {
           console.log("sending sms");
-          sendSMS(phone);
+          // sendSMS(phone);
         }
       }
       res.status(200).send({ 

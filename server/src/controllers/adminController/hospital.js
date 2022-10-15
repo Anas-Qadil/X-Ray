@@ -362,7 +362,7 @@ const getAllSearchServices = async (req, res) => {
       ],
     })
       .populate("hospital");
-
+    // console.log(services);
     const hospitals = await hospitalModel.find({
       $or: [
         {name: {$regex: hospitalSearch, $options: "i"}},
@@ -376,13 +376,17 @@ const getAllSearchServices = async (req, res) => {
     });
 
     let data = [];
-    services.map((service) => {
-      hospitals.map((hospital) => {
-        if (service?.hospital?._id.toString() === hospital?._id.toString()) {
-          data.push(service);
-        }
+    if (hospitalSearch)
+    {
+      services.map((service) => {
+        hospitals.map((hospital) => {
+          if (service?.hospital?._id.toString() === hospital?._id.toString()) {
+            data.push(service);
+          }
+        });
       });
-    });
+    }else 
+      data = services;
     res.send({
       message: "success",
       data: data

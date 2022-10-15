@@ -1,6 +1,7 @@
 const express = require("express");
 const patientModel = require("../../models/patientModel");
 const traitementModel = require("../../models/traitementModel");
+const usersModel = require("../../models/usersModel");
 const moment = require("moment");
 
 const getPatients = async (req, res) => {
@@ -62,14 +63,13 @@ const getPatientData = async (req, res) => {
 
 const deletePatient = async (req, res) => { 
   try {
+    const id = req.params.id;
     if (!req.params.id) {
       return res.status(400).json({ error: "id is required" });
     }
-    const patient = await patientModel.findById(req.params.id);
-    if (!patient) {
-      return res.status(400).json({ error: "patient not found" });
-    }
-    await patientModel.findByIdAndDelete(req.params.id);
+    await usersModel.findOneAndDelete({ patient: id });
+    await traitementModel.deleteMany({ patient: id });
+    await patientModel.findOneAndDelete({_id: id});
     res.status(200).json({ message: "patient deleted" });
   } catch (error) {
       res.status(500).json({ error: error.message });
