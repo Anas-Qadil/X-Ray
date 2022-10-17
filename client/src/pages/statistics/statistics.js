@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack'
 import Autocomplete from '@mui/material/Autocomplete';
-import { getPatientDoses, getPersonTraitements, getCompanyServices, getHospitalServices, getAllTraitementApi } from '../../api/servicesApi';
+import { getPatientDoses, getPersonTraitements, getCompanyServices, getUltimateStatisticsApi, getHospitalServices, getAllTraitementApi } from '../../api/servicesApi';
 
 
 const Statistics = ({role}) => {
@@ -20,8 +20,9 @@ const Statistics = ({role}) => {
   const { enqueueSnackbar } = useSnackbar();
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
+  const [dataLoading, setDataLoading] = React.useState(true);
   const navigate = useNavigate();
-  const labels = ["Date", "Region", "Ville", "Hospital", "Service", "Examen", "Protocole", "Appareil", "Equipement", "Dose"];
+  const labels = ["Date", "Region", "Ville", "Hospital", "Service", "Examen", "Protocole", "Appareil", "Dose"];
   const [services, setServices] = React.useState([]);
   const [data, setData] = React.useState([]);
   const [regions, setRegions] = React.useState([]); // regions of hospitals
@@ -35,22 +36,44 @@ const Statistics = ({role}) => {
     region: "",
     service: "",
     appareil: "",
+    patient: role === "patient" ? user.patient._id : "",
+    person: role === "person" ? user.person._id : "",
     startDate: moment().subtract(1, 'year').format('YYYY-MM-DD'),
-    endDate: moment().format('YYYY-MM-DD'),
+    endDate: moment().add(1, 'days').format('YYYY-MM-DD'),
   });
 
   const getAllStatistics = async () => {
     try {
-      console.log(stats);
+      setDataLoading(true);
+      const res = await getUltimateStatisticsApi(token, stats);
+      let finalData = [];
+      if (res?.data?.data) {
+        res.data?.data?.forEach((item) => {
+          finalData.push({
+            Date: moment(item.createdAt).format('YYYY-MM-DD'),
+            Region: item.service.hospital.region,
+            Ville: item.service.hospital.ville,
+            Hospital: item.service.hospital.name,
+            Service: item.service.name,
+            Examen: item.service.examen,
+            Protocole: item.service.protocol,
+            Appareil: item.service.equipment,
+            Dose: item.dose,
+          });
+        });
+        console.log(res);
+        setData(finalData);
+        setDataLoading(false);
+      }
     } catch (e) {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
-
+  console.log(user);
   const getServices = async () => {
     try {
       let res;
-      console.log(user);
+      // console.log(user);
       switch (role) {
         case "admin":
           res = await getAllTraitementApi(token);
@@ -70,7 +93,7 @@ const Statistics = ({role}) => {
         default:
           break;
       }
-      console.log(res.data);
+      // console.log(res.data);
       let regionsOpt = [];
       let servicesOpt = [];
       let hospitalsOpt = [];
@@ -130,7 +153,6 @@ const Statistics = ({role}) => {
           });
         }
       });
-      console.log(personsOpt);
       setRegions(regionsOpt);
       setServicesName(servicesOpt);
       setHospitals(hospitalsOpt);
@@ -143,8 +165,8 @@ const Statistics = ({role}) => {
   }
 
   useEffect(() => {
-    getAllStatistics();
     getServices();
+    getAllStatistics();
   }, [stats]);
 
 	return (
@@ -165,6 +187,13 @@ const Statistics = ({role}) => {
                       disablePortal
                       id="combo-box-demo"
                       options={patients}
+                      onChange={(event, value) => {
+                        setStats({
+                          ...stats,
+                          patient: value?.data,
+                          person: "",
+                        });
+                      }}
                       renderInput={(params) => <TextField {...params} label="Patients" />}
                     />
                     <Autocomplete
@@ -172,6 +201,13 @@ const Statistics = ({role}) => {
                       disablePortal
                       id="combo-box-demo"
                       options={persons}
+                      onChange={(event, value) => {
+                        setStats({
+                          ...stats,
+                          person: value?.data,
+                          patient: "",
+                        });
+                      }}
                       renderInput={(params) => <TextField {...params} label="Persons" />}
                     />
                   </> }
@@ -260,7 +296,7 @@ const Statistics = ({role}) => {
           </div>
           <br />
           <hr />
-          <Table data={[]} labels={labels} />
+          <Table data={data} labels={labels} DataLoading={dataLoading} />
         </div>
       </div>
     </div>

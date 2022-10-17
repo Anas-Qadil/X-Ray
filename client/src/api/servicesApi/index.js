@@ -249,3 +249,16 @@ export const getAllTraitementApi = async (token) => {
     },
   })
 }
+
+export const getUltimateStatisticsApi = async (token, stats) => {
+  return await axios.get(`${links.localhost}/api/admin/ultimate-statistics`,{
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      stats,
+    },
+  })
+}

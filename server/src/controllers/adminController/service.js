@@ -75,7 +75,122 @@ const getAllTraitements = async (req, res) => {
   }
 }
 
+const getUltimateStatistics = async (req, res) => {
+  try {
+    const user = req.user;
+    const stats = JSON.parse(req.query.stats);
+    console.log(stats);
+    let data = [];
+
+    let traitements = [];
+    let person_traitement = [];
+    if (stats.patient) {
+      traitements = await traitementModel.find({ patient: stats.patient,
+        createdAt: {
+          $gte: moment(stats.startDate, "YYYY-MM-DD").toISOString(),
+          $lte: moment(stats.endDate, "YYYY-MM-DD").toISOString(),
+        }
+      })
+        .populate({
+          path: 'service',
+          populate: {
+            path: 'hospital',
+          },
+        })
+        .populate('patient');
+    } else if (stats.person) {
+      person_traitement = await person_traitementModel.find({ person: stats.person,
+        createdAt: {
+          $gte: moment(stats.startDate, "YYYY-MM-DD").toISOString(),
+          $lte: moment(stats.endDate, "YYYY-MM-DD").toISOString(),
+        }
+      })
+        .populate({
+          path: 'service',
+          populate: {
+            path: 'hospital',
+          },
+        }).populate({
+          path: 'person',
+          populate: {
+            path: 'hospital',
+          },
+        });
+    } else {
+      traitements = await traitementModel.find({
+        createdAt: {
+          $gte: moment(stats.startDate, "YYYY-MM-DD").toISOString(),
+          $lte: moment(stats.endDate, "YYYY-MM-DD").toISOString(),
+        }
+      })
+      .populate({
+        path: 'service',
+        populate: {
+          path: 'hospital',
+        },
+      })
+      .populate('patient');
+      person_traitement = await person_traitementModel.find({
+        createdAt: {
+          $gte: moment(stats.startDate, "YYYY-MM-DD").toISOString(),
+          $lte: moment(stats.endDate, "YYYY-MM-DD").toISOString(),
+        }
+      })
+        .populate({
+          path: 'service',
+          populate: {
+            path: 'hospital',
+          },
+        }).populate({
+          path: 'person',
+          populate: {
+            path: 'hospital',
+          },
+        });
+    }
+
+    const combined = [...traitements, ...person_traitement];
+    combined.map((doc) => {
+      if (stats?.hospital) {
+        if (doc?.service?.hospital?._id == stats?.hospital) {
+          if (stats?.region) {
+            if (doc?.service?.hospital?.region == stats?.region) {
+              data.push(doc);
+            }
+          } else data.push(doc);
+        }
+      } else if (stats?.region) {
+        if (doc?.service?.hospital?.region == stats?.region) {
+          data.push(doc);
+        }
+      } else data.push(doc);
+    });
+    let data2 = [];
+    data.map((doc) => {
+      if (stats?.service) {
+        if (doc?.service?._id == stats?.service) {
+          if (stats?.appareil) {
+            if (doc?.service.appareil == stats?.appareil) {
+              data2.push(doc);
+            }
+          } else data2.push(doc);
+        }
+      } else if (stats?.appareil) {
+        if (doc?.service?.equipment == stats?.appareil) {
+          data2.push(doc);
+        }
+      } else data2.push(doc);
+    });
+
+    // console.log(data2);
+    res.send({ data: data2 });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+}
+
 module.exports = {
 	deleteService,
-  getAllTraitements
+  getAllTraitements,
+  getUltimateStatistics
 }
