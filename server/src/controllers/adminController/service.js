@@ -20,8 +20,21 @@ const deleteService = async (req, res) => {
 const getAllTraitements = async (req, res) => {
   try {
     let data = [];
-    const traitements = await traitementModel.find();
-    const person_traitement = await person_traitementModel.find();
+    const traitements = await traitementModel.find()
+      .populate({
+        path: 'service',
+        populate: {
+          path: 'hospital',
+        },
+      })
+      .populate('patient');
+    const person_traitement = await person_traitementModel.find()
+      .populate({
+        path: 'service',
+        populate: {
+          path: 'hospital',
+        },
+      }).populate('person');
     let i = 0;
     data = [...traitements, ...person_traitement];
 

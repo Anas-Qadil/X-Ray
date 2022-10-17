@@ -247,7 +247,6 @@ const filterCompanyService = async (req, res) => {
       if (String(doc?.person?.company) === String(company?.company)) {
         services.map(service => {
           if (String(service._id) === String(doc.service._id)) {
-            console.log("doc")
             data.push(doc);
           }
         });

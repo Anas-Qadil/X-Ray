@@ -346,6 +346,26 @@ const getCompanyData = async (req, res) => {
   }
 }
 
+const getAllStatistics = async (req, res) => {
+  try {
+    const stats = req.query;
+    console.log(stats);
+
+
+
+    
+    const data = []
+    res.status(200).send({
+      message: "success",
+      data: data,
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.message,
+    });
+  }
+}
+
 module.exports = {
   getCompanies,
   getCompany,
@@ -357,5 +377,6 @@ module.exports = {
   getFilterCompanies,
   getFilterServices,
   getFilterPersons,
-  getCompanyData
+  getCompanyData,
+  getAllStatistics
 }

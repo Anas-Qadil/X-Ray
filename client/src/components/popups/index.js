@@ -41,7 +41,7 @@ export default function Model({open, setOpen, deleteThis, id}) {
           height: "250px",
         }}>
           <img src={Delete} width={100} />
-          <DialogTitle>{"Are You Sure You Want To Delete This Company?"}</DialogTitle>
+          <DialogTitle>{"Are You Sure You Want To Delete This Item?"}</DialogTitle>
           <DialogActions>
             <Button 
               sx={{ ':hover': { bgcolor: 'text.secondary', color: 'white' }, bgcolor: 'black' }} 

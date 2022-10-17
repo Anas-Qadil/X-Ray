@@ -154,7 +154,6 @@ const getHospitalTraitements = async (req, res) => {
     personTraitements.map((doc) => {
       if (doc.service?.hospital?._id == id) {
         personData.push(doc);
-        console.log(doc);
       }
     });
 
@@ -187,6 +186,8 @@ const getHospitalTraitements = async (req, res) => {
         lastMonthDose: lastMonthDose,
         lastWeekDose: lastWeekDose,
         lastyearDose: lastyearDose,
+        patients: result,
+        persons: personData,
       }
     });
   } catch (error) {

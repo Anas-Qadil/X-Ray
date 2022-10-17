@@ -6,12 +6,13 @@ const { signUpAdmin } = require("./admin");
 const { adminSignUpMiddleWare } = require("../../middlewares/adminMiddleware/adminSignUpMiddle");
 
 // companies controllers and middlewares
-const { getCompanyData, getFilterCompanies, getFilterPersons, getFilterServices, getCompanies, deleteCompany, getCompany, getStatisticsRegion, getStatistics, getStatisticsServices, getStatisticsAppareil } = require("./company");
+const { getCompanyData, getAllStatistics, getFilterCompanies, getFilterPersons, getFilterServices, getCompanies, deleteCompany, getCompany, getStatisticsRegion, getStatistics, getStatisticsServices, getStatisticsAppareil } = require("./company");
 
 
 router.post("/sign-up", adminSignUpMiddleWare, signUpAdmin);
 
 // companies routes
+router.get("/statistics", authenticateMiddleware, getAllStatistics);
 router.get("/companies", authenticateMiddleware, getCompanies); // ucan send search query to filter companies out
 router.get("/company/:id", authenticateMiddleware, getCompany);
 router.get("/company/:id/data", authenticateMiddleware, getCompanyData);
