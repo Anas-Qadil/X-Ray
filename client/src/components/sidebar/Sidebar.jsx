@@ -15,6 +15,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DataSaverOnIcon from '@mui/icons-material/DataSaverOn';
 import LOGO from '../../assets/LOGO.png';
+import ThreePIcon from '@mui/icons-material/ThreeP';
 
 const Sidebar = ({role}) => {
 
@@ -71,7 +72,18 @@ const Sidebar = ({role}) => {
                 {(role === "person" || role === "patient") && <span>Your Statistics</span>}
               </li>
             </Link>
-          {(role === "admin" || role === "company" || role === "hospital") && <p className="title">USER</p>}
+            
+          <p className="title">USER</p>
+
+          {/* PROFILE */ }
+            <Link to="/profile" style={{ textDecoration: "none" }}>
+              <li>
+                <ThreePIcon className="icon" />
+                <span>Profile</span>
+              </li>
+            </Link>
+          {/* PROFILE */ }
+
             {(role === "admin") && (
               <Link to="/admin/companies" style={{ textDecoration: "none" }}>
                 <li>

@@ -7,6 +7,7 @@ import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutl
 import Avatar from '@mui/material/Avatar';
 
 const Featured = ({user, role}) => {
+  console.log(user);
 
   return (
     <div className="featured">
@@ -26,7 +27,7 @@ const Featured = ({user, role}) => {
         <p className="title">Votre profile informations</p>
         {(role === "person" || role === "patient") && (
           <>
-            <div className="summary">
+            <div className="summary" style={{width: "50%"}}>
               <div className="item">
                 <div className="itemTitle" style={{ fontWeight: "bold"}}>First name</div>
                   <div className="itemResult positive">
@@ -47,7 +48,7 @@ const Featured = ({user, role}) => {
               </div>
             </div>
             <br />
-            <div className="summary">
+            <div className="summary" style={{width: "50%"}}>
               <div className="item">
                 <div className="itemTitle"
                   style={{ fontWeight: "bold"}}
@@ -73,7 +74,7 @@ const Featured = ({user, role}) => {
         )}
         {(role === "company" || role === "hospital") && (
           <>
-            <div className="summary">
+            <div className="summary" style={{width: "50%"}}>
               <div className="item">
                 <div className="itemTitle" style={{ fontWeight: "bold"}}>Email</div>
                   <div className="itemResult positive">
@@ -90,7 +91,7 @@ const Featured = ({user, role}) => {
               )}
             </div>
             <br />
-            <div className="summary">
+            <div className="summary" style={{width: "50%"}}>
               <div className="item">
                 <div className="itemTitle" style={{ fontWeight: "bold"}}>Designation</div>
                   <div className="itemResult positive">

@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import { setData } from './store/index';
 import Persons from "./pages/person/persons";
 import { useSnackbar } from 'notistack'
+import Profile from './pages/profile';
 
 
 function App() {
@@ -98,6 +99,9 @@ function App() {
         {/* Actions */}
         <Route path="/add-traitement" element={<AddTraitement role={role} />} />
         <Route path="/create-account" element={<CreateAccount role={role} />} />
+
+        {/* Profile */}
+        <Route path="/profile" element={<Profile role={role} />} />
 
         <Route path="*" element={<NotFound/ >} />
       </Routes>
