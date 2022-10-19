@@ -110,7 +110,7 @@ const AddTraitement = ({role}) => {
     }
   }
 
-  const AddTraitement = async () => {
+  const AddTraitement__ = async () => {
     try {
       if(!checkifEmpty(traitementData, setError)) {
         if (traitementType === 'person') {
@@ -243,7 +243,7 @@ const AddTraitement = ({role}) => {
         </FormControl>
         <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
           <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-          <Button variant="contained" onClick={AddTraitement} fullWidth>Add Traitement</Button>
+          <Button variant="contained" onClick={AddTraitement__} fullWidth>Add Traitement</Button>
         </Stack>
       </Container>
       </div>

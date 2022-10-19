@@ -23,6 +23,7 @@ import { setData } from './store/index';
 import Persons from "./pages/person/persons";
 import { useSnackbar } from 'notistack'
 import Profile from './pages/profile';
+import AddService from './pages/actions/addService';
 
 
 function App() {
@@ -98,6 +99,7 @@ function App() {
         <Route path="/admin/companies" element={<Companies role={role} />} />
         {/* Actions */}
         <Route path="/add-traitement" element={<AddTraitement role={role} />} />
+        <Route path="/add-service" element={<AddService role={role} />} />
         <Route path="/create-account" element={<CreateAccount role={role} />} />
 
         {/* Profile */}

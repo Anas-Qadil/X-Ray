@@ -126,6 +126,14 @@ const Sidebar = ({role}) => {
             )}
           <p className="title">Action</p>
           {(role === "admin" || role === "hospital") && (
+            <Link to="/add-service" style={{ textDecoration: "none" }}>
+              <li>
+                <DataSaverOnIcon className="icon" />
+                <span>Add Service</span>
+              </li>
+            </Link>
+          )}
+          {(role === "admin" || role === "hospital") && (
             <Link to="/add-traitement" style={{ textDecoration: "none" }}>
               <li>
                 <DataSaverOnIcon className="icon" />

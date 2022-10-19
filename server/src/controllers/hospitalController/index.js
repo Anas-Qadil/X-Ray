@@ -3,6 +3,8 @@ const hospitalModel = require("../../models/hospitalModel");
 const patientModel = require("../../models/patientModel");
 const serviceModel = require("../../models/serviceModel");
 const traitementModel = require("../../models/traitementModel");
+const personModel = require("../../models/personModel");
+const person_traitementModel = require("../../models/person_traitementModel");
 
 const getAllHospitals = async (req, res) => {
 	try {
@@ -48,7 +50,7 @@ const getHospitalById = async (req, res) => {
 const getHospitalPatients = async (req, res) => {
 	try {
 		const id = String(req.user.hospital);
-    const search = '';
+    const search = req.query.search;
     const patients = await patientModel.find({ 
       $or: [
         { firstName: { $regex: search, $options: "i" } },
@@ -88,6 +90,55 @@ const getHospitalPatients = async (req, res) => {
       message: "Somthing went wrong..."
 		});
 	}
+}
+
+const getHospitalPersons = async (req, res) => {
+  try {
+    const id = String(req.user.hospital);
+    const search = req.query.search;
+    const persons = await personModel.find({
+      $or: [
+        { firstName: { $regex: search, $options: "i" } },
+        { lastName: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+        { cin: { $regex: search, $options: "i" } },
+        { secteur: { $regex: search, $options: "i" } },
+        { type: { $regex: search, $options: "i" } },
+        { fonction: { $regex: search, $options: "i" } },
+        { poids: { $regex: search, $options: "i" } },
+      ],
+    });
+    const data = await person_traitementModel.find({}).populate("person").populate("service");
+    let result = [];
+    data.map((doc) => {
+      if (doc.service.hospital == id) {
+        result.push(doc)
+      }
+    });
+    
+    let final = [];
+    result.map((doc) => {
+      persons.map((person) => {
+        if (String(doc.person._id) == String(person._id)) {
+          if (!final.includes(person)) {
+            final.push(person)
+          }
+        }
+      })
+    });
+
+    res.status(200).send({
+      status: "success",
+      message: "persons found",
+      data: final,
+    });
+  } catch (error) {
+    res.status(500).send({
+      status: "failure",
+      message: "Internal server error"
+    });
+  }
 }
 
 const getHospitalServices = async (req, res) => {
@@ -146,18 +197,17 @@ const hospitalDoes = async (req, res) => {
 
 const addService = async (req, res) => {
   try {
-    const { id } = req.params;
-    const service = req.body;
-    const data = await serviceModel.create(service);
+    const { data } = req.body;
+    const dataResult = await serviceModel.create(data);
     console.log(data);
-    if (!data) {
+    if (!dataResult) {
       return res.status(400).json({
         message: "No hospital found",
       });
     }
     res.status(200).send({
-      message: "Hospital found",
-      data: data,
+      message: "Service Was Created Successfully",
+      data: dataResult,
     });
   } catch (error) {
     res.status(500).send({
@@ -173,5 +223,6 @@ module.exports = {
   getHospitalPatients,
   getHospitalServices,
   hospitalDoes,
-  addService
+  addService,
+  getHospitalPersons
 }

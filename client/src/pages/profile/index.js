@@ -19,7 +19,6 @@ const Profile = ({role}) => {
   if (role === "company")
     userInfo = user?.company;
 
-
 	return (
     <div className="home">
 	    <Sidebar role={role} />

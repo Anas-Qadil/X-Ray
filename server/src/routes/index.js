@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { signUpController, signUpPatient, signUpHospital, signUpCompany, signUpPerson } = require("../controllers/authController/signUpController");
 const { signUpMiddleware, patientMiddleware, signUpPersonMiddleware, companyMiddleware } = require("../middlewares/authMiddleware/signUpMiddleware");
-const { getAllHospitals, getHospitalById, getHospitalPatients, getHospitalServices, hospitalDoes, addService } = require("../controllers/hospitalController");
+const { getAllHospitals, getHospitalPersons, getHospitalById, getHospitalPatients, getHospitalServices, hospitalDoes, addService } = require("../controllers/hospitalController");
 const { getAllPatients, currentPatient, getPatientById, getPatientServices, getPatientDoses, getPatientHospital } = require("../controllers/patientController");
 const loginController = require("../controllers/authController/loginController");
 const loginMiddleware = require("../middlewares/authMiddleware/loginMiddleware");
@@ -62,6 +62,7 @@ router.use("/admin", adminRouter);
 router.post("/sign-up/hospital", signUpMiddleware, signUpHospitalMiddleware, signUpHospital); // todo: when u finish admin parte make sure to check who can access this route
 router.get("/get-all-hospitals", authenticateMiddleware, hospitalMiddleware, getAllHospitals);
 router.get("/hospital/patients", authenticateMiddleware, hospitalMiddleware, getHospitalPatients);
+router.get("/hospital/persons", authenticateMiddleware, getHospitalPersons);
 router.get("/hospital/:id", authenticateMiddleware, hospitalMiddleware, getHospitalById);
 // hospital services
 router.get("/hospital/service/services", authenticateMiddleware, hospitalMiddleware, getHospitalServices);

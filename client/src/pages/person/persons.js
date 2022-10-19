@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import moment from "moment";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getPersons, getPersonForCompanyRole, deletePersonAPI } from "../../api/servicesApi";
+import { getPersons, getPersonForCompanyRole, deletePersonAPI, getHospitalPersons } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
 import Model from "../../components/popups/index";
 
@@ -40,7 +40,10 @@ const Persons = ({role}) => {
       {
         res = await getPersons(token, search);
         console.log(res);
-      } else {
+      } else if (role === "hospital") {
+        res = await getHospitalPersons(token, search);
+      } 
+      else {
         res = await getPersonForCompanyRole(token, search);
       }
       res?.data?.data?.map((person) => {
@@ -65,7 +68,7 @@ const Persons = ({role}) => {
         if (role === "admin") {
           obj.action = ( <IconButton onClick={() => checkDelete(person?._id)} aria-label="delete" size="large">
             <DeleteIcon fontSize="inherit" />
-            </IconButton>);
+          </IconButton>);
         }
         PersonsData.push(obj);
       });
