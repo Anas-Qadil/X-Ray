@@ -81,7 +81,7 @@ const Patient = () => {
   useEffect(() => {
     if (user?.patient?._id)  
       getDoses();
-    // getGraph();
+    getGraph();
     setLoading(false);
   }, [user]);
 
@@ -100,7 +100,7 @@ const Patient = () => {
           <Widget type="weekly" dose={doseData?.lastWeekDose} DataLoading={DataLoading} />
         </div>
         <div className="charts"> 
-          <Chart title="Last Year (Doses)" aspect={2.6 / 1} color={doseData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} graph={graph}/>
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} color={doseData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} graph={graph} />
         </div>
       </div>
     </div>

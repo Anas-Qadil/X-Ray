@@ -5,6 +5,7 @@ const companyModel = require("../../models/companyModel");
 const patientModel = require("../../models/patientModel");
 const serviceModel = require("../../models/serviceModel");
 const traitementModel = require("../../models/traitementModel");
+const person_traitementModel = require("../../models/person_traitementModel");
 const moment = require("moment");
 
 const searchHospital = async (req, res) => {
@@ -156,10 +157,32 @@ const graphData = async (req, res) => {
   try {
     let data = [];
     const user = req.user;
-
+    let traitements = [];
     if (user.role === "patient") {
       traitements = await traitementModel.find({ patient: user.patient?._id }, { dose: 1, createdAt: 1 });
+    } else if (user.role === "person") {
+      traitements = await person_traitementModel.find({ person: user.person?._id }, { dose: 1, createdAt: 1 });
+    } else if (user.role === "admin") {
+      traitements = await traitementModel.find({}, { dose: 1, createdAt: 1 });
+      traitements = traitements.concat(await person_traitementModel.find({}, { dose: 1, createdAt: 1 }));
+    } else if (user.role === "company") {
+      let tmp = await person_traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("person");
+      tmp.map((t) => {
+        if (t.person.company.toString() === user.company?._id.toString()) {
+          traitements.push(t);
+        }
+      });
+    } else if (user.role === "hospital") {
+      let tmp = await person_traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("service");
+      tmp = tmp.concat(await traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("service"));
+      tmp.map((t) => {
+        if (t.service.hospital.toString() === user.hospital?._id.toString()) {
+          traitements.push(t);
+        }
+      });
     }
+
+
     traitements.map(item => {
       let date = moment(item.createdAt).month() + 1;
       item.dateFormated = date;

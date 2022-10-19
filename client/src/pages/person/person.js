@@ -13,6 +13,7 @@ import Table from "../../components/table/Table";
 import { getPersonTraitements } from "../../api/servicesApi";
 import moment from 'moment';
 import { useSnackbar } from 'notistack'
+import { getGraphData } from "../../api/servicesApi";
 
 
 const Person = () => {
@@ -27,6 +28,7 @@ const Person = () => {
   const [personTraitementData, setPersonTraitementData] = useState({});
   const [mainPageData, setMainPageData] = useState([]);
   const [DataLoading, setDataLoading] = useState(true);
+  const [graph, setGraph] = useState({});
 
   const getDoses = async () => {
     try {
@@ -64,9 +66,24 @@ const Person = () => {
     setMainPageData(data);
   }
 
+  const getGraph = async () => {
+    try {
+      const res = await getGraphData(token);
+      console.log(res);
+      if (res.status === 200) {
+        setGraph(res.data.data);
+      } else {
+        enqueueSnackbar(res?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
   useEffect(() => {
     if (user?.person?._id)
       getDoses();
+    getGraph();
     setLoading(false);
   }, [user])
 
@@ -85,7 +102,7 @@ const Person = () => {
           <Widget type="weekly" dose={personTraitementData?.lastWeekDose} DataLoading={DataLoading}/>
         </div>
         <div className="charts"> 
-          <Chart title="Last Year (Doses)" aspect={2.6 / 1} color={personTraitementData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} />
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} color={personTraitementData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} graph={graph} />
         </div>
       </div>
     </div>

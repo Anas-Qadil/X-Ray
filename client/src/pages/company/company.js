@@ -10,6 +10,8 @@ import moment from "moment";
 import Loader from "../../components/loader";
 import { getCompanyServices } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
+import { getGraphData } from "../../api/servicesApi";
+
 
 const Company = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -20,6 +22,7 @@ const Company = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [mainPageData, setMainPageData] = useState([]);
+  const [graph, setGraph] = useState({});
 
   const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
   
@@ -54,11 +57,26 @@ const Company = () => {
     }
     setMainPageData(data);
   }
+
+  const getGraph = async () => {
+    try {
+      const res = await getGraphData(token);
+      console.log(res);
+      if (res.status === 200) {
+        setGraph(res.data.data);
+      } else {
+        enqueueSnackbar(res?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
   
   useEffect(() => {
     if (token)  
       getServices();
     setLoading(false);
+    getGraph();
   }, [token]);
   if (loading) return <Loader />
 
@@ -75,7 +93,7 @@ const Company = () => {
         </div>
         <div className="charts"> 
           {/* <Featured user={user?.company} role="company" /> */}
-          <Chart title="Last Year (Doses)" aspect={2.6 / 1} />
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} graph={graph} />
         </div>
         {/* <div className="listContainer">
           <div className="listTitle">Latest Operations</div>

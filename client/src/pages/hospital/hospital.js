@@ -10,6 +10,7 @@ import moment from "moment";
 import Loader from "../../components/loader";
 import { getHospitalServices } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
+import { getGraphData } from "../../api/servicesApi";
 
 
 const Hospital = () => {
@@ -19,6 +20,7 @@ const Hospital = () => {
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const [loading, setLoading] = useState(true);
+  const [graph, setGraph] = useState({});
   const [data, setData] = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [mainPageData, setMainPageData] = useState([]);
@@ -56,10 +58,25 @@ const Hospital = () => {
     setMainPageData(data);
   }
 
+  const getGraph = async () => {
+    try {
+      const res = await getGraphData(token);
+      console.log(res);
+      if (res.status === 200) {
+        setGraph(res.data.data);
+      } else {
+        enqueueSnackbar(res?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
 
   useEffect(() => {
     if (user?.hospital?._id)  
       getServices();
+    getGraph();
     setLoading(false);
   }, [user]);
 
@@ -79,7 +96,7 @@ const Hospital = () => {
         </div>
         <div className="charts"> 
           {/* <Featured user={user?.hospital} role="hospital" /> */}
-          <Chart title="Last Year (Doses)" aspect={2.6 / 1} />
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} graph={graph} />
         </div>
         {/* <div className="listContainer">
           <div className="listTitle">Latest Operations</div>

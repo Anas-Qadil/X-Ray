@@ -13,17 +13,17 @@ const Chart = ({ aspect, title, color = "#00A7E1", graph }) => {
 
   const data = [
     { name: "January", Dose: graph?.hasOwnProperty("1") ? graph['1']?.dose || 0 : 0 },
-    { name: "February", Dose: graph?.hasOwnProperty("1") ? graph['2']?.dose || 0 : 0 },
-    { name: "March", Dose: graph?.hasOwnProperty("1") ? graph['3']?.dose || 0 : 0 },
-    { name: "April", Dose: graph?.hasOwnProperty("1") ? graph['4']?.dose || 0 : 0 },
-    { name: "May", Dose: graph?.hasOwnProperty("1") ? graph['5']?.dose || 0 : 0 },
-    { name: "June", Dose: graph?.hasOwnProperty("1") ? graph['6']?.dose || 0 : 0 },
-    { name: "July", Dose: graph?.hasOwnProperty("1") ? graph['7']?.dose || 0 : 0 },
-    { name: "August", Dose: graph?.hasOwnProperty("1") ? graph['8']?.dose || 0 : 0 },
-    { name: "September", Dose: graph?.hasOwnProperty("1") ? graph['9']?.dose || 0 : 0 },
-    { name: "October", Dose: graph?.hasOwnProperty("1") ? graph['10']?.dose || 0 : 0 },
-    { name: "November", Dose: graph?.hasOwnProperty("1") ? graph['11']?.dose || 0 : 0 },
-    { name: "December", Dose: graph?.hasOwnProperty("1") ? graph['12']?.dose || 0 : 0 },
+    { name: "February", Dose: graph?.hasOwnProperty("2") ? graph['2']?.dose || 0 : 0 },
+    { name: "March", Dose: graph?.hasOwnProperty("3") ? graph['3']?.dose || 0 : 0 },
+    { name: "April", Dose: graph?.hasOwnProperty("4") ? graph['4']?.dose || 0 : 0 },
+    { name: "May", Dose: graph?.hasOwnProperty("5") ? graph['5']?.dose || 0 : 0 },
+    { name: "June", Dose: graph?.hasOwnProperty("6") ? graph['6']?.dose || 0 : 0 },
+    { name: "July", Dose: graph?.hasOwnProperty("7") ? graph['7']?.dose || 0 : 0 },
+    { name: "August", Dose: graph?.hasOwnProperty("8") ? graph['8']?.dose || 0 : 0 },
+    { name: "September", Dose: graph?.hasOwnProperty("9") ? graph['9']?.dose || 0 : 0 },
+    { name: "October", Dose: graph?.hasOwnProperty("10") ? graph['10']?.dose || 0 : 0 },
+    { name: "November", Dose: graph?.hasOwnProperty("11") ? graph['11']?.dose || 0 : 0 },
+    { name: "December", Dose: graph?.hasOwnProperty("12") ? graph['12']?.dose || 0 : 0 },
   ];
 
   return (

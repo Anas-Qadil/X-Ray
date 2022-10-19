@@ -10,13 +10,16 @@ import  { getAllTraitementApi } from  "../../api/servicesApi" ;
 import moment from "moment";
 import { useSnackbar } from 'notistack'
 import { useSelector } from 'react-redux'
+import { getGraphData } from "../../api/servicesApi";
+
 
 const Admin = () => {
 
   const { enqueueSnackbar } = useSnackbar()
   const [loading, setLoading] = React.useState(true);
   const token = useSelector(state => state?.data?.token);
-  const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
+  const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"];
+  const [graph, setGraph] = useState({});
   const [dataLoading, setDataLoading] = useState(true);
   const [data, setData] = useState([]);
 
@@ -30,10 +33,24 @@ const Admin = () => {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
-
+  
+  const getGraph = async () => {
+    try {
+      const res = await getGraphData(token);
+      console.log(res);
+      if (res.status === 200) {
+        setGraph(res.data.data);
+      } else {
+        enqueueSnackbar(res?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
 
   useEffect(() => {
     getAllTraitement();
+    getGraph();
     setLoading(false);
   }, []);
 
@@ -50,7 +67,7 @@ const Admin = () => {
           <Widget type="weekly" dose={data?.lastWeekDose} DataLoading={dataLoading}/>
         </div>
         <div className="charts"> 
-          <Chart title="Last Year (Doses)" aspect={2.6 / 1} />
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} graph={graph} />
         </div>
       </div>
     </div>
