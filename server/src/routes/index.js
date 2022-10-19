@@ -157,13 +157,14 @@ router.delete("/person/:username", deletePersonMiddleware, deletePerson);
 {/* -------------------------------------------------- End Person --------------------------------------------------*/}
 
 {/* -------------------------------------------------- Start Search --------------------------------------------------*/}
-const { searchHospital, searchPerson, searchCompany, searchService, searchPatient } = require("../controllers/search"); 
+const { searchHospital, searchPerson, searchCompany, searchService, searchPatient, graphData } = require("../controllers/search"); 
 
 router.get("/search/hospital", searchHospital);
 router.get("/search/person", searchPerson);
 router.get("/search/company", searchCompany);
 router.get("/search/service", searchService);
 router.get("/search/patient", searchPatient);
+router.get("/graph", authenticateMiddleware, graphData);
 
 {/* -------------------------------------------------- End Search --------------------------------------------------*/}
 

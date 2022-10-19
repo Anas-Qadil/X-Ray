@@ -13,7 +13,7 @@ import { getPatientDoses } from "../../api/servicesApi";
 import moment from "moment";
 import { useSnackbar } from 'notistack'
 import LineLoader from "../../components/loader/lineLoader";
-
+import { getGraphData } from "../../api/servicesApi";
 
 const Patient = () => {
 
@@ -22,7 +22,7 @@ const Patient = () => {
   const [loading, setLoading] = useState(true);
   const [doseData, setDoseData] = useState([]);
   const [mainPageData, setMainPageData] = useState([]);
-
+  const [graph, setGraph] = useState({});
   // get user data from redux store
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
@@ -64,9 +64,24 @@ const Patient = () => {
     setMainPageData(data);
   }
 
+  const getGraph = async () => {
+    try {
+      const res = await getGraphData(token);
+      console.log(res);
+      if (res.status === 200) {
+        setGraph(res.data.data);
+      } else {
+        enqueueSnackbar(res?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
   useEffect(() => {
     if (user?.patient?._id)  
       getDoses();
+    // getGraph();
     setLoading(false);
   }, [user]);
 
@@ -85,7 +100,7 @@ const Patient = () => {
           <Widget type="weekly" dose={doseData?.lastWeekDose} DataLoading={DataLoading} />
         </div>
         <div className="charts"> 
-          <Chart title="Last Year (Doses)" aspect={2.6 / 1} color={doseData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} />
+          <Chart title="Last Year (Doses)" aspect={2.6 / 1} color={doseData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} graph={graph}/>
         </div>
       </div>
     </div>

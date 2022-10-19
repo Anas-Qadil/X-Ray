@@ -170,7 +170,7 @@ const getUltimateStatistics = async (req, res) => {
       if (stats?.service) {
         if (doc?.service?._id == stats?.service) {
           if (stats?.appareil) {
-            if (doc?.service.appareil == stats?.appareil) {
+            if (doc?.service?.equipment == stats?.appareil) {
               data2.push(doc);
             }
           } else data2.push(doc);

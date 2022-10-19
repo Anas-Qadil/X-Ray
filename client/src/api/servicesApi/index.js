@@ -284,3 +284,13 @@ export const getHospitalPersons = async (token, search) => {
     },
   })
 }
+
+export const getGraphData = async (token) => {
+  return await axios.get(`${links.localhost}/api/graph`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}

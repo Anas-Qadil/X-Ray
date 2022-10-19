@@ -4,6 +4,8 @@ const personModel = require("../../models/personModel");
 const companyModel = require("../../models/companyModel");
 const patientModel = require("../../models/patientModel");
 const serviceModel = require("../../models/serviceModel");
+const traitementModel = require("../../models/traitementModel");
+const moment = require("moment");
 
 const searchHospital = async (req, res) => {
   try {
@@ -150,6 +152,41 @@ const searchPatient = async (req, res) => {
   }
 }
 
+const graphData = async (req, res) => {
+  try {
+    let data = [];
+    const user = req.user;
+
+    if (user.role === "patient") {
+      traitements = await traitementModel.find({ patient: user.patient?._id }, { dose: 1, createdAt: 1 });
+    }
+    traitements.map(item => {
+      let date = moment(item.createdAt).month() + 1;
+      item.dateFormated = date;
+      data.push({ date: date, dose: item.dose });
+    })
+    const result = [];
+    // group data by date
+    const all = data.reduce((res, value) => {
+      if (!res[value.date]) {
+        res[value.date] = { date: value.date, dose: 0 };
+        result.push(res[value.date])
+      }
+      res[value.date].dose += value.dose;
+      return res;
+    }, {});
+
+
+    res.status(200).json({
+      message: "success",
+      data: all
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: e.message
+    });
+  }
+}
 
 
 module.exports = {
@@ -157,5 +194,6 @@ module.exports = {
   searchPerson,
   searchCompany,
   searchService,
-  searchPatient
+  searchPatient,
+  graphData
 }
