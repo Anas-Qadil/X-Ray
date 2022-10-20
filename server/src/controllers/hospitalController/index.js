@@ -108,7 +108,7 @@ const getHospitalPersons = async (req, res) => {
         { fonction: { $regex: search, $options: "i" } },
         { poids: { $regex: search, $options: "i" } },
       ],
-    });
+    }).populate("company");
     const data = await person_traitementModel.find({}).populate("person").populate("service");
     let result = [];
     data.map((doc) => {

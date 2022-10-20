@@ -9,8 +9,17 @@ import Paper from "@mui/material/Paper";
 import moment from "moment";
 import LineLoader from "../loader/lineLoader";
 import NoData from "../../assets/No data-amico.png";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const List = ({data, labels, DataLoading}) => {
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const paths = location.pathname.split("/");
+  const userRDX = useSelector(state => state?.data?.data?.user);
+
   return ( 
     <TableContainer component={Paper} className="table"
     >
@@ -23,14 +32,77 @@ const List = ({data, labels, DataLoading}) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data?.map((row) => (
-            <TableRow key={row?.id}>
-              {Object?.keys(row)?.map((key, index) => (
-                <TableCell className="tableCell" key={index}>{row[key]}</TableCell>
-              ))}
-            </TableRow>
-          )) 
-          }
+          {(paths[paths.length - 1] === "companies" || paths[paths.length - 1] === "patients" || paths[paths.length - 1] === "persons" || paths[paths.length - 1] === "hospitals") ? (
+            data?.map((row) => (
+              <TableRow className="tableRowHover" key={row?.id} onClick={() => {
+                console.log(row);
+                const obj = {};
+                if (paths[paths.length - 1] === "companies") {
+                  obj.designation = row?.designation;
+                  obj.email = row?.email;
+                  obj.phone = row?.phone;
+                  obj.region = row?.region;
+                  obj.ville = row?.ville;
+                  obj.role = userRDX.role;
+                  obj.OwnRole = "company";
+                } else if (paths[paths.length - 1] === "patients") {
+                  obj.address = row?.address;
+                  obj.age = row?.age;
+                  obj.birthDate = row?.birthDate;
+                  obj.cin = row?.cin;
+                  obj.createdAt = row?.createdAt;
+                  obj.email = row?.email;
+                  obj.firstName = row?.firstName;
+                  obj.gender = row?.gender;
+                  obj.lastName = row?.lastName;
+                  obj.phone = row?.phone;
+                  obj.poids = row?.poids;
+                  obj.role = userRDX.role;
+                  obj.OwnRole = "patient";
+                } else if (paths[paths.length - 1] === "persons") {
+                  obj.address = row?.address;
+                  obj.age = row?.age;
+                  obj.birthDate = row?.birthDate;
+                  obj.cin = row?.cin;
+                  obj.createdAt = row?.createdAt;
+                  obj.email = row?.email;
+                  obj.firstName = row?.firstName;
+                  obj.gender = row?.gender;
+                  obj.lastName = row?.lastName;
+                  obj.phone = row?.phone;
+                  obj.poids = row?.poids;
+                  obj.secteur = row?.secteur;
+                  obj.type = row?.type;
+                  obj.fonction = row?.fonction;
+                  obj.company = row?.company;
+                  obj.role = userRDX.role;
+                  obj.OwnRole = "person";
+                } else if (paths[paths.length - 1] === "hospitals") {
+                  obj.designation = row?.designation;
+                  obj.email = row?.email;
+                  obj.phone = row?.phone;
+                  obj.region = row?.region;
+                  obj.ville = row?.ville;
+                  obj.name = row?.name;
+                  obj.statut = row?.statut;
+                  obj.role = userRDX.role;
+                  obj.OwnRole = "hospital";
+                }
+                navigate("/profile", {state: {data: obj}});
+              }}>
+                {Object?.keys(row)?.map((key, index) => (
+                  <TableCell className="tableCell" key={index}>{row[key]}</TableCell>
+                ))}
+              </TableRow>
+            ))) : (
+            data?.map((row) => (
+              <TableRow key={row?.id}>
+                {Object?.keys(row)?.map((key, index) => (
+                  <TableCell className="tableCell" key={index}>{row[key]}</TableCell>
+                ))}
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
       {DataLoading && <LineLoader />}

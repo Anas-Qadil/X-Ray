@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from 'react-redux'
-import { useNavigate } from "react-router-dom";
 import Loader from "../../components/loader";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Widget from "../../components/widget/Widget";
-import Featured from "../../components/featured/Featured";
 import Chart from "../../components/chart/Chart";
-import Table from "../../components/table/Table";
-import Navbar from "../../components/navbar/Navbar";
 import "./home.scss";
 import { getPatientDoses } from "../../api/servicesApi";
 import moment from "moment";
 import { useSnackbar } from 'notistack'
-import LineLoader from "../../components/loader/lineLoader";
 import { getGraphData } from "../../api/servicesApi";
 
 const Patient = () => {

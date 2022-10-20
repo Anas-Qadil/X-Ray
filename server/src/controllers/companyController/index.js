@@ -93,7 +93,7 @@ const getCompanyPersons = async (req, res) => {
           { fonction: { $regex: search, $options: "i" } },
           { poids: { $regex: search, $options: "i" } },
         ],
-      });
+      }).populate("company");
   } else {
     persons = await personModel.find({
       hospital: user.hospital,
@@ -108,7 +108,7 @@ const getCompanyPersons = async (req, res) => {
         { fonction: { $regex: search, $options: "i" } },
         { poids: { $regex: search, $options: "i" } },
       ],
-    });
+    }).populate("hospital");
   }
 
 

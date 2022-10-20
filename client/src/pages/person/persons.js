@@ -22,7 +22,6 @@ const Persons = ({role}) => {
 
   // model
   const [open, setOpen] = useState(false);
-  const [confirm, setConfirm] = useState(false);
   const [id, setId] = useState("");
 
   let labels;
@@ -39,7 +38,6 @@ const Persons = ({role}) => {
       if (role === "admin")
       {
         res = await getPersons(token, search);
-        console.log(res);
       } else if (role === "hospital") {
         res = await getHospitalPersons(token, search);
       } 
@@ -64,6 +62,7 @@ const Persons = ({role}) => {
           secteur: person.secteur,
           fonction: person.fonction,
           type: person.type,
+          company: person?.company?.designation || "",
         }
         if (role === "admin") {
           obj.action = ( <IconButton onClick={() => checkDelete(person?._id)} aria-label="delete" size="large">
