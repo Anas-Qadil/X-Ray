@@ -35,6 +35,7 @@ const Companies = ({role}) => {
         i++;
         companiesData.push({
           id: i,
+          _id: company._id,
           region: company.region,
           ville: company.ville,
           designation: company.designation,

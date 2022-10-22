@@ -49,6 +49,7 @@ const HospitalPatient = ({role}) => {
         i++;
         let obj = {
           id: i,
+          _id: patient._id,
           createdAt: moment(patient.createdAt).format("YYYY-MM-DD"),
           firstName: patient.firstName,
           lastName: patient.lastName,

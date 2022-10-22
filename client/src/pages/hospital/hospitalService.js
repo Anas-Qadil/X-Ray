@@ -44,6 +44,7 @@ const HospitalService = ({role}) => {
         i++;
         let obj = {
           id: i,
+          _id: service._id,
           name: service.name,
           equipement: service.equipment,
           examen: service.examen, 

@@ -34,6 +34,7 @@ const Hospitals = ({role}) => {
         i++;
         hospitalsData.push({
           id: i,
+          _id: hospital._id,
           name: hospital.name,
           region: hospital.region,
           ville: hospital.ville,

@@ -22,13 +22,16 @@ export const getPersonTraitements = async (token, id) => {
   })
 }
 
-export const getCompanyServices = async (token) => {
+export const getCompanyServices = async (token, id) => {
   return await axios.get(`${links.localhost}/api/company/services`, {
     headers: {
       Accept: "application/json",
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
+    params: {
+      id
+    }
   })
 }
 
@@ -285,12 +288,15 @@ export const getHospitalPersons = async (token, search) => {
   })
 }
 
-export const getGraphData = async (token) => {
+export const getGraphData = async (token, type) => {
   return await axios.get(`${links.localhost}/api/graph`, {
     headers: {
       Accept: "application/json",
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
+    },
+    params: {
+      type,
     },
   })
 }

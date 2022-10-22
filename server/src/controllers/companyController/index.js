@@ -127,6 +127,9 @@ const getCompanyPersons = async (req, res) => {
 const getCompanyServices = async (req, res) => {
   try {
     const company = req.user;
+    const id = req?.query?.id;
+    if (id)
+      company.company = id
     if (!company) {
       return res.status(400).json({
         message: "company not found",

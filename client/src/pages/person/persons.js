@@ -48,6 +48,7 @@ const Persons = ({role}) => {
         i++;
         let obj = {
           id: i,
+          _id: person._id,
           createdAt: moment(person.createdAt).format("YYYY-MM-DD"),
           firstName: person.firstName,
           lastName: person.lastName,

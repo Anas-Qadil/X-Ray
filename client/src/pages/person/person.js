@@ -43,8 +43,8 @@ const Person = () => {
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
-
   }
+  
   const formatData = (traitements) => {
     let data = [];
     let formatedData = {};

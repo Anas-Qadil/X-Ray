@@ -35,9 +35,9 @@ const List = ({data, labels, DataLoading}) => {
           {(paths[paths.length - 1] === "companies" || paths[paths.length - 1] === "patients" || paths[paths.length - 1] === "persons" || paths[paths.length - 1] === "hospitals") ? (
             data?.map((row) => (
               <TableRow className="tableRowHover" key={row?.id} onClick={() => {
-                console.log(row);
                 const obj = {};
                 if (paths[paths.length - 1] === "companies") {
+                  obj._id = row?._id;
                   obj.designation = row?.designation;
                   obj.email = row?.email;
                   obj.phone = row?.phone;
@@ -46,6 +46,7 @@ const List = ({data, labels, DataLoading}) => {
                   obj.role = userRDX.role;
                   obj.OwnRole = "company";
                 } else if (paths[paths.length - 1] === "patients") {
+                  obj._id = row?._id;
                   obj.address = row?.address;
                   obj.age = row?.age;
                   obj.birthDate = row?.birthDate;
@@ -60,6 +61,7 @@ const List = ({data, labels, DataLoading}) => {
                   obj.role = userRDX.role;
                   obj.OwnRole = "patient";
                 } else if (paths[paths.length - 1] === "persons") {
+                  obj._id = row?._id;
                   obj.address = row?.address;
                   obj.age = row?.age;
                   obj.birthDate = row?.birthDate;
@@ -78,6 +80,7 @@ const List = ({data, labels, DataLoading}) => {
                   obj.role = userRDX.role;
                   obj.OwnRole = "person";
                 } else if (paths[paths.length - 1] === "hospitals") {
+                  obj._id = row?._id;
                   obj.designation = row?.designation;
                   obj.email = row?.email;
                   obj.phone = row?.phone;
@@ -90,16 +93,22 @@ const List = ({data, labels, DataLoading}) => {
                 }
                 navigate("/profile", {state: {data: obj}});
               }}>
-                {Object?.keys(row)?.map((key, index) => (
-                  <TableCell className="tableCell" key={index}>{row[key]}</TableCell>
-                ))}
+                {Object?.keys(row)?.map((key, index) => {
+                    if (key === "_id")
+                      return ;
+                    return <TableCell className="tableCell" key={index}>{row[key]}</TableCell>
+                  }
+                )}
               </TableRow>
             ))) : (
             data?.map((row) => (
               <TableRow key={row?.id}>
-                {Object?.keys(row)?.map((key, index) => (
-                  <TableCell className="tableCell" key={index}>{row[key]}</TableCell>
-                ))}
+                {Object?.keys(row)?.map((key, index) => {
+                    if (key === "_id")
+                      return ;
+                    return <TableCell className="tableCell" key={index}>{row[key]}</TableCell>
+                  }
+                )}
               </TableRow>
             ))
           )}
