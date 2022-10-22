@@ -13,9 +13,29 @@ import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack'
 import Autocomplete from '@mui/material/Autocomplete';
 import { getPatientDoses, getPersonTraitements, getCompanyServices, getUltimateStatisticsApi, getHospitalServices, getAllTraitementApi } from '../../api/servicesApi';
-
+import ReactToPrint from "react-to-print";
+import { useRef } from 'react';
+import { Button } from '@mui/material';
+import XRAYLOGO from "../../assets/LOGO.png";
 
 const Statistics = ({role}) => {
+
+  // print functionallity
+  const componentRef = useRef(null);
+  const reactToPrintContent = React.useCallback(() => {
+    return componentRef.current;
+  }, [componentRef.current]);
+  const reactToPrintTrigger = React.useCallback(() => {
+    return (
+      <Button variant="contained" style={{
+        width: "100%",
+      }}>Print</Button>
+    );
+  }, []);
+
+  //select patient/person
+  const [selectedUSer, setSelectedUser] = React.useState({});
+  const [totalDose, setTotalDose] = React.useState(0);
 
   const { enqueueSnackbar } = useSnackbar();
   const token = useSelector(state => state?.data?.token);
@@ -61,15 +81,25 @@ const Statistics = ({role}) => {
             Dose: item.dose,
           });
         });
-        console.log(res);
+        // calculate total dose
+        let total = 0;
+        res.data?.data?.forEach((item) => {
+          total += item.dose;
+        });
+        setTotalDose(total);
+
         setData(finalData);
+        if (stats.patient)
+          setSelectedUser(res.data?.data[0]?.patient);
+        if (stats.person)
+          setSelectedUser(res.data?.data[0]?.person);
+        
         setDataLoading(false);
       }
     } catch (e) {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
-  console.log(user);
   const getServices = async () => {
     try {
       let res;
@@ -294,9 +324,97 @@ const Statistics = ({role}) => {
             </FormControl>
             </div>
           </div>
+          <ReactToPrint 
+            content={reactToPrintContent}
+            trigger={reactToPrintTrigger} 
+          />
           <br />
           <hr />
-          <Table data={data} labels={labels} DataLoading={dataLoading} />
+          <div ref={componentRef}>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-around",
+            }}>
+              <p>DATE: {moment().format("YYYY-MM-DD")}</p>
+              <h1 style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>Rapport dosimétrique</h1>
+              <img src={XRAYLOGO} width="200px" />
+            </div>
+            <div style={{ marginLeft: "100px", marginTop: "-50px"}}>
+              <h3>Période : {stats.startDate} - {stats.endDate}</h3>
+              <h3>Année : {moment(stats.endDate).year()}</h3>
+            </div>
+
+            {(stats.patient || stats.person) &&  
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <div>
+                <div style={{ display: "flex" }}>
+                  <h3>Nom : </h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.lastName}</p>
+                </div>
+                <div style={{ display: "flex", marginTop: "-30px" }}>
+                  <h3>CIN :</h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.cin}</p>
+                </div>
+                <div style={{ display: "flex", marginTop: "-30px" }}>
+                  <h3>Date de naissance : </h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {moment(selectedUSer.birthDate).format("YYYY-MM-DD")}</p>
+                </div>
+                <div style={{ display: "flex", marginTop: "-30px" }}>
+                  <h3>Adresse : </h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.address}</p>
+                </div>
+                <div style={{ display: "flex", marginTop: "-30px" }}>
+                  <h3>Tél : </h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.phone}</p>
+                </div>
+                { stats.person &&
+                  <div style={{ display: "flex", marginTop: "-30px" }}>
+                    <h3>Lieu d’activité : </h3>
+                    <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.secteur}</p>
+                  </div>}
+              </div>
+              <div>
+                <div style={{ display: "flex" }}>
+                  <h3>Prénom : </h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.firstName}</p>
+                </div>
+                <div style={{ display: "flex", marginTop: "-30px" }}>
+                  <h3>Sexe : </h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.gender}</p>
+                </div>
+                <div style={{ display: "flex", marginTop: "-30px" }}>
+                  <h3>Age : </h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.age}</p>
+                </div>
+                <div style={{ display: "flex", marginTop: "-30px" }}>
+                  <h3>ID : </h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer._id}</p>
+                </div>
+                <div style={{ display: "flex", marginTop: "-30px" }}>
+                  <h3>Email : </h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.email}</p>
+                </div>
+                { stats.person &&
+                  <div style={{ display: "flex", marginTop: "-30px" }}>
+                  <h3>La fonction  : </h3>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.fonction}</p>
+                </div>}
+              </div>
+            </div>}
+
+            {(stats.patient || stats.person) &&  
+              <div style={{
+              display: "flex",
+              justifyContent: "space-around",
+            }}>
+              <h3>Dose Total : {totalDose} mSv</h3> 
+            </div>}
+            <Table data={data} labels={labels} DataLoading={dataLoading} />
+          </div>
         </div>
       </div>
     </div>
