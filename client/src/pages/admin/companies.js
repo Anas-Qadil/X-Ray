@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useSnackbar } from 'notistack'
 import { deleteCompanyAPI } from '../../api/servicesApi'
 import Model from "../../components/popups/index";
+import validateSearchInput from "../../utils/searchValidate";
 
 const Companies = ({role}) => {
 
@@ -28,6 +29,10 @@ const Companies = ({role}) => {
 
   const getCompanies = async () => {
     try {
+      if (!validateSearchInput(search)) {
+        enqueueSnackbar('Invalid Search Input', {variant: 'error'})
+        return;
+      }
       const companiesData = [];
       const res = await getAllCompanies(token, search);
       let i = 0;

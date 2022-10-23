@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
 import Model from "../../components/popups/index";
-
+import validateSearchInput from "../../utils/searchValidate";
 
 const HospitalService = ({role}) => {
 
@@ -26,11 +26,14 @@ const HospitalService = ({role}) => {
 
   // model
   const [open, setOpen] = useState(false);
-  const [confirm, setConfirm] = useState(false);
   const [id, setId] = useState("");
 
   const getServices = async () => {
     try {
+      if (!validateSearchInput(search) || !validateSearchInput(hospitalSearch)) {
+        enqueueSnackbar('Invalid Search Input', {variant: 'error'})
+        return;
+      }
       const servicesData = [];
       let res;
       if (role === "admin")

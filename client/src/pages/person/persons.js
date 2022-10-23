@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { getPersons, getPersonForCompanyRole, deletePersonAPI, getHospitalPersons } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
 import Model from "../../components/popups/index";
+import validateSearchInput from "../../utils/searchValidate";
 
 const Persons = ({role}) => {
 
@@ -32,6 +33,10 @@ const Persons = ({role}) => {
 
   const getAllPersons = async () => {
     try {
+      if (!validateSearchInput(search)) {
+        enqueueSnackbar('Invalid Search Input', {variant: 'error'})
+        return;
+      }
       let res;
       let i = 0;
       let PersonsData = [];
