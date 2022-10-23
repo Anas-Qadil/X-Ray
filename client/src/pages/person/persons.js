@@ -49,6 +49,7 @@ const Persons = ({role}) => {
       else {
         res = await getPersonForCompanyRole(token, search);
       }
+      
       res?.data?.data?.map((person) => {
         i++;
         let obj = {
@@ -68,7 +69,7 @@ const Persons = ({role}) => {
           secteur: person.secteur,
           fonction: person.fonction,
           type: person.type,
-          company: person?.company?.designation || "",
+          
         }
         if (role === "admin") {
           obj.action = ( <IconButton onClick={() => checkDelete(person?._id)} aria-label="delete" size="large">
@@ -104,6 +105,8 @@ const Persons = ({role}) => {
   useEffect(() => {
     getAllPersons();
   }, [search]);
+
+  console.log(data);
 
 	return (
 	<div className="home">

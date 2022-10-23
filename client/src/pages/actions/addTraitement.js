@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 import { addPersonTraitement, addPatientTraitement } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
 import { getPatientForHospitlRole } from "../../api/servicesApi";
-import { getPersonForCompanyRole } from "../../api/servicesApi";
 
 const AddTraitement = ({role}) => {
   

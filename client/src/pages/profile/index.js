@@ -85,6 +85,7 @@ const Profile = ({role}) => {
     setMainPageData(data);
   }
 
+
   const getGraph = async () => {
     try {
       const res = await getGraphData(token, {role: user.OwnRole, id: user._id});
@@ -159,7 +160,7 @@ const Profile = ({role}) => {
     getGraph();
   }, []);
 
-  
+  console.log(user);
 
   return (
     <div>
@@ -202,7 +203,7 @@ const Profile = ({role}) => {
                     </div>
                     <div className="detailItem">
                       <span className="itemKey">birthDate:</span>
-                      <span className="itemValue">{user.birthDate}</span>
+                      <span className="itemValue">{moment(user.birthDate).format("YYYY-MM-DD")}</span>
                     </div>
                     <div className="detailItem">
                       <span className="itemKey">address:</span>

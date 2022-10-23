@@ -79,39 +79,21 @@ const getCompanyPersons = async (req, res) => {
       });
     }
     let persons = [];
-    if (user.role !== "company") {
-       persons = await personModel.find({
-        company: user.company,
-        $or: [
-          { firstName: { $regex: search, $options: "i" } },
-          { lastName: { $regex: search, $options: "i" } },
-          { email: { $regex: search, $options: "i" } },
-          { phone: { $regex: search, $options: "i" } },
-          { cin: { $regex: search, $options: "i" } },
-          { secteur: { $regex: search, $options: "i" } },
-          { type: { $regex: search, $options: "i" } },
-          { fonction: { $regex: search, $options: "i" } },
-          { poids: { $regex: search, $options: "i" } },
-        ],
-      }).populate("company");
-  } else {
     persons = await personModel.find({
-      hospital: user.hospital,
-      $or: [
-        { firstName: { $regex: search, $options: "i" } },
-        { lastName: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-        { phone: { $regex: search, $options: "i" } },
-        { cin: { $regex: search, $options: "i" } },
-        { secteur: { $regex: search, $options: "i" } },
-        { type: { $regex: search, $options: "i" } },
-        { fonction: { $regex: search, $options: "i" } },
-        { poids: { $regex: search, $options: "i" } },
-      ],
-    }).populate("hospital");
-  }
-
-
+    company: user.company,
+    $or: [
+      { firstName: { $regex: search, $options: "i" } },
+      { lastName: { $regex: search, $options: "i" } },
+      { email: { $regex: search, $options: "i" } },
+      { phone: { $regex: search, $options: "i" } },
+      { cin: { $regex: search, $options: "i" } },
+      { secteur: { $regex: search, $options: "i" } },
+      { type: { $regex: search, $options: "i" } },
+      { fonction: { $regex: search, $options: "i" } },
+      { poids: { $regex: search, $options: "i" } },
+    ],
+  }).populate("company");
+  
     res.status(200).send({
       message: "persons found",
       data: persons,

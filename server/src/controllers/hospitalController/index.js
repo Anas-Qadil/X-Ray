@@ -97,6 +97,7 @@ const getHospitalPersons = async (req, res) => {
     const id = String(req.user.hospital);
     const search = req.query.search;
     const persons = await personModel.find({
+      hospital: id,
       $or: [
         { firstName: { $regex: search, $options: "i" } },
         { lastName: { $regex: search, $options: "i" } },
@@ -109,29 +110,11 @@ const getHospitalPersons = async (req, res) => {
         { poids: { $regex: search, $options: "i" } },
       ],
     }).populate("company");
-    const data = await person_traitementModel.find({}).populate("person").populate("service");
-    let result = [];
-    data.map((doc) => {
-      if (doc.service.hospital == id) {
-        result.push(doc)
-      }
-    });
     
-    let final = [];
-    result.map((doc) => {
-      persons.map((person) => {
-        if (String(doc.person._id) == String(person._id)) {
-          if (!final.includes(person)) {
-            final.push(person)
-          }
-        }
-      })
-    });
-
     res.status(200).send({
       status: "success",
       message: "persons found",
-      data: final,
+      data: persons,
     });
   } catch (error) {
     res.status(500).send({
