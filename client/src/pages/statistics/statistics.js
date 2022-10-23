@@ -140,28 +140,28 @@ const Statistics = ({role}) => {
         responseData = res?.data?.data;
       } 
       responseData?.map(doc => {
-        if (!regionsOpt.find(region => region.label === doc.service?.hospital?.region)) {
+        if (!regionsOpt.find(region => region.label === doc.service?.hospital?.region) && doc.service && doc.service?.hospital) {
           regionsOpt.push({
             label: doc.service?.hospital?.region,
             data: doc.service?.hospital?.region,
           });
         }
         // check if the service is already in the array
-        if (!servicesOpt.find(service => service.label === doc.service?.name)) {
+        if (!servicesOpt.find(service => service?.label === doc.service?.name) && doc.service !== null) {
           servicesOpt.push({
             label: doc.service?.name,
             data: doc.service?._id,
           });
         }
         // check if the hospital is already in the array
-        if (!hospitalsOpt.find(hospital => hospital.label === doc.service?.hospital?.name)) {
+        if (!hospitalsOpt.find(hospital => hospital.label === doc.service?.hospital?.name) && doc.service && doc.service?.hospital) {
           hospitalsOpt.push({
             label: doc.service?.hospital?.name,
             data: doc.service?.hospital?._id,
           });
         }
         // check if the appareil is already in the array
-        if (!appareilsOpt.find(appareil => appareil.label === doc?.service?.equipment)) {
+        if (!appareilsOpt.find(appareil => appareil.label === doc?.service?.equipment) && doc?.service?.equipment) {
           appareilsOpt.push({
             label: doc.service?.equipment,
             data: doc.service?.equipment,
@@ -169,14 +169,14 @@ const Statistics = ({role}) => {
         }
         // check if the patient is already in the array
         // if (doc.patient !== undefined)
-        if (doc.patient !== undefined && !patientsOpt.find(patient => patient.data === doc?.patient?._id)) {
+        if (doc.patient !== undefined && !patientsOpt.find(patient => patient.data === doc?.patient?._id) && doc?.patient) {
           patientsOpt.push({
             label: doc?.patient?.firstName + " " + doc?.patient?.lastName + " [ " + doc?.patient?.cin + " ]",
             data: doc?.patient?._id,
           });
         }
         // check if the person is already in the array
-        if (doc.person !== undefined && !personsOpt.find(person => person.data === doc?.person?._id)) {
+        if (doc.person !== undefined && !personsOpt.find(person => person.data === doc?.person?._id) && doc?.person) {
           personsOpt.push({
             label: doc?.person?.firstName + " " + doc?.person?.lastName + " [ " + doc?.person?.cin + " ]",
             data: doc?.person?._id,
