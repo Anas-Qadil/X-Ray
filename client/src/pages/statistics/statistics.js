@@ -71,14 +71,14 @@ const Statistics = ({role}) => {
         res.data?.data?.forEach((item) => {
           finalData.push({
             Date: moment(item.createdAt).format('YYYY-MM-DD'),
-            Region: item.service.hospital.region,
-            Ville: item.service.hospital.ville,
-            Hospital: item.service.hospital.name,
-            Service: item.service.name,
-            Examen: item.service.examen,
-            Protocole: item.service.protocol,
-            Appareil: item.service.equipment,
-            Dose: item.dose,
+            Region: item.service?.hospital?.region,
+            Ville: item.service?.hospital?.ville,
+            Hospital: item.service?.hospital?.name,
+            Service: item.service?.name,
+            Examen: item.service?.examen,
+            Protocole: item.service?.protocol,
+            Appareil: item.service?.equipment,
+            Dose: item?.dose,
           });
         });
         // calculate total dose
@@ -132,9 +132,9 @@ const Statistics = ({role}) => {
       let personsOpt = [];
       let responseData;
       if (role === "person") {
-        responseData = res.data.traitements;
+        responseData = res?.data?.traitements;
       } else if (role === "hospital") {
-        responseData = res.data.data.data;
+        responseData = res.data?.data?.data;
       }
       else {
         responseData = res?.data?.data;
@@ -353,23 +353,23 @@ const Statistics = ({role}) => {
               <div>
                 <div style={{ display: "flex" }}>
                   <h3>Nom : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.lastName}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.lastName}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
                   <h3>CIN :</h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.cin}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.cin}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
                   <h3>Date de naissance : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {moment(selectedUSer.birthDate).format("YYYY-MM-DD")}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {moment(selectedUSer?.birthDate).format("YYYY-MM-DD")}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
                   <h3>Adresse : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.address}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.address}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
                   <h3>Tél : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.phone}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.phone}</p>
                 </div>
                 { stats.person &&
                   <div style={{ display: "flex", marginTop: "-30px" }}>
@@ -380,23 +380,23 @@ const Statistics = ({role}) => {
               <div>
                 <div style={{ display: "flex" }}>
                   <h3>Prénom : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.firstName}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.firstName}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
                   <h3>Sexe : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.gender}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.gender}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
                   <h3>Age : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.age}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.age}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
                   <h3>ID : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer._id}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?._id}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
                   <h3>Email : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.email}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.email}</p>
                 </div>
                 { stats.person &&
                   <div style={{ display: "flex", marginTop: "-30px" }}>
