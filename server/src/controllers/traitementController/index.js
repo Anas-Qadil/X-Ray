@@ -38,7 +38,6 @@ const addTraitement = async (req, res, next) => {
       const DocDate = moment(doc.createdAt);
       const today = moment();
       const TodayMinusOneYear = moment(today).subtract(1, "year");
-      // console.log({DocDate, today, TodayMinusOneYear});
       if (DocDate.isBetween(TodayMinusOneYear, today)) {
         validTraitementData.push(doc);
       }
@@ -48,36 +47,28 @@ const addTraitement = async (req, res, next) => {
     validTraitementData.map((doc) => {
       totalDoses += doc.dose;
     });
-    console.log(totalDoses);
 
     if (totalDoses >= 18) {
       const email = savedTraitement.patient?.email;
       if (email) {
-        console.log("sending email");
-        // if (validator.isEmail(email))
-        //   sendEmail(email);
+        if (validator.isEmail(email))
+          sendEmail(email);
       }
       const hospitalEmail = savedTraitement.service?.hospital?.email;
       if (hospitalEmail) {
-        console.log("sending email to hospital");
-        // if (validator.isEmail(hospitalEmail))
-        //   sendEmail(hospitalEmail);
+        if (validator.isEmail(hospitalEmail))
+          sendAdminMail(hospitalEmail, savedTraitement?.patient?.cin);
       }
       const phoneNumber = savedTraitement.patient?.phone;
       if (phoneNumber) {
-        console.log("sending sms");
-        // sendSms(phoneNumber);
+        console.log(phoneNumber);
+        sendSms(phoneNumber);
       }
       // admin email
       const adminEmail = await adminModel.findOne({}).select("email");
-      console.log({
-        adminEmail: adminEmail.email,
-        cin: savedTraitement.patient.cin
-      })
       if (adminEmail) {
-        console.log("sending email to admin");
-        // if (validator.isEmail(adminEmail.email))
-        //   sendAdminMail(adminEmail.email, savedTraitement.patient.cin);
+        if (validator.isEmail(adminEmail.email))
+          sendAdminMail(adminEmail.email, savedTraitement.patient.cin);
       }
     }
 

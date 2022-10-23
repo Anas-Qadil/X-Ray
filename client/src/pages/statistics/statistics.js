@@ -103,7 +103,6 @@ const Statistics = ({role}) => {
   const getServices = async () => {
     try {
       let res;
-      // console.log(user);
       switch (role) {
         case "admin":
           res = await getAllTraitementApi(token);

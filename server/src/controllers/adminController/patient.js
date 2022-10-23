@@ -97,7 +97,6 @@ const getStatisticsPatient = async (req, res) => {
 
     traitements.map((traitement) => {
       const date = moment(traitement.createdAt, "YYYY-MM-DD");
-      console.log(date);
       if (date.isBetween(startDate, endDate)) {
         data.push(traitement);
       }

@@ -7,7 +7,6 @@ const companyModel = require("../../models/companyModel");
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const signUpMiddleware = async (req, res, next) => {
-	console.log("middleware runs");
 	next();
 }
 

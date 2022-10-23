@@ -23,7 +23,6 @@ const getPersons = async (req, res) => {
       data: persons,
     });
   } catch (e) {
-    console.log(e);
     res.status(500).send({
       message: e.message,
     });

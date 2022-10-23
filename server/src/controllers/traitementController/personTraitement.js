@@ -4,11 +4,12 @@ const moment = require("moment");
 const {sendEmail, sendAdminMail} = require("../../services/emailService");
 const sendSMS = require("../../services/smsService");
 const validator = require("validator");
+const adminModel = require("../../models/adminModel");
+
 
 const addPersonTraitement = async (req, res) => {
   try {
     const data = req.body; // person traitement data
-    // console.log(data);
     const traitement = new person_traitementModel(data);
 
     const savedTraitement = await traitement.save();
@@ -22,7 +23,6 @@ const addPersonTraitement = async (req, res) => {
         const DocDate = moment(doc.createdAt);
         const today = moment();
         const TodayMinusOneYear = moment(today).subtract(1, "year");
-        // console.log({DocDate, today, TodayMinusOneYear});
         if (DocDate.isBetween(TodayMinusOneYear, today)) {
           validTraitementData.push(doc);
         }
@@ -36,32 +36,34 @@ const addPersonTraitement = async (req, res) => {
       validTraitementData.map((doc) => {
         totalDoses += doc.dose;
       });
-      console.log(totalDoses);
 
       if (parseInt(totalDoses) >= 18) {
-        const email = savedTraitement.person.email;
+        const email = savedTraitement?.person?.email;
         if (email) {
-          console.log("sending email");
-          // if (validator.isEmail(email))
-          //   sendEmail(email);
+          if (validator.isEmail(email))
+            sendEmail(email);
         }
         const hospitalEmail = savedTraitement?.service?.hospital?.email;
         if (hospitalEmail) {
-          console.log("sending email to hospital");
-          // if (validator.isEmail(hospitalEmail))
-          //   sendEmail(hospitalEmail);
+          if (validator.isEmail(hospitalEmail))
+          {
+            sendAdminMail(hospitalEmail, savedTraitement?.person?.cin);
+          }
         }
         const companyEmail = savedTraitement?.person?.company?.email;
         if (companyEmail) {
-          console.log("sending email to company");
-          // if (validator.isEmail(companyEmail))
-          //   sendEmail(companyEmail);
+          if (validator.isEmail(companyEmail))
+            sendAdminMail(hospitalEmail, savedTraitement?.person?.cin);
         }
 
         phone = savedTraitement?.person?.phone;
         if (phone) {
-          console.log("sending sms");
-          // sendSMS(phone);
+          sendSMS(phone);
+        }
+        const adminEmail = await adminModel.findOne({}).select("email");
+        if (adminEmail) {
+          if (validator.isEmail(adminEmail?.email))
+            sendAdminMail(adminEmail?.email, savedTraitement?.person?.cin);
         }
       }
       res.status(200).send({ 

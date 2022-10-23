@@ -52,7 +52,6 @@ const sendAdminMail = async(userEmail, patientCin) => {
 			return console.log(err);
 		const email = process.env.EMAIL;
 		const password = process.env.PASSWORD;
-    console.log({email, password});
 		const EmailReciever = userEmail;
 		const subject = "Warning";
 		const text = "You have exceeded the limit of x-ray doses";

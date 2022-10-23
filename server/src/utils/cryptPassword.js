@@ -6,7 +6,7 @@ const cryptPassword = async (password) => {
     const hashedPassword = await bcrypt.hash(password, salt);
     return (hashedPassword);
   } catch (e) {
-    console.log(e);
+    return (e.message);
   }
 }
 

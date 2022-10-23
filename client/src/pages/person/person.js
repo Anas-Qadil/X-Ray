@@ -69,7 +69,6 @@ const Person = () => {
   const getGraph = async () => {
     try {
       const res = await getGraphData(token);
-      console.log(res);
       if (res.status === 200) {
         setGraph(res.data.data);
       } else {

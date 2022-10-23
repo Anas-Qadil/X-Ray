@@ -15,6 +15,7 @@ const getHospitals = async (req, res) => {
       hospitals = await hospitalModel.find({
         $or: [
           { region: { $regex: search, $options: "i" } },
+          { name: { $regex: search, $options: "i" } },
           { ville: { $regex: search, $options: "i" } },
           { designation: { $regex: search, $options: "i" } },
           { phone: { $regex: search, $options: "i" } },

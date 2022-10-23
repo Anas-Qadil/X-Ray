@@ -81,7 +81,6 @@ const getUltimateStatistics = async (req, res) => {
   try {
     const user = req.user;
     const stats = JSON.parse(req.query.stats);
-    console.log(stats);
     let data = [];
 
     let traitements = [];
@@ -184,7 +183,6 @@ const getUltimateStatistics = async (req, res) => {
       } else data2.push(doc);
     });
 
-    // console.log(data2);
     res.send({ data: data2 });
   } catch (e) {
     res.status(500).json({ message: e.message });

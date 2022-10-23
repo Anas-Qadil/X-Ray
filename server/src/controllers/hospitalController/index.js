@@ -152,7 +152,6 @@ const getHospitalServices = async (req, res) => {
         message: "No services found",
       });
     }
-    console.log(data);
     res.status(200).send({
       message: "Services found",
       data: data,
@@ -199,7 +198,6 @@ const addService = async (req, res) => {
   try {
     const { data } = req.body;
     const dataResult = await serviceModel.create(data);
-    console.log(data);
     if (!dataResult) {
       return res.status(400).json({
         message: "No hospital found",

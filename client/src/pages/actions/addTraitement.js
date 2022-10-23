@@ -78,7 +78,6 @@ const AddTraitement = ({role}) => {
   const getServices = async () => {
     try {
       const res = await getAllServices(token);
-      console.log(res.data.data)
       const options = [];
       if (res.status === 200) {
         res?.data?.data?.map((service) => {
