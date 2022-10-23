@@ -11,6 +11,8 @@ const deleteService = async (req, res) => {
     }
 
     await serviceModel.deleteOne({ _id: id });
+    await traitementModel.deleteMany({ service: id });
+    await person_traitementModel.deleteMany({ service: id });
     return res.status(200).json({ message: 'Service Deleted Successfully' });
   } catch (e) {
     res.status(500).json({ message: e.message });

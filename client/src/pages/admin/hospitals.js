@@ -42,7 +42,7 @@ const Hospitals = ({role}) => {
           designation: hospital.designation,
           phone: hospital.phone,
           email: hospital.email,
-          action: <IconButton onClick={() => checkDelete(hospital?._id)} aria-label="delete" size="large">
+          action: <IconButton style={{zIndex: "100"}} onClick={() => checkDelete(hospital?._id)} aria-label="delete" size="large">
                 <DeleteIcon fontSize="inherit" />
               </IconButton>
         });

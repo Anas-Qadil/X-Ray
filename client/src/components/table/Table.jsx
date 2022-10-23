@@ -34,69 +34,75 @@ const List = ({data, labels, DataLoading}) => {
         <TableBody>
           {(paths[paths.length - 1] === "companies" || paths[paths.length - 1] === "patients" || paths[paths.length - 1] === "persons" || paths[paths.length - 1] === "hospitals") ? (
             data?.map((row) => (
-              <TableRow className="tableRowHover" key={row?.id} onClick={() => {
-                const obj = {};
-                if (paths[paths.length - 1] === "companies") {
-                  obj._id = row?._id;
-                  obj.designation = row?.designation;
-                  obj.email = row?.email;
-                  obj.phone = row?.phone;
-                  obj.region = row?.region;
-                  obj.ville = row?.ville;
-                  obj.role = userRDX.role;
-                  obj.OwnRole = "company";
-                } else if (paths[paths.length - 1] === "patients") {
-                  obj._id = row?._id;
-                  obj.address = row?.address;
-                  obj.age = row?.age;
-                  obj.birthDate = row?.birthDate;
-                  obj.cin = row?.cin;
-                  obj.createdAt = row?.createdAt;
-                  obj.email = row?.email;
-                  obj.firstName = row?.firstName;
-                  obj.gender = row?.gender;
-                  obj.lastName = row?.lastName;
-                  obj.phone = row?.phone;
-                  obj.poids = row?.poids;
-                  obj.role = userRDX.role;
-                  obj.OwnRole = "patient";
-                } else if (paths[paths.length - 1] === "persons") {
-                  obj._id = row?._id;
-                  obj.address = row?.address;
-                  obj.age = row?.age;
-                  obj.birthDate = row?.birthDate;
-                  obj.cin = row?.cin;
-                  obj.createdAt = row?.createdAt;
-                  obj.email = row?.email;
-                  obj.firstName = row?.firstName;
-                  obj.gender = row?.gender;
-                  obj.lastName = row?.lastName;
-                  obj.phone = row?.phone;
-                  obj.poids = row?.poids;
-                  obj.secteur = row?.secteur;
-                  obj.type = row?.type;
-                  obj.fonction = row?.fonction;
-                  obj.company = row?.company;
-                  obj.role = userRDX.role;
-                  obj.OwnRole = "person";
-                } else if (paths[paths.length - 1] === "hospitals") {
-                  obj._id = row?._id;
-                  obj.designation = row?.designation;
-                  obj.email = row?.email;
-                  obj.phone = row?.phone;
-                  obj.region = row?.region;
-                  obj.ville = row?.ville;
-                  obj.name = row?.name;
-                  obj.statut = row?.statut;
-                  obj.role = userRDX.role;
-                  obj.OwnRole = "hospital";
-                }
-                navigate("/profile", {state: {data: obj}});
-              }}>
+              <TableRow className="tableRowHover" key={row?.id} >
                 {Object?.keys(row)?.map((key, index) => {
                     if (key === "_id")
                       return ;
-                    return <TableCell className="tableCell" key={index}>{row[key]}</TableCell>
+                    return (<TableCell 
+                      className="tableCell" 
+                      key={index}
+                      onClick={key == "action" ? undefined 
+                        : () => {
+                        const obj = {};
+                        if (paths[paths.length - 1] === "companies") {
+                          obj._id = row?._id;
+                          obj.designation = row?.designation;
+                          obj.email = row?.email;
+                          obj.phone = row?.phone;
+                          obj.region = row?.region;
+                          obj.ville = row?.ville;
+                          obj.role = userRDX.role;
+                          obj.OwnRole = "company";
+                        } else if (paths[paths.length - 1] === "patients") {
+                          obj._id = row?._id;
+                          obj.address = row?.address;
+                          obj.age = row?.age;
+                          obj.birthDate = row?.birthDate;
+                          obj.cin = row?.cin;
+                          obj.createdAt = row?.createdAt;
+                          obj.email = row?.email;
+                          obj.firstName = row?.firstName;
+                          obj.gender = row?.gender;
+                          obj.lastName = row?.lastName;
+                          obj.phone = row?.phone;
+                          obj.poids = row?.poids;
+                          obj.role = userRDX.role;
+                          obj.OwnRole = "patient";
+                        } else if (paths[paths.length - 1] === "persons") {
+                          obj._id = row?._id;
+                          obj.address = row?.address;
+                          obj.age = row?.age;
+                          obj.birthDate = row?.birthDate;
+                          obj.cin = row?.cin;
+                          obj.createdAt = row?.createdAt;
+                          obj.email = row?.email;
+                          obj.firstName = row?.firstName;
+                          obj.gender = row?.gender;
+                          obj.lastName = row?.lastName;
+                          obj.phone = row?.phone;
+                          obj.poids = row?.poids;
+                          obj.secteur = row?.secteur;
+                          obj.type = row?.type;
+                          obj.fonction = row?.fonction;
+                          obj.company = row?.company;
+                          obj.role = userRDX.role;
+                          obj.OwnRole = "person";
+                        } else if (paths[paths.length - 1] === "hospitals") {
+                          obj._id = row?._id;
+                          obj.designation = row?.designation;
+                          obj.email = row?.email;
+                          obj.phone = row?.phone;
+                          obj.region = row?.region;
+                          obj.ville = row?.ville;
+                          obj.name = row?.name;
+                          obj.statut = row?.statut;
+                          obj.role = userRDX.role;
+                          obj.OwnRole = "hospital";
+                        }
+                        navigate("/profile", {state: {data: obj}});
+                      }
+                    }
+                    >{row[key]}</TableCell>)
                   }
                 )}
               </TableRow>
