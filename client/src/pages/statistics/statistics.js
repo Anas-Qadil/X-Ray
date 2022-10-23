@@ -56,8 +56,8 @@ const Statistics = ({role}) => {
     region: "",
     service: "",
     appareil: "",
-    patient: role === "patient" ? user.patient._id : "",
-    person: role === "person" ? user.person._id : "",
+    patient: role === "patient" ? user?.patient?._id : "",
+    person: role === "person" ? user?.person?._id : "",
     startDate: moment().subtract(1, 'year').format('YYYY-MM-DD'),
     endDate: moment().add(1, 'days').format('YYYY-MM-DD'),
   });
@@ -140,44 +140,44 @@ const Statistics = ({role}) => {
         responseData = res?.data?.data;
       } 
       responseData?.map(doc => {
-        if (!regionsOpt.find(region => region.label === doc.service?.hospital?.region) && doc.service && doc.service?.hospital) {
-          regionsOpt.push({
+        if (!regionsOpt.find(region => region?.label === doc?.service?.hospital?.region) && doc?.service && doc?.service?.hospital) {
+          regionsOpt?.push({
             label: doc.service?.hospital?.region,
             data: doc.service?.hospital?.region,
           });
         }
         // check if the service is already in the array
-        if (!servicesOpt.find(service => service?.label === doc.service?.name) && doc.service !== null) {
+        if (!servicesOpt.find(service => service?.label === doc?.service?.name) && doc?.service !== null) {
           servicesOpt.push({
-            label: doc.service?.name,
-            data: doc.service?._id,
+            label: doc?.service?.name,
+            data: doc?.service?._id,
           });
         }
         // check if the hospital is already in the array
-        if (!hospitalsOpt.find(hospital => hospital.label === doc.service?.hospital?.name) && doc.service && doc.service?.hospital) {
-          hospitalsOpt.push({
+        if (!hospitalsOpt?.find(hospital => hospital?.label === doc?.service?.hospital?.name) && doc?.service && doc.service?.hospital) {
+          hospitalsOpt?.push({
             label: doc.service?.hospital?.name,
             data: doc.service?.hospital?._id,
           });
         }
         // check if the appareil is already in the array
-        if (!appareilsOpt.find(appareil => appareil.label === doc?.service?.equipment) && doc?.service?.equipment) {
+        if (!appareilsOpt.find(appareil => appareil?.label === doc?.service?.equipment) && doc?.service?.equipment) {
           appareilsOpt.push({
-            label: doc.service?.equipment,
-            data: doc.service?.equipment,
+            label: doc?.service?.equipment,
+            data: doc?.service?.equipment,
           });
         }
         // check if the patient is already in the array
         // if (doc.patient !== undefined)
-        if (doc.patient !== undefined && !patientsOpt.find(patient => patient.data === doc?.patient?._id) && doc?.patient) {
-          patientsOpt.push({
+        if (doc.patient !== undefined && !patientsOpt.find(patient => patient?.data === doc?.patient?._id) && doc?.patient) {
+          patientsOpt?.push({
             label: doc?.patient?.firstName + " " + doc?.patient?.lastName + " [ " + doc?.patient?.cin + " ]",
             data: doc?.patient?._id,
           });
         }
         // check if the person is already in the array
-        if (doc.person !== undefined && !personsOpt.find(person => person.data === doc?.person?._id) && doc?.person) {
-          personsOpt.push({
+        if (doc.person !== undefined && !personsOpt.find(person => person?.data === doc?.person?._id) && doc?.person) {
+          personsOpt?.push({
             label: doc?.person?.firstName + " " + doc?.person?.lastName + " [ " + doc?.person?.cin + " ]",
             data: doc?.person?._id,
           });
@@ -305,8 +305,8 @@ const Statistics = ({role}) => {
                 <DesktopDatePicker
                   label="From"
                   inputFormat="YYYY/MM/DD"
-                  value={stats.startDate}
-                  onChange={(newValue) => { setStats({ ...stats, startDate: newValue.format("YYYY/MM/DD") });}}
+                  value={stats?.startDate}
+                  onChange={(newValue) => { setStats({ ...stats, startDate: newValue?.format("YYYY/MM/DD") });}}
                   renderInput={(params) => <TextField {...params} sx={{width: '100%'}} />}
                 />
               </LocalizationProvider>
@@ -316,7 +316,7 @@ const Statistics = ({role}) => {
                 <DesktopDatePicker
                   label="To"
                   inputFormat="YYYY/MM/DD"
-                  value={stats.endDate}
+                  value={stats?.endDate}
                   onChange={(newValue) => { setStats({ ...stats, endDate: newValue.format("YYYY/MM/DD") });}}
                   renderInput={(params) => <TextField {...params} sx={{width: '100%'}} />}
                 />
@@ -344,11 +344,11 @@ const Statistics = ({role}) => {
               <img src={XRAYLOGO} width="200px" />
             </div>
             <div style={{ marginLeft: "100px", marginTop: "-50px"}}>
-              <h3>Période : {stats.startDate} - {stats.endDate}</h3>
-              <h3>Année : {moment(stats.endDate).year()}</h3>
+              <h3>Période : {stats?.startDate} - {stats?.endDate}</h3>
+              <h3>Année : {moment(stats?.endDate).year()}</h3>
             </div>
 
-            {(stats.patient || stats.person) &&  
+            {(stats?.patient || stats?.person) &&  
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <div>
                 <div style={{ display: "flex" }}>
@@ -374,7 +374,7 @@ const Statistics = ({role}) => {
                 { stats.person &&
                   <div style={{ display: "flex", marginTop: "-30px" }}>
                     <h3>Lieu d’activité : </h3>
-                    <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.secteur}</p>
+                    <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.secteur}</p>
                   </div>}
               </div>
               <div>
@@ -398,15 +398,15 @@ const Statistics = ({role}) => {
                   <h3>Email : </h3>
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.email}</p>
                 </div>
-                { stats.person &&
+                { stats?.person &&
                   <div style={{ display: "flex", marginTop: "-30px" }}>
                   <h3>La fonction  : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer.fonction}</p>
+                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.fonction}</p>
                 </div>}
               </div>
             </div>}
 
-            {(stats.patient || stats.person) &&  
+            {(stats?.patient || stats?.person) &&  
               <div style={{
               display: "flex",
               justifyContent: "space-around",

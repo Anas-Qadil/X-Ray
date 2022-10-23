@@ -57,6 +57,7 @@ function App() {
       localStorage.setItem('role', data?.user?.role);
       // redirect to patient dashboard
       navigate(`/${data?.user?.role}`);
+      setLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
     }
@@ -69,7 +70,6 @@ function App() {
     if (token && LocalRole)
     {
       relogin(token);
-      setLoading(false);
     } else {
       navigate('/');
       setLoading(false);
