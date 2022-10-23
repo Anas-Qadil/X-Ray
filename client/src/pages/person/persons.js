@@ -49,7 +49,6 @@ const Persons = ({role}) => {
       else {
         res = await getPersonForCompanyRole(token, search);
       }
-      
       res?.data?.data?.map((person) => {
         i++;
         let obj = {
@@ -69,7 +68,12 @@ const Persons = ({role}) => {
           secteur: person.secteur,
           fonction: person.fonction,
           type: person.type,
-          
+        }
+        if (person.company) {
+          // console.log(person)
+          obj._company = person.company.designation;
+        } else if (person.hospital) {
+          obj._hospital = person.hospital.name;
         }
         if (role === "admin") {
           obj.action = ( <IconButton onClick={() => checkDelete(person?._id)} aria-label="delete" size="large">
@@ -78,6 +82,7 @@ const Persons = ({role}) => {
         }
         PersonsData.push(obj);
       });
+      console.log(PersonsData);
       setData(PersonsData);
       setDataLoading(false);
     } catch (e) {

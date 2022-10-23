@@ -17,7 +17,8 @@ const getPersons = async (req, res) => {
         { secteur: { $regex: search, $options: "i" } },
         { type: { $regex: search, $options: "i" } },
       ]
-    });
+    }).populate("company")
+      .populate("hospital")
     res.status(200).json({
       status: "success",
       data: persons,

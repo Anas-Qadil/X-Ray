@@ -109,8 +109,8 @@ const getHospitalPersons = async (req, res) => {
         { fonction: { $regex: search, $options: "i" } },
         { poids: { $regex: search, $options: "i" } },
       ],
-    }).populate("company");
-    
+    }).populate("hospital");
+
     res.status(200).send({
       status: "success",
       message: "persons found",

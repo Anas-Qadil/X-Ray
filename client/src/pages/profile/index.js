@@ -36,7 +36,7 @@ const Profile = ({role}) => {
   const isEmpty = Object.keys(locationData).length === 0 && locationData.constructor === Object;
   let user = {};
   if (!isEmpty) 
-  user = locationData;
+    user = locationData;
   else
   {
     if (userRDX.patient)
@@ -62,6 +62,7 @@ const Profile = ({role}) => {
       user.OwnRole = role;
     }
   }
+  console.log(user);
 
   const formatData = (traitements) => {
     let data = [];
@@ -160,7 +161,7 @@ const Profile = ({role}) => {
     getGraph();
   }, []);
 
-  console.log(user);
+  
 
   return (
     <div>
@@ -228,6 +229,10 @@ const Profile = ({role}) => {
                     {user.OwnRole === "person" && <div className="detailItem">
                       <span className="itemKey">fonction:</span>
                       <span className="itemValue">{user.fonction}</span>
+                    </div>}
+                    {user.OwnRole === "person" && <div className="detailItem">
+                      <span className="itemKey">{user.company ? "Company" : "Hospital"}:</span>
+                      <span className="itemValue">{user.company? user.company: user.hospital}</span>
                     </div>}
                   </div>
                 }

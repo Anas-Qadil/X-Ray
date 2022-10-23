@@ -19,6 +19,7 @@ const List = ({data, labels, DataLoading}) => {
   const navigate = useNavigate();
   const paths = location.pathname.split("/");
   const userRDX = useSelector(state => state?.data?.data?.user);
+  // console.log(data);
 
   return ( 
     <TableContainer component={Paper} className="table"
@@ -36,7 +37,7 @@ const List = ({data, labels, DataLoading}) => {
             data?.map((row) => (
               <TableRow className="tableRowHover" key={row?.id} >
                 {Object?.keys(row)?.map((key, index) => {
-                    if (key === "_id")
+                    if (key === "_id" || key === "_company" || key === "_hospital")
                       return ;
                     return (<TableCell 
                       className="tableCell" 
@@ -84,9 +85,14 @@ const List = ({data, labels, DataLoading}) => {
                           obj.secteur = row?.secteur;
                           obj.type = row?.type;
                           obj.fonction = row?.fonction;
-                          obj.company = row?.company;
                           obj.role = userRDX.role;
                           obj.OwnRole = "person";
+                          if (row?._company) {
+                            
+                            obj.company = row?._company;
+                          } else if (row?._hospital) {
+                            obj.hospital = row?._hospital;
+                          }
                         } else if (paths[paths.length - 1] === "hospitals") {
                           obj._id = row?._id;
                           obj.designation = row?.designation;
