@@ -159,7 +159,6 @@ const Profile = ({role}) => {
     getGraph();
   }, []);
 
-  console.log(user);
 
   return (
     <div>

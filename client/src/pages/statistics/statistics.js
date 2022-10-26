@@ -122,7 +122,6 @@ const Statistics = ({role}) => {
         default:
           break;
       }
-      // console.log(res.data);
       let regionsOpt = [];
       let servicesOpt = [];
       let hospitalsOpt = [];

@@ -66,7 +66,6 @@ const validatePersonData = (personData, error, setError) => {
   let checker = 1;
   for (let key in errorObject) {
     if (errorObject[key] === true) {
-      console.log(errorObject[key]);
       checker = 0;
       break;
     }

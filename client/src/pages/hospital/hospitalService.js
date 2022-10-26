@@ -95,7 +95,7 @@ const HospitalService = ({role}) => {
 	  <Sidebar role={role} />
 	  <div className="homeContainer">
       <div className="listContainer">
-        <div className="listTitle">[{role}] Latest Operations</div>
+        <div className="listTitle">Services</div>
         <div style={{display: "flex" }}>
         {
           role === "admin" && (

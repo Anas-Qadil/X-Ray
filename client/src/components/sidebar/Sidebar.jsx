@@ -128,7 +128,7 @@ const Sidebar = ({role}) => {
           {(role === "admin" || role === "hospital") && (
             <Link to="/add-service" style={{ textDecoration: "none" }}>
               <li>
-                <DataSaverOnIcon className="icon" />
+                <CreditCardIcon className="icon" />
                 <span>Add Service</span>
               </li>
             </Link>

@@ -108,7 +108,7 @@ const HospitalPatient = ({role}) => {
 	  <div className="homeContainer">
       {/* <Navbar /> */}
       <div className="listContainer">
-        <div className="listTitle">[{role}] Latest Operations</div>
+        <div className="listTitle">Patients</div>
         <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
           <TextField id="standard-basic" label="Search" variant="standard" 
             value={search}

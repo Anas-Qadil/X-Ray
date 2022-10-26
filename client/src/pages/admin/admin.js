@@ -26,7 +26,6 @@ const Admin = () => {
   const getAllTraitement = async () => {
     try {
       const res = await getAllTraitementApi(token);
-      console.log(res.data);
       setData(res?.data);
       setDataLoading(false);
     } catch (e) {
@@ -37,7 +36,6 @@ const Admin = () => {
   const getGraph = async () => {
     try {
       const res = await getGraphData(token);
-      console.log(res);
       if (res.status === 200) {
         setGraph(res.data.data);
       } else {

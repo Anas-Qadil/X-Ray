@@ -70,7 +70,6 @@ const Persons = ({role}) => {
           type: person.type,
         }
         if (person.company) {
-          // console.log(person)
           obj._company = person.company.designation;
         } else if (person.hospital) {
           obj._hospital = person.hospital.name;
@@ -82,7 +81,6 @@ const Persons = ({role}) => {
         }
         PersonsData.push(obj);
       });
-      console.log(PersonsData);
       setData(PersonsData);
       setDataLoading(false);
     } catch (e) {
@@ -111,7 +109,6 @@ const Persons = ({role}) => {
     getAllPersons();
   }, [search]);
 
-  console.log(data);
 
 	return (
 	<div className="home">
@@ -119,7 +116,7 @@ const Persons = ({role}) => {
 	  <div className="homeContainer">
       {/* <Navbar /> */}
       <div className="listContainer">
-        <div className="listTitle">[{role}] Latest Operations</div>
+        <div className="listTitle">Professionals Healthcare</div>
         <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
           <TextField id="standard-basic" label="Search" variant="standard" 
             value={search}

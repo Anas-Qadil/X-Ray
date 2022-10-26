@@ -102,7 +102,6 @@ const AddService = ({role}) => {
             options={hospitals}
             onChange={(e, value) => {
               setError({ ...error, hospital: false });
-              console.log(value)
               setServiceData({
                 ...serviceData,
                 hospital: value?.data?._id,

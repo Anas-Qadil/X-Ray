@@ -64,6 +64,10 @@ const Login = () => {
   const handleSubmit = async (e) =>{
     e.preventDefault();
     try {
+      if (user === '' || psw === '') {
+        enqueueSnackbar('Please Fill All Fields', {variant: 'error'})
+        return;
+      }
       const res = await loginApi(user, psw);
       const data = res.data;
       const payload = {
@@ -83,7 +87,7 @@ const Login = () => {
       // redirect to patient dashboard
       navigate(`/${data.user.role}`);
     } catch (e) {
-      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      enqueueSnackbar('Username or password is incorrect', {variant: 'error'})
     }
   }
 

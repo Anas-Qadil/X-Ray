@@ -86,7 +86,7 @@ const Hospitals = ({role}) => {
 	  <div className="homeContainer">
       {/* <Navbar /> */}
       <div className="listContainer">
-        <div className="listTitle">[{role}] Hospitals</div>
+        <div className="listTitle">Hospitals</div>
         <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
           <TextField id="standard-basic" label="Search" variant="standard" 
             value={search}
