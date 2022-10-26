@@ -16,7 +16,7 @@ import checkifEmpty from "../../utils/checkIfEmpty";
 import { useNavigate } from "react-router-dom";
 import { addPersonTraitement, addPatientTraitement } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
-import { getPatientForHospitlRole } from "../../api/servicesApi";
+import { getPatientForHospitlRole, getAllHospitalServices } from "../../api/servicesApi";
 
 const AddTraitement = ({role}) => {
   
@@ -60,7 +60,7 @@ const AddTraitement = ({role}) => {
 
   const getHospitalPatients = async () => {
     try {
-      const res = await getPatientForHospitlRole(token);
+      const res = await getPatientForHospitlRole(token, '');
       const options = [];
       res.data?.data?.map((patient) => {
         options.push({
@@ -76,7 +76,11 @@ const AddTraitement = ({role}) => {
 
   const getServices = async () => {
     try {
-      const res = await getAllServices(token);
+      let res;
+      if (role === 'hospital') 
+        res = await getAllHospitalServices(token);
+      else
+        res = await getAllServices(token);
       const options = [];
       if (res.status === 200) {
         res?.data?.data?.map((service) => {

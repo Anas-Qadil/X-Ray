@@ -84,10 +84,10 @@ const getHospitalPatients = async (req, res) => {
       message: "Patients found",
       data: final,
     });
-	} catch (error) {
+	} catch (e) {
 		res.status(500).send({
       status: "failure",
-      message: "Somthing went wrong..."
+      message: e.message
 		});
 	}
 }
