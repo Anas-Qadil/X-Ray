@@ -74,7 +74,8 @@ const deleteHospital = async (req, res) => {
     const user = await usersModel.findOneAndDelete({ hospital: id });
     
     const deletedHospital = await hospitalModel.findByIdAndDelete(id);
-
+    await serviceModel.deleteMany({ hospital: id });
+    
     res.send({
       message: "sucess",
       data: deletedHospital

@@ -175,8 +175,15 @@ router.get("/all-users", async (req, res) => {
 	});
 });
 
-router.get("/", (req, res) => {
-	res.send("hello from signUpController");
-});
+// const sendSms = require("../services/smsService");
+
+// router.get("/send-sms", (req, res) => {
+// 	const phone = req.query.phone;
+// 	// console.log("708035810");
+// 	sendSms(phone);
+// 	res.send({
+// 		phone
+// 	});
+// })
 
 module.exports = router;

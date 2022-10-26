@@ -62,7 +62,7 @@ const Company = () => {
     try {
       const res = await getGraphData(token);
       if (res.status === 200) {
-        setGraph(res.data.data);
+        setGraph(res?.data?.data);
       } else {
         enqueueSnackbar(res?.data?.message || 'Something Went Wrong..', {variant: 'error'})
       }
@@ -72,10 +72,11 @@ const Company = () => {
   }
   
   useEffect(() => {
-    if (token)  
+    if (token) {
       getServices();
+      getGraph();
+    } 
     setLoading(false);
-    getGraph();
   }, [token]);
   if (loading) return <Loader />
 

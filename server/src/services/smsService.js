@@ -19,6 +19,7 @@ const sendSms = async (phone) => {
       from: phoneNumber,
       to: phone,
     });
+    console.log(response);
   } catch (error) {
     console.log(error);
   }

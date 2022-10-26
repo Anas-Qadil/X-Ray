@@ -62,7 +62,6 @@ const Profile = ({role}) => {
       user.OwnRole = role;
     }
   }
-  console.log(user);
 
   const formatData = (traitements) => {
     let data = [];
@@ -85,7 +84,6 @@ const Profile = ({role}) => {
     setDataLoading(false);
     setMainPageData(data);
   }
-
 
   const getGraph = async () => {
     try {
@@ -161,7 +159,7 @@ const Profile = ({role}) => {
     getGraph();
   }, []);
 
-  
+  console.log(user);
 
   return (
     <div>
@@ -230,10 +228,19 @@ const Profile = ({role}) => {
                       <span className="itemKey">fonction:</span>
                       <span className="itemValue">{user.fonction}</span>
                     </div>}
-                    {user.OwnRole === "person" && <div className="detailItem">
-                      <span className="itemKey">{user.company ? "Company" : "Hospital"}:</span>
-                      <span className="itemValue">{user.company? user.company: user.hospital}</span>
-                    </div>}
+                    {user.OwnRole === "person" && 
+                      <div className="detailItem">
+                        <span className="itemKey">{user.company ? "Company" : "Hospital"}:</span>
+                        <span className="itemValue">
+                          {
+                            user.company ? 
+                            ((typeof user.company === 'object' && user.company !== null) ? user.company?.designation : user.company)
+                              : 
+                              user.hospital
+                          }
+                          </span>
+                      </div>
+                    }
                   </div>
                 }
                 { (user.OwnRole === "hospital" || user.OwnRole === "company") && 

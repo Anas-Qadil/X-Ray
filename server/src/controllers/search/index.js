@@ -171,15 +171,15 @@ const graphData = async (req, res) => {
       } else if (parsedType.role === "company") {
         let tmp = await person_traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("person");
         tmp.map((t) => {
-          if (t?.person?.company?.toString() === parsedType.id.toString()) {
+          if (t?.person?.company?.toString() === parsedType?.id?.toString()) {
             traitements.push(t);
-          }
+            }
         });
       } else if (parsedType.role === "hospital") {
         let tmp = await person_traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("service");
         tmp = tmp.concat(await traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("service"));
         tmp.map((t) => {
-          if (t?.service?.hospital?.toString() === parsedType.id.toString()) {
+          if (t?.service?.hospital?.toString() === parsedType?.id?.toString()) {
             traitements.push(t);
           }
         });
@@ -196,7 +196,7 @@ const graphData = async (req, res) => {
     } else if (user.role === "company") {
       let tmp = await person_traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("person");
       tmp.map((t) => {
-        if (t.person.company.toString() === user.company?._id.toString()) {
+        if (t?.person?.company?.toString() === user.company?._id?.toString()) {
           traitements.push(t);
         }
       });
@@ -204,13 +204,13 @@ const graphData = async (req, res) => {
       let tmp = await person_traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("service");
       tmp = tmp.concat(await traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("service"));
       tmp.map((t) => {
-        if (t.service.hospital.toString() === user.hospital?._id.toString()) {
+        if (t.service?.hospital?.toString() === user.hospital?._id.toString()) {
           traitements.push(t);
         }
       });
     }
 
-
+    
     traitements.map(item => {
       let date = moment(item.createdAt).month() + 1;
       item.dateFormated = date;
