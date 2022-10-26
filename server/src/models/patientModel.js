@@ -38,7 +38,7 @@ const patientSchema = new Schema({
 	},
 	email: {
 		type: String,
-		unique: true,
+		default: null,
 	},
 	cin: {
 		type: String,

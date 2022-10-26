@@ -182,8 +182,23 @@ const getUltimateStatistics = async (req, res) => {
         }
       } else data2.push(doc);
     });
+    let result = [];
+    if (user.role === "company") {
+      data2.map((doc) => {
+        if (doc?.person?.company?.toString() == user?.company?.toString()) {
+          result.push(doc);
+        }
+      });
+    } else if (user.role === "hospital") {
+      console.log(data2[0].service.hospital);
+      data2.map((doc) => {
+        if (doc?.service?.hospital?._id.toString() == user?.hospital?.toString()) {
+          result.push(doc);
+        }
+      });
+    } else result = data2;
 
-    res.send({ data: data2 });
+    res.send({ data: result });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
