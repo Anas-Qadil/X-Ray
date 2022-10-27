@@ -59,7 +59,7 @@ function App() {
       navigate(`/${data?.user?.role}`);
       setLoading(false);
     } catch (e) {
-      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
