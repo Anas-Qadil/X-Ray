@@ -119,7 +119,7 @@ const Login = () => {
             <Avatar  sx={{ m: 1,marginTop: 5, bgcolor: 'secondary.main' }}>
             </Avatar>
             <Typography component="h1" variant="h5">
-                Connexion
+                Connection
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
               <TextField

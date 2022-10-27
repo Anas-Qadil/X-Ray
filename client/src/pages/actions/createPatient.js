@@ -235,7 +235,7 @@ const CreatePatient = ({role}) => {
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.poids}>POIDS</InputLabel>
-          <Input type="text" id="my-input" 
+          <Input type="number" id="my-input" 
             error={error.poids}
             aria-describedby="my-helper-text" 
             style={{width: "90%"}}

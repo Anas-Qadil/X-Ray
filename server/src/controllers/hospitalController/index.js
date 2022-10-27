@@ -71,7 +71,7 @@ const getHospitalPatients = async (req, res) => {
     let final = [];
     result.map((doc) => {
       patients.map((patient) => {
-        if (String(doc.patient._id) == String(patient._id)) {
+        if (String(doc?.patient?._id) == String(patient._id)) {
           if (!final.includes(patient)) {
             final.push(patient)
           }

@@ -13,7 +13,7 @@ const signUpMiddleware = async (req, res, next) => {
 //@checker Middleware
 const patientMiddleware = async (req, res, next) => {
 	const data = req.body;
-
+  try {
 	//@data checker
 	if (data)
 	{
@@ -175,13 +175,6 @@ const patientMiddleware = async (req, res, next) => {
           message: "email must be a valid email"
         });
       }
-      const email = await patientModel.findOne({ email: data.email });
-      if (email)
-      {
-        return res.status(400).json({
-          message: "email already exists"
-        });
-      }
     }
 
     //@validate birthDate
@@ -280,6 +273,11 @@ const patientMiddleware = async (req, res, next) => {
       message: "patient data is required"
     });
   }
+ } catch (e) {
+  return res.status(500).json({
+    message: e.message
+  });
+ }
 }
 
 // @company validation

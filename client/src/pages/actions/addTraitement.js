@@ -137,11 +137,7 @@ const AddTraitement = ({role}) => {
   }
 
   useEffect(() => {
-    if (role === "admin") {
-      getAllPatients();
-    } else if (role === "hospital") {
-      getHospitalPatients();
-    }
+    getAllPatients();
     getAllPersons();
     getServices();
   }, []);

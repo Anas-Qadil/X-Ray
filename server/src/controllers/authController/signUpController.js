@@ -31,6 +31,7 @@ const signUpPatient = async (req, res, next) => {
       patient: savedPatient._id
     });
     const savedUser = await user.save();
+    console.log("main was here");
     if (!savedUser) {
       return res.status(400).send({
         status: "failure ",

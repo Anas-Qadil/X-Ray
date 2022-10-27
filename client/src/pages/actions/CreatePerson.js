@@ -140,7 +140,7 @@ const CreatePerson = ({role}) => {
             type: e.target.value,
           })}}
         >
-          { (role === "admin" || role === "patient") && <MenuItem value="medical">Medical</MenuItem>}
+          <MenuItem value="medical">Medical</MenuItem>
           <MenuItem value="technical">Technical</MenuItem>
         </Select>
       </FormControl>
@@ -313,7 +313,7 @@ const CreatePerson = ({role}) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Stack spacing={1} style={{width: "90%", marginRight: "40px"}} error={error.birthDate}>
             <DesktopDatePicker
-              label="Date desktop"
+              label="Birth Date"
               inputFormat="YYYY-MM-DD"
               value={personData.birthDate}
               onChange={(newValue) => {
@@ -410,7 +410,7 @@ const CreatePerson = ({role}) => {
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.poids} >POIDS</InputLabel>
-          <Input type="text" id="my-input" 
+          <Input type="number" id="my-input" 
              error={error.poids}
             aria-describedby="my-helper-text" 
             style={{width: "90%"}}
