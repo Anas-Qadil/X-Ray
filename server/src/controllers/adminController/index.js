@@ -58,9 +58,20 @@ router.delete("/person/:id", authenticateMiddleware, deletePerson);
 router.get("/statistics/persons", authenticateMiddleware, getStatisticsPerson);
 
 //services
-const { deleteService, getAllTraitements, getUltimateStatistics } = require("./service");
+const { deleteService, getAllTraitements, getUltimateStatistics, 
+	getUserHospital,
+	getUserCompany,
+	getUserPatient,
+	getUserPerson,
+	getHospitalMedicalPersons
+} = require("./service");
 router.delete("/service/:id", authenticateMiddleware, deleteService);
 router.get("/all-traitements", authenticateMiddleware, getAllTraitements);
 router.get("/ultimate-statistics", authenticateMiddleware, getUltimateStatistics);
+router.get("/user-hospital/:id", authenticateMiddleware, getUserHospital);
+router.get("/user-company/:id", authenticateMiddleware, getUserCompany);
+router.get("/user-patient/:id", authenticateMiddleware, getUserPatient);
+router.get("/user-person/:id", authenticateMiddleware, getUserPerson);
+router.get("/medical-persons", authenticateMiddleware, getHospitalMedicalPersons);
 
 module.exports = router;

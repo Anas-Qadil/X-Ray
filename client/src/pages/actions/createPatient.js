@@ -1,9 +1,6 @@
 import React from "react";
-import Sidebar from "../../components/sidebar/Sidebar"
-import Navbar from "../../components/navbar/Navbar"
 import { FormControl, InputLabel, Input, FormHelperText, Select, MenuItem } from '@mui/material';
 import { Container } from '@mui/material';
-import Paper from "@mui/material/Paper";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import moment from "moment";
@@ -13,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import checkPatientData from "../../utils/checkPatient";
+import { checkPatientData } from "../../utils/checkPatient";
 import { signUpPatient } from "../../api/authApi/signUp";
 import { useSnackbar } from 'notistack'
 

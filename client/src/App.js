@@ -24,7 +24,7 @@ import Persons from "./pages/person/persons";
 import { useSnackbar } from 'notistack'
 import Profile from './pages/profile';
 import AddService from './pages/actions/addService';
-
+import Update from "./pages/actions/update";
 
 function App() {
 
@@ -105,6 +105,8 @@ function App() {
         {/* Profile */}
         <Route path="/profile" element={<Profile role={role} />} />
 
+        {/* Update */}
+        <Route path="/update" element={<Update role={role} />} />
         <Route path="*" element={<NotFound/ >} />
       </Routes>
     </div>

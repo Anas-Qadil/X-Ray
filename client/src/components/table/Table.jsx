@@ -127,7 +127,7 @@ const List = ({data, labels, DataLoading}) => {
         </TableBody>
       </Table>
       {DataLoading && <LineLoader />}
-      {!DataLoading && data.length === 0 && (
+      {!DataLoading && data?.length === 0 && (
           <div style={{
             display: "flex",
             justifyContent: "center",

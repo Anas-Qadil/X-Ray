@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import checkCompany from "../../utils/checkCompany";
+import { checkCompany } from "../../utils/checkCompany";
 import { signUpCompany } from "../../api/authApi/signUp";
 import { useSnackbar } from 'notistack'
 

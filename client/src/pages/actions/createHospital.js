@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import checkHospital from "../../utils/checkHospital";
+import { checkHospital } from "../../utils/checkHospital";
 import { signUpHospital } from "../../api/authApi/signUp";
 import { useSnackbar } from 'notistack'
 
@@ -126,7 +126,7 @@ const CreateHospital = ({role}) => {
           />
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input">STATUT</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.statut}>STATUT</InputLabel>
           <Input type="text" id="my-input" 
             error={error.statut}
             aria-describedby="my-helper-text" 

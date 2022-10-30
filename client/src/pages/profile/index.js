@@ -111,25 +111,25 @@ const Profile = ({role}) => {
         res = await getCompanyServices(token, user?._id);
       }
       
-       if (res.status === 200) {
-         if ((user.OwnRole === "patient" || user.OwnRole === "person") &&  res.data.lastyearDose >= 18)
-           enqueueSnackbar(user.firstName + " " + user.lastName + " Have exceeded The Does Rate Limit.", {variant: 'warning'})
+      if (res.status === 200) {
+        if ((user.OwnRole === "patient" || user.OwnRole === "person") &&  res.data?.lastyearDose >= 18)
+          enqueueSnackbar(user.firstName + " " + user.lastName + " Have exceeded The Does Rate Limit.", {variant: 'warning'})
         if (user.OwnRole === "patient")
           formatData(res?.data?.data);
         else if (user.OwnRole === "person")
           formatData(res?.data?.traitements);
         else if (user.OwnRole === "hospital")
-          formatData(res?.data.data.data);
+          formatData(res?.data?.data?.data);
         else if (user.OwnRole === "company"){
-          formatDataCompany(res?.data.data);
+          formatDataCompany(res?.data?.data);
         }
         else 
           setMainPageData([]);
         setDoseData(res.data);
-       }
-       setDataLoading(false);
+      }
+      setDataLoading(false);
     } catch (e) {
-      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
    }
 

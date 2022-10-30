@@ -16,6 +16,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DataSaverOnIcon from '@mui/icons-material/DataSaverOn';
 import LOGO from '../../assets/LOGO.png';
 import ThreePIcon from '@mui/icons-material/ThreeP';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const Sidebar = ({role}) => {
 
@@ -125,6 +126,14 @@ const Sidebar = ({role}) => {
               </Link>
             )}
           <p className="title">Action</p>
+          {(role === "admin" || role === "hospital" || role === "company") && (
+            <Link to="/update" style={{ textDecoration: "none" }}>
+              <li>
+                <SettingsIcon className="icon" />
+                <span>Update</span>
+              </li>
+            </Link>
+          )}
           {(role === "admin" || role === "hospital") && (
             <Link to="/add-service" style={{ textDecoration: "none" }}>
               <li>

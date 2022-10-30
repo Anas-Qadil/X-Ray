@@ -7,21 +7,19 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import TextField from '@mui/material/TextField';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { getCompanies, getHospitals } from "../../api/servicesApi";
 import { useSelector } from 'react-redux'
-import { signUpPerson } from "../../api/authApi/signUp";
-import validatePersonData from "../../utils/addPersonValidation";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from 'notistack'
+import Autocomplete from '@mui/material/Autocomplete';
+import { getMedicalPersons, getUserPerson, getPersons, getPersonForCompanyRole } from "../../../api/servicesApi";
+import { checkUpdatePersonData } from "../../../utils/checkPatient";
 
-const CreatePerson = ({role}) => {
+const UpdatePerson = ({role}) => {
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar()
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
-  const [companies, setCompanies] = React.useState([]);
-  const [hospitals, setHospitals] = React.useState([]);
   const [error, setError] = React.useState({
     username: false,
     password: false,
@@ -54,59 +52,161 @@ const CreatePerson = ({role}) => {
     phone: '',
     email: '',
     poids: '',
-    secteur: 'public',
+    secteur: '',
     fonction: '',
-    type: 'technical',
+    type: '',
     company: null,
     hospital: null,
   });
 
-  const addPerson = async () => {
+  const [persons, setPersons] = React.useState([]);
+
+  const getMedicalPersonsData = async () => {
     try {
-      if (role === "company")
-        setPersonData({...personData, company: user?.company?._id});
-      else if (role === "hospital")
-        setPersonData({...personData, hospital: user?.hospital?._id});
-      const validation = validatePersonData(personData, error, setError);
-      if (validation === 1) {
-        const res = await signUpPerson(token, personData);
-        if (res?.status === 200) {
-          enqueueSnackbar('Professional Healthcare was created successfully', {variant: 'success'})
-          navigate(`/${role}`);
-        }
-      } else 
-        enqueueSnackbar('Please Check your inputs', {variant: 'error'})
+      const res = await getMedicalPersons(token);
+      if (res.status !== 200)
+        return enqueueSnackbar("Error while fetching medical persons", {variant: "error"});
+      
+      const options = [];
+      res.data?.data?.map((person) => {
+        options.push({
+          label: person?.firstName + ' - ' + person?.lastName + ' - ' + person?.cin + ' - ' + person?.type,
+          data: person,
+        })
+      });
+      setPersons(options);
+
     } catch (e) {
-      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
-  const getCompaniesData = async () => {
+  const getPersonUser = async (id) => {
     try {
-      const res = await getCompanies(token);
-      setCompanies(res?.data?.data);
+      const res = await getUserPerson(token, id);
+      if (res.status !== 200)
+        return enqueueSnackbar("Error while fetching person", {variant: "error"});
+      setPersonData({
+        ...personData,
+        username: res.data?.data?.username,
+      });
     } catch (e) {
-      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
-  const getHospitalsData = async () => {
+  const getAllPersons = async () => {
     try {
-      const res = await getHospitals(token);
-      setHospitals(res?.data?.data);
+      const res = await getPersons(token, "");
+      if (res.status !== 200)
+        return enqueueSnackbar("Error while fetching persons", {variant: "error"});
+      const options = [];
+      res.data?.data?.map((person) => {
+        options.push({
+          label: person?.firstName + ' - ' + person?.lastName + ' - ' + person?.cin + ' - ' + person?.type,
+          data: person,
+        })
+      });
+      setPersons(options);
     } catch (e) {
-      enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
+  const getPersonForCompanyRoleData = async () => {
+    try {
+      const res = await getPersonForCompanyRole(token, "");
+      if (res.status !== 200)
+        return enqueueSnackbar("Error while fetching persons", {variant: "error"});
+      const options = [];
+      res.data?.data?.map((person) => {
+        options.push({
+          label: person?.firstName + ' - ' + person?.lastName + ' - ' + person?.cin + ' - ' + person?.type,
+          data: person,
+        })
+      });
+      setPersons(options);
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
+  const updatePerson = async () => {
+    try {
+      if (!checkUpdatePersonData(personData, setError))
+        console.log("all done");
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
   useEffect(() => {
-    getCompaniesData();
-    getHospitalsData();
-  }, []);
+    if (role === "hospital") {
+      getMedicalPersonsData();
+    } else if (role === "admin") {
+      getAllPersons();
+    } else if (role === "company") {
+      getPersonForCompanyRoleData();
+    }
+    if (personData?._id)
+      getPersonUser(personData?._id);
+  }, [personData._id]);
 
 	return (
-		<>
-      <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
+	<div>
+    <Autocomplete
+      style={{marginBottom: "20px"}}
+      disablePortal
+      id="combo-box-demo"
+      options={persons}
+      onChange={(e, value) => {
+      //   setError({ ...error, person: false });
+        if (value === null) {
+          setPersonData({
+            username: '',
+            password: '',
+            firstName: '',
+            lastName: '',
+            cin: '',
+            gender: '',
+            birthDate: moment().format("YYYY-MM-DD"),
+            age: '',
+            address: '',
+            phone: '',
+            email: '',
+            poids: '',
+            secteur: '',
+            fonction: '',
+            type: '',
+            company: null,
+            hospital: null,
+          });
+          return;
+        }
+        setPersonData({
+          ...personData,
+          _id: value.data._id,
+          firstName: value.data.firstName,
+          lastName: value.data.lastName,
+          cin: value.data.cin,
+          gender: value.data.gender,
+          birthDate: value.data.birthDate,
+          age: value.data.age,
+          address: value.data.address,
+          phone: value.data.phone,
+          email: value.data.email,
+          poids: value.data.poids,
+          secteur: value.data.secteur,
+          fonction: value.data.fonction,
+          type: value.data.type,
+          company: value.data?.company?._id || value.data?.company,
+          hospital: value.data?.hospital?._id || value.data?.hospital,
+        });
+      }}
+      renderInput={(params) => <TextField {...params} label="Professional Healthcare" />}
+    />
+    <br /> <br /> <br />
+    <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
         <InputLabel id="demo-simple-select-label" error={error.type}>Professional Healthcare Type</InputLabel>
         <Select
           error={error.type}
@@ -117,76 +217,14 @@ const CreatePerson = ({role}) => {
           value={personData.type}
           onChange={(e) => {
             // empty personData
-            const old = {
-              username: '',
-              password: '',
-                firstName: '',
-                lastName: '',
-                cin: '',
-                gender: '',
-                birthDate: moment().format("YYYY-MM-DD"),
-                age: '',
-                address: '',
-                phone: '',
-                email: '',
-                poids:'',
-                secteur: 'public',
-                fonction: '',
-                type: 'technical',
-                company: null,
-                hospital: null,
-              };
-            setPersonData({...old,
-            type: e.target.value,
+            setPersonData({...personData,
+              type: e.target.value,
           })}}
         >
           <MenuItem value="medical">Medical</MenuItem>
           <MenuItem value="technical">Technical</MenuItem>
         </Select>
       </FormControl>
-      { role === "admin" && personData?.type === "technical" && (<FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-        <InputLabel id="demo-simple-select-label" error={error.company} >Choose Company</InputLabel>
-        <Select
-          error={error.company}
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="Choose Company"
-          style={{width: "95%"}}
-          value={personData.company}
-          onChange={(e) => {
-            setError({...error, company: false});
-            setPersonData({...personData,
-            company: e.target.value,
-          })}}
-        >
-          {companies?.map((company, index) => (
-            <MenuItem value={company._id}>{company.designation}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>)}
-      { role === "admin" && personData?.type === "medical" && (
-      <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-        <InputLabel id="demo-simple-select-label" error={error.hospital}>Choose Hospital</InputLabel>
-        <Select
-          error={error.hospital}
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="Choose Hospital"
-          style={{width: "95%"}}
-          value={personData.hospital}
-          onChange={(e) => {
-            setError({...error,
-              hospital: false,
-            });
-            setPersonData({...personData,
-            hospital: e.target.value,
-          })}}
-        >
-          {hospitals?.map((hospital, index) => (
-            <MenuItem value={hospital._id}>{hospital.designation}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>)}
       <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>
@@ -410,7 +448,7 @@ const CreatePerson = ({role}) => {
           />
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.poids} >POIDS</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.poids}>POIDS</InputLabel>
           <Input type="number" id="my-input" 
              error={error.poids}
             aria-describedby="my-helper-text" 
@@ -428,10 +466,10 @@ const CreatePerson = ({role}) => {
       </div>
       <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
         <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-        <Button onClick={addPerson} variant="contained" fullWidth>Add {personData.type} Person</Button>
+        <Button variant="contained" onClick={updatePerson} fullWidth>Update {personData.type} Person</Button>
       </Stack>
-		</>
+	</div>
   );
 }
 
-export default CreatePerson;
+export default UpdatePerson;

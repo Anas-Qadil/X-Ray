@@ -2,6 +2,8 @@ const serviceModel = require('../../models/serviceModel');
 const traitementModel = require('../../models/traitementModel');
 const person_traitementModel = require('../../models/person_traitementModel');
 const moment = require('moment');
+const usersModel = require('../../models/usersModel');
+const personModel = require('../../models/personModel');
 
 const deleteService = async (req, res) => {
   try {
@@ -190,7 +192,6 @@ const getUltimateStatistics = async (req, res) => {
         }
       });
     } else if (user.role === "hospital") {
-      console.log(data2[0].service.hospital);
       data2.map((doc) => {
         if (doc?.service?.hospital?._id.toString() == user?.hospital?.toString()) {
           result.push(doc);
@@ -200,12 +201,99 @@ const getUltimateStatistics = async (req, res) => {
 
     res.send({ data: result });
   } catch (e) {
+    console.log(e);
     res.status(500).json({ message: e.message });
   }
 }
 
+const getUserHospital = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "id is required" });
+    }
+    const user = await usersModel.findOne({
+      hospital: id
+    });
+
+    res.send({ data: user });
+
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+}
+
+const getUserCompany = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "id is required" });
+    }
+    const user = await usersModel.findOne({
+      company: id
+    });
+
+    res.send({ data: user });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+}
+
+const getUserPatient = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "id is required" });
+    }
+    const user = await usersModel.findOne({
+      patient: id
+    });
+
+    res.send({ data: user });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+}
+
+const getUserPerson = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: "id is required" });
+    }
+    const user = await usersModel.findOne({
+      person: id
+    });
+
+    res.send({ data: user });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+}
+
+const getHospitalMedicalPersons = async (req, res) => {
+  try {
+    const user = req.user;
+    const hospitalId = String(user.hospital);
+
+    const persons = await personModel.find({
+      hospital: hospitalId
+    });
+    
+    res.send({ data: persons });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+}
+
+
 module.exports = {
 	deleteService,
   getAllTraitements,
-  getUltimateStatistics
+  getUltimateStatistics,
+  getUserHospital,
+  getUserCompany,
+  getUserPerson,
+  getUserPatient,
+  getHospitalMedicalPersons
 }

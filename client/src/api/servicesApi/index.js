@@ -300,3 +300,53 @@ export const getGraphData = async (token, type) => {
     },
   })
 }
+
+export const getUserHospital = async (token, id) => {
+  return await axios.get(`${links.localhost}/api/admin/user-hospital/${id}`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const getUserCompany = async (token, id) => {
+  return await axios.get(`${links.localhost}/api/admin/user-company/${id}`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const getUserPatient = async (token, id) => {
+  return await axios.get(`${links.localhost}/api/admin/user-patient/${id}`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const getUserPerson = async (token, id) => {
+  return await axios.get(`${links.localhost}/api/admin/user-person/${id}`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+  
+export const getMedicalPersons = async (token) => {
+  return await axios.get(`${links.localhost}/api/admin/medical-persons`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
