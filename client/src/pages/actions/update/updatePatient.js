@@ -15,7 +15,7 @@ import { useSnackbar } from 'notistack'
 import { getPatientForHospitlRole, getPatients, getUserPatient } from "../../../api/servicesApi";
 import Autocomplete from '@mui/material/Autocomplete';
 import { checkUpdatePatientData } from "../../../utils/checkPatient";
-
+import { updatePatientData } from "../../../api/update";
 
 const UpdatePatient = ({role}) => {
 
@@ -89,8 +89,13 @@ const UpdatePatient = ({role}) => {
 
   const updatePatient = async () => {
     try {
-      if (!checkUpdatePatientData(patientData, setError))
-        console.log("all don f patient");
+      if (checkUpdatePatientData(patientData, setError))
+        return enqueueSnackbar("Please check your inputs", {variant: "error"});
+      const res = await updatePatientData(token, patientData);
+      if (res.status !== 200)
+        return enqueueSnackbar("Error while updating patient", {variant: "error"});
+      enqueueSnackbar("Patient updated successfully", {variant: "success"});
+      navigate(`/${role}`);
     } catch (e) {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }

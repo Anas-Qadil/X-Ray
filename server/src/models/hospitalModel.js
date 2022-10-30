@@ -30,7 +30,6 @@ const hospitalSchema = new schema({
 	phone: {
 		type: String,
     trim: true,
-		required: true,
 	},
 	email: {
 		type: String,

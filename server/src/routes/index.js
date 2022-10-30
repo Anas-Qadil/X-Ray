@@ -168,6 +168,18 @@ router.get("/graph", authenticateMiddleware, graphData);
 
 {/* -------------------------------------------------- End Search --------------------------------------------------*/}
 
+{/* -------------------------------------------------- Start update --------------------------------------------------*/}
+const { updateHospital, updatePatient, updatePerson, updateCompany } = require("../controllers/update/index");
+
+router.put("/update/hospital", authenticateMiddleware, updateHospital);
+router.put("/update/company", authenticateMiddleware, updateCompany);
+router.put("/update/patient", authenticateMiddleware, updatePatient);
+router.put("/update/person", authenticateMiddleware, updatePerson);
+
+{/* -------------------------------------------------- End update --------------------------------------------------*/}
+
+
+
 router.get("/all-users", async (req, res) => {
 	const users = await usersModel.find({});
 	res.send({
@@ -175,15 +187,5 @@ router.get("/all-users", async (req, res) => {
 	});
 });
 
-// const sendSms = require("../services/smsService");
-
-// router.get("/send-sms", (req, res) => {
-// 	const phone = req.query.phone;
-// 	// console.log("708035810");
-// 	sendSms(phone);
-// 	res.send({
-// 		phone
-// 	});
-// })
 
 module.exports = router;

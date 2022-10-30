@@ -25,10 +25,10 @@ const List = ({data, labels, DataLoading}) => {
     <TableContainer component={Paper} className="table"
     >
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
+        <TableHead style={{backgroundColor: "#18a6df", color: "white"}}>
           <TableRow>
             {labels?.map((label, index) => (
-              <TableCell className="tableCell" key={index}>{label}</TableCell>
+              <TableCell className="tableCell" key={index} style={{color: "white"}}>{label}</TableCell>
             ))}
           </TableRow>
         </TableHead>

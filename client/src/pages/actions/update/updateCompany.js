@@ -10,6 +10,8 @@ import { getCompanies, getUserCompany } from "../../../api/servicesApi";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { checkUpdateCompany } from "../../../utils/checkCompany";
+import { updateCompanyData } from "../../../api/update/index";
+
 
 const UpdateCompany = ({role}) => {
 
@@ -71,8 +73,13 @@ const UpdateCompany = ({role}) => {
 
   const updateCompany = async () => {
     try {
-      if (!checkUpdateCompany(companyData, setError))
-        console.log("all done f company");
+      if (checkUpdateCompany(companyData, setError))
+        return enqueueSnackbar("Please fill all fields", {variant: "error"});
+      const res = await updateCompanyData(token, companyData);
+      if (res.status !== 200)
+        return enqueueSnackbar("Error while updating company", {variant: "error"});
+      enqueueSnackbar("Company updated successfully", {variant: "success"});
+      navigate(`/${role}`);
     } catch (e) {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }

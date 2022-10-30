@@ -16,7 +16,6 @@ const personSchema = new Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
   },
   gender: {
     type: String,

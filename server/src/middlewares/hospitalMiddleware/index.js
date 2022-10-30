@@ -57,12 +57,6 @@ const signUpHospitalMiddleware = async (req, res, next) => {
           message: 'Password is required'
         });
       }
-      if (!data.phone) {
-        return res.status(400).send({
-          status: 'failure',
-          message: 'Phone is required'
-        });
-      }
       if (!data.designation) {
         return res.status(400).send({
           status: 'failure',

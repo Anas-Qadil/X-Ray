@@ -20,7 +20,7 @@ const checkHospital = (obj, setError) => {
         err[key] = true;
       }
     }
-		else if (!obj[key]) {
+		else if (!obj[key] && key !== "phone") {
 			err[key] = true;
 		}
 	});

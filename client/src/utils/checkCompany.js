@@ -17,7 +17,7 @@ const checkCompany = (obj, setError) => {
       if (obj[key] && obj[key] !== '' && obj[key] !== ' ' && !validator.isEmail(obj[key])) {
         err[key] = true;
       }
-    } else if (!obj[key]) {
+    } else if (!obj[key] && key !== "phone") {
 			err[key] = true;
 		}
 	});

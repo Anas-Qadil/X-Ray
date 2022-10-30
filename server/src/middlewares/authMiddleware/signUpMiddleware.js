@@ -215,36 +215,6 @@ const patientMiddleware = async (req, res, next) => {
       });
     }
 
-    //@validate cin
-    if (data.cin)
-    {
-      const cin = await patientModel.findOne({ cin: data.cin });
-      if (cin)
-      {
-        return res.status(400).json({
-          message: "cin already exists"
-        });
-      }
-      if (typeof data.cin !== "string")
-      {
-        return res.status(400).json({
-          message: "cin must be a string"
-        });
-      }
-      else if (data.cin.length < 3)
-      {
-        return res.status(400).json({
-          message: "cin must be at least 3 characters long"
-        });
-      }
-      else if (data.cin.length > 20)
-      {
-        return res.status(400).json({
-          message: "cin must be less than 20 characters long"
-        });
-      }
-    }
-
     if (!data.password)
     {
       return res.status(400).json({
@@ -307,17 +277,6 @@ const companyMiddleware = async (req, res, next) => {
           status: "failrue",
           message: "designation is required"
         });
-      }
-      if (data.phone)
-      {
-        const phone = await companyModel.findOne({ phone: data.phone });
-        if (phone)
-        {
-          return res.status(400).json({
-            status: "failure",
-            message: "phone already exists"
-          });
-        }
       }
       if (!data.username)
       {
@@ -440,14 +399,6 @@ const signUpPersonMiddleware = async (req, res, next) => {
           status: "failure",
           message: "cin is required"
         });
-      } else {
-        const cin = await personModel.findOne({ cin: data.cin });
-        if (cin) {
-          return res.status(400).send({
-            status: "failure",
-            message: "cin already exists"
-          });
-        }
       }
       if (!data.gender) {
         return res.status(400).send({

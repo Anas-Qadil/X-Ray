@@ -13,6 +13,7 @@ import { useSnackbar } from 'notistack'
 import Autocomplete from '@mui/material/Autocomplete';
 import { getMedicalPersons, getUserPerson, getPersons, getPersonForCompanyRole } from "../../../api/servicesApi";
 import { checkUpdatePersonData } from "../../../utils/checkPatient";
+import { updatePersonData } from "../../../api/update/index";
 
 const UpdatePerson = ({role}) => {
 
@@ -133,8 +134,15 @@ const UpdatePerson = ({role}) => {
 
   const updatePerson = async () => {
     try {
-      if (!checkUpdatePersonData(personData, setError))
-        console.log("all done");
+      if (checkUpdatePersonData(personData, setError))
+        return;
+
+      const res = await updatePersonData(token, personData);
+      if (res.status !== 200)
+        return enqueueSnackbar("Error while updating person", {variant: "error"});
+      enqueueSnackbar("Person updated successfully", {variant: "success"});
+      navigate(`/${role}`);
+
     } catch (e) {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
@@ -205,26 +213,6 @@ const UpdatePerson = ({role}) => {
       }}
       renderInput={(params) => <TextField {...params} label="Professional Healthcare" />}
     />
-    <br /> <br /> <br />
-    <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-        <InputLabel id="demo-simple-select-label" error={error.type}>Professional Healthcare Type</InputLabel>
-        <Select
-          error={error.type}
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="Professional Healthcare Type"
-          style={{width: "95%"}}
-          value={personData.type}
-          onChange={(e) => {
-            // empty personData
-            setPersonData({...personData,
-              type: e.target.value,
-          })}}
-        >
-          <MenuItem value="medical">Medical</MenuItem>
-          <MenuItem value="technical">Technical</MenuItem>
-        </Select>
-      </FormControl>
       <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>

@@ -9,6 +9,7 @@ import { getCompanies, getHospitals, getUserHospital } from "../../../api/servic
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { checkUpdateHospital } from "../../../utils/checkHospital";
+import { updateHospitalData } from "../../../api/update";
 
 const UpdateHospital = ({role}) => {
 
@@ -75,9 +76,14 @@ const UpdateHospital = ({role}) => {
 
   const updateHospital = async () => {
     try {
-      if (!checkUpdateHospital(hospitalData, setError))
-        console.log("all done");
+      if (checkUpdateHospital(hospitalData, setError))
+        return enqueueSnackbar("Please check your inputs", {variant: "error"});
 
+      const res = await updateHospitalData(token, hospitalData);
+      if (res.status !== 200)
+        return enqueueSnackbar("Error while updating hospital", {variant: "error"});
+      enqueueSnackbar("Hospital updated successfully", {variant: "success"});
+      navigate(`/${role}`);
     } catch (e) {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
@@ -85,7 +91,7 @@ const UpdateHospital = ({role}) => {
 
   useEffect(() => {
     if (role !== 'admin') {
-      navigate(`${role}`);
+      navigate(`/${role}`);
     }
     getAllHospitals();
     if (hospitalData._id)

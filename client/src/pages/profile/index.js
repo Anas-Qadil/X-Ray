@@ -63,6 +63,8 @@ const Profile = ({role}) => {
     }
   }
 
+  // console.log(user);
+
   const formatData = (traitements) => {
     let data = [];
     let formatedData = {};
@@ -155,7 +157,7 @@ const Profile = ({role}) => {
   }
 
   useEffect(() => {
-    getDoses();
+    // getDoses();
     getGraph();
   }, []);
 
@@ -229,13 +231,13 @@ const Profile = ({role}) => {
                     </div>}
                     {user.OwnRole === "person" && 
                       <div className="detailItem">
-                        <span className="itemKey">{user.company ? "Company" : "Hospital"}:</span>
+                        <span className="itemKey">{user.company ? "Company" : user.hospital ? "Hospital" : ""}:</span>
                         <span className="itemValue">
                           {
                             user.company ? 
                             ((typeof user.company === 'object' && user.company !== null) ? user.company?.designation : user.company)
                               : 
-                              user.hospital
+                              typeof user.hospital === 'object' && user.hospital !== null ? user.hospital?.name : user.hospital
                           }
                           </span>
                       </div>
