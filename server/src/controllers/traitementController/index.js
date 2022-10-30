@@ -45,7 +45,7 @@ const addTraitement = async (req, res, next) => {
 
     let totalDoses = 0;
     validTraitementData.map((doc) => {
-      totalDoses += doc.dose;
+      totalDoses += Number(doc.dose);
     });
 
     if (totalDoses >= 18) {

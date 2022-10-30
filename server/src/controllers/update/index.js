@@ -5,6 +5,7 @@ const personModel = require("../../models/personModel");
 const hospitalModel = require("../../models/hospitalModel");
 const companyModel = require("../../models/companyModel");
 const cryptPassword = require("../../utils/cryptPassword");
+const adminModel = require("../../models/adminModel");
 
 const updateHospital = async (req, res) => {
   try {
@@ -99,11 +100,36 @@ const updatePerson = async (req, res) => {
   }
 }
 
+const updateAdmin = async (req, res) => {
+  try {
+    const data = req.body;
 
+    if (!data)
+      return res.status(400).send({ message: "Missing data" });
+    await adminModel.updateOne({ _id: data?._id }, data);
+    if (data.username) {
+      const user = await usersModel.findOne({ admin: data?._id });
+      if (user.username !== data.username) {
+        user.username = data.username;
+      }
+      if (data.password) {
+        const newPassword = await cryptPassword(data?.password);
+        user.password = newPassword;
+      }
+      await user.save();
+    }
+
+    res.status(200).send({ message: "Admin updated successfully" });
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({ message: e.message });
+  }
+}
 
 module.exports = {
   updateHospital,
   updateCompany,
   updatePatient,
-  updatePerson
+  updatePerson,
+  updateAdmin
 };

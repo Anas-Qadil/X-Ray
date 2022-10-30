@@ -63,7 +63,8 @@ const { deleteService, getAllTraitements, getUltimateStatistics,
 	getUserCompany,
 	getUserPatient,
 	getUserPerson,
-	getHospitalMedicalPersons
+	getHospitalMedicalPersons,
+  getAdminData
 } = require("./service");
 router.delete("/service/:id", authenticateMiddleware, deleteService);
 router.get("/all-traitements", authenticateMiddleware, getAllTraitements);
@@ -73,5 +74,8 @@ router.get("/user-company/:id", authenticateMiddleware, getUserCompany);
 router.get("/user-patient/:id", authenticateMiddleware, getUserPatient);
 router.get("/user-person/:id", authenticateMiddleware, getUserPerson);
 router.get("/medical-persons", authenticateMiddleware, getHospitalMedicalPersons);
+
+
+router.get("/admin-data", authenticateMiddleware, getAdminData);
 
 module.exports = router;

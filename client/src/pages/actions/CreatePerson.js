@@ -56,7 +56,7 @@ const CreatePerson = ({role}) => {
     poids: '',
     secteur: 'public',
     fonction: '',
-    type: 'technical',
+    type: role === "hospital" ? "medical" : 'technical',
     company: null,
     hospital: null,
   });
@@ -140,8 +140,8 @@ const CreatePerson = ({role}) => {
             type: e.target.value,
           })}}
         >
-          <MenuItem value="medical">Medical</MenuItem>
-          <MenuItem value="technical">Technical</MenuItem>
+          {(role === "admin" || role === "hospital") && <MenuItem value="medical">Medical</MenuItem>}
+          {(role === "admin" || role === "company") && <MenuItem value="technical">Technical</MenuItem>}
         </Select>
       </FormControl>
       { role === "admin" && personData?.type === "technical" && (<FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}

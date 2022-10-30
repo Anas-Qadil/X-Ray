@@ -4,6 +4,7 @@ const person_traitementModel = require('../../models/person_traitementModel');
 const moment = require('moment');
 const usersModel = require('../../models/usersModel');
 const personModel = require('../../models/personModel');
+const adminModel = require('../../models/adminModel');
 
 const deleteService = async (req, res) => {
   try {
@@ -287,6 +288,22 @@ const getHospitalMedicalPersons = async (req, res) => {
 }
 
 
+
+const getAdminData = async (req, res) => {
+  try {
+    const user = req.user;
+    const adminData = await adminModel.findOne({
+      _id: user.admin
+    });
+    const data = Object.assign({}, adminData._doc);
+    data.username = user.username;
+
+    res.send({ data: data });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+}
+
 module.exports = {
 	deleteService,
   getAllTraitements,
@@ -295,5 +312,6 @@ module.exports = {
   getUserCompany,
   getUserPerson,
   getUserPatient,
-  getHospitalMedicalPersons
+  getHospitalMedicalPersons,
+  getAdminData
 }

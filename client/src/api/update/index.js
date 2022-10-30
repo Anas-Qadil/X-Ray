@@ -41,3 +41,23 @@ export const updatePersonData = async (token, data) => {
     },
   })
 }
+
+export const getAdmin = async (token) => {
+  return await axios.get(`${links.localhost}/api/admin/admin-data`, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export const updateAdminData = async (token, data) => {
+  return await axios.put(`${links.localhost}/api/update/admin`, data, {
+    headers: {
+      Accept: "application/json",
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+}

@@ -8,6 +8,7 @@ import Paper from "@mui/material/Paper";
 import { Container } from '@mui/material';
 import { FormControl, InputLabel, Input, FormHelperText, Select, MenuItem } from '@mui/material';
 import { useNavigate } from "react-router-dom";
+import UpdateAdmin from './updateAdmin';
 
 const Update = ({role}) => {
 
@@ -53,6 +54,7 @@ const Update = ({role}) => {
         {updateType === "patient" && <UpdatePatient role={role}  />}
         {updateType === "hospital" && <UpdateHospital role={role} />}
         {updateType === "company" && <UpdateCompany role={role} />}
+        {updateType === "admin" && <UpdateAdmin role={role} />}
       </Container>
       </div>
     </div>

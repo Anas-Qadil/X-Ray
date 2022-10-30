@@ -191,8 +191,8 @@ const graphData = async (req, res) => {
     } else if (user.role === "person") {
       traitements = await person_traitementModel.find({ person: user.person?._id }, { dose: 1, createdAt: 1 });
     } else if (user.role === "admin") {
-      traitements = await traitementModel.find({}, { dose: 1, createdAt: 1 });
-      traitements = traitements.concat(await person_traitementModel.find({}, { dose: 1, createdAt: 1 }));
+      traitements = await traitementModel.find({}, { dose: 1, createdAt: 1 }).populate("patient");
+      traitements = traitements.concat(await person_traitementModel.find({}, { dose: 1, createdAt: 1 }).populate("person"));
     } else if (user.role === "company") {
       let tmp = await person_traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("person");
       tmp.map((t) => {
@@ -201,14 +201,15 @@ const graphData = async (req, res) => {
         }
       });
     } else if (user.role === "hospital") {
-      let tmp = await person_traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("service");
-      tmp = tmp.concat(await traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("service"));
+      let tmp = await person_traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("service").populate("person")
+      tmp = tmp.concat(await traitementModel.find({ }, { dose: 1, createdAt: 1 }).populate("service").populate("patient"));
       tmp.map((t) => {
         if (t.service?.hospital?.toString() === user.hospital?._id.toString()) {
           traitements.push(t);
         }
       });
     }
+
 
     
     traitements.map(item => {
@@ -227,10 +228,64 @@ const graphData = async (req, res) => {
       return res;
     }, {});
 
+    let doseTraitementData = traitements.reduce((res, value) => {
+      
+      if (value.person && !res[value.person?.cin]) {
+        res[value.person?.cin] = { personId: value.person._id, cin: value.person?.cin, dose: 0 };
+      } else if (value.patient && !res[value.patient?.cin]) {
+        res[value.patient?.cin] = { patientId: value.patient._id,cin: value.patient?.cin, dose: 0 };
+      }
+      if (value.person ) {
+        if (moment(value.createdAt).isBetween(moment().subtract(1, "year"), moment())) {
+          res[value.person?.cin].dose += value.dose
+        }
+      }
+      else if (value.patient) 
+      {
+        if (moment(value.createdAt).isBetween(moment().subtract(1, "year"), moment())) 
+          res[value.patient?.cin].dose += value.dose;
+      }
+      return res;
+    }, {});
 
+    let doseTraitementDataArray = Object.values(doseTraitementData);
+
+
+    const traitementOver18aYear = doseTraitementDataArray.map(async (item) => {
+      if (item.personId) {
+        let dose = 0;
+        let personTrai = await person_traitementModel.find({ person: item.personId });
+        personTrai.map(t => {
+          if (moment(t.createdAt).isBetween(moment().subtract(1, "year"), moment())) {
+            dose += t.dose;
+          }
+        });
+        if (dose >= 18) {
+          return {...item, dose: dose};
+        }
+      }
+      else if (item.patientId){
+        let dose = 0;
+        let patientTrai = await traitementModel.find({ patient: item.patientId });
+        patientTrai.map(t => {
+          if (moment(t.createdAt).isBetween(moment().subtract(1, "year"), moment())) {
+            dose += t.dose;
+          }
+        });
+        if (Number(dose) >= 18) {
+          return {...item, dose: dose};
+        }
+      }
+    })
+
+    const traitementOver18aYearArray = await Promise.all(traitementOver18aYear);
+    const traitementOver18aYearArrayFiltered = traitementOver18aYearArray.filter(item => item !== undefined);
+
+    
     res.status(200).json({
       message: "success",
-      data: all
+      data: all,
+      traitementOver18aYear: traitementOver18aYearArrayFiltered
     });
   } catch (e) {
     res.status(500).send({

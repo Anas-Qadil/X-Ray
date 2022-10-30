@@ -136,7 +136,7 @@ const getPatientDoses = async (req, res) => {
         lastyearDose += doc.dose;
       }
 
-      const dose = parseInt(doc.dose);
+      const dose = Number(doc.dose);
       doses += dose;
     });
     if (!data) {

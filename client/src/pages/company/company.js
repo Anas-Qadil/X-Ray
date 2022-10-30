@@ -66,6 +66,10 @@ const Company = () => {
       } else {
         enqueueSnackbar(res?.data?.message || 'Something Went Wrong..', {variant: 'error'})
       }
+
+      res.data.traitementOver18aYear?.map(item => {
+        enqueueSnackbar(item.cin + " has exceeded the maximum dose limit", {variant: 'warning'})
+      });
     } catch (e) {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }

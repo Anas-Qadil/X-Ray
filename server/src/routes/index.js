@@ -169,12 +169,13 @@ router.get("/graph", authenticateMiddleware, graphData);
 {/* -------------------------------------------------- End Search --------------------------------------------------*/}
 
 {/* -------------------------------------------------- Start update --------------------------------------------------*/}
-const { updateHospital, updatePatient, updatePerson, updateCompany } = require("../controllers/update/index");
+const { updateHospital, updatePatient, updatePerson, updateCompany, updateAdmin } = require("../controllers/update/index");
 
 router.put("/update/hospital", authenticateMiddleware, updateHospital);
 router.put("/update/company", authenticateMiddleware, updateCompany);
 router.put("/update/patient", authenticateMiddleware, updatePatient);
 router.put("/update/person", authenticateMiddleware, updatePerson);
+router.put("/update/admin", authenticateMiddleware, updateAdmin);
 
 {/* -------------------------------------------------- End update --------------------------------------------------*/}
 

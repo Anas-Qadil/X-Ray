@@ -29,6 +29,7 @@ const Patient = () => {
       if (res.status === 200) {
         if (res.data.lastyearDose >= 18)
           enqueueSnackbar("You Have exceeded The Does Rate Limit.", {variant: 'warning'})
+        console.log(res.data);
         formatData(res?.data?.data);
         setDoseData(res.data);
         setDataLoading(false);

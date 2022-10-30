@@ -111,11 +111,12 @@ const Profile = ({role}) => {
         res = await getHospitalServices(token, user?._id);
       } else if (user.OwnRole === "company") {
         res = await getCompanyServices(token, user?._id);
-      }
+      } else 
+        return ;
       
       if (res.status === 200) {
         if ((user.OwnRole === "patient" || user.OwnRole === "person") &&  res.data?.lastyearDose >= 18)
-          enqueueSnackbar(user.firstName + " " + user.lastName + " Have exceeded The Does Rate Limit.", {variant: 'warning'})
+          enqueueSnackbar(user.cin + " Have exceeded The Does Rate Limit.", {variant: 'warning'})
         if (user.OwnRole === "patient")
           formatData(res?.data?.data);
         else if (user.OwnRole === "person")
@@ -157,10 +158,9 @@ const Profile = ({role}) => {
   }
 
   useEffect(() => {
-    // getDoses();
+    getDoses();
     getGraph();
   }, []);
-
 
   return (
     <div>
