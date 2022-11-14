@@ -39,10 +39,10 @@ const signUpHospitalMiddleware = async (req, res, next) => {
           message: 'Username already exists'
         });
       }
-      if (!data.name) {
+      if (!data.address) {
         return res.status(400).send({
           status: 'failure',
-          message: 'Hospital name is required'
+          message: 'Hospital Address is required'
         });
       }
       if (!data.region) {

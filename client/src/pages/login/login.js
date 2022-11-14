@@ -69,7 +69,6 @@ const Login = () => {
         return;
       }
       const res = await loginApi(user, psw);
-      
       const data = res.data;
       const payload = {
         user: data.user,

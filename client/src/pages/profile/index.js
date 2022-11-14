@@ -63,7 +63,7 @@ const Profile = ({role}) => {
     }
   }
 
-  // console.log(user);
+  console.log(user);
 
   const formatData = (traitements) => {
     let data = [];
@@ -169,7 +169,7 @@ const Profile = ({role}) => {
         <div className="singleContainer">
           <div className="top">
             <div className="left">
-              <div className="editButton">{user?.OwnRole === "person" ? "Professional Healthcare" : user?.OwnRole }</div>
+              <div className="editButton">{user?.OwnRole === "person" ? "Professional Healthcare" : user?.OwnRole === "hospital" ? "Health Institution" : user?.OwnRole }</div>
               <h1 className="title">Information</h1>
               <div className="item">
                 <img
@@ -246,10 +246,10 @@ const Profile = ({role}) => {
                 }
                 { (user.OwnRole === "hospital" || user.OwnRole === "company") && 
                   <div className="details">
-                    <h1 className="itemTitle">{user.designation}</h1>
+                    <h1 className="itemTitle">Health Institution</h1>
                     {user.OwnRole === "hospital" && <div className="detailItem">
-                      <span className="itemKey">Hospital name:</span>
-                      <span className="itemValue">{user.name}</span>
+                      <span className="itemKey">Designation:</span>
+                      <span className="itemValue">{user.designation}</span>
                     </div>}
                     <div className="detailItem">
                       <span className="itemKey">Region:</span>
@@ -262,6 +262,10 @@ const Profile = ({role}) => {
                     {user.phone && <div className="detailItem">
                       <span className="itemKey">phone:</span>
                       <span className="itemValue">{user.phone}</span>
+                    </div>}
+                    {user.address && <div className="detailItem">
+                      <span className="itemKey">address:</span>
+                      <span className="itemValue">{user.address}</span>
                     </div>}
                     {user.email && <div className="detailItem">
                       <span className="itemKey">Email:</span>
@@ -296,10 +300,6 @@ const Profile = ({role}) => {
               <Chart aspect={3 / 1} title="User Dose ( LastYear)" color={doseData?.lastyearDose >= 18 ? "#df4759" : "#00A7E1"} graph={graph} />
             </div>
           </div>
-          {user.OwnRole !== "admin" && <div className="bottom">
-          <h1 className="title">services</h1>
-            <Table data={mainPageData} labels={labels} DataLoading={DataLoading}  />
-          </div>}
         </div>
       </div>
     </div>

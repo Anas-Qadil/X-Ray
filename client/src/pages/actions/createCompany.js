@@ -54,38 +54,6 @@ const CreateCompany = ({role}) => {
 		<>
       <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.username}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={companyData.username}
-            onChange={(e) => {
-              setError({
-                ...error,
-                username: false,
-              });
-              setCompanyData({...companyData, username: e.target.value})}}
-          />
-        </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.password}>Password</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.password}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={companyData.password}
-            onChange={(e) => {
-              setError({
-                ...error,
-                password: false,
-              });
-              setCompanyData({...companyData, password: e.target.value})}}
-          />
-        </FormControl>
-      </div>
-      <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.region}>REGION</InputLabel>
           <Input type="text" id="my-input" 
             error={error.region}
@@ -162,6 +130,38 @@ const CreateCompany = ({role}) => {
                 email: false,
               });
               setCompanyData({...companyData, email: e.target.value})}}
+          />
+        </FormControl>
+      </div>
+      <div style={{display: "flex"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.username}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={companyData.username}
+            onChange={(e) => {
+              setError({
+                ...error,
+                username: false,
+              });
+              setCompanyData({...companyData, username: e.target.value})}}
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.password}>Password</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.password}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={companyData.password}
+            onChange={(e) => {
+              setError({
+                ...error,
+                password: false,
+              });
+              setCompanyData({...companyData, password: e.target.value})}}
           />
         </FormControl>
       </div>

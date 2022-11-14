@@ -13,7 +13,7 @@ import { useSnackbar } from 'notistack'
 import { getGraphData } from "../../api/servicesApi";
 
 
-const Hospital = () => {
+const Hospital = ({role}) => {
 
   const { enqueueSnackbar } = useSnackbar()
   const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
@@ -77,9 +77,11 @@ const Hospital = () => {
 
 
   useEffect(() => {
+    // if (role !== "hospital") {
     if (user?.hospital?._id)  
       getServices();
     getGraph();
+    // }
     setLoading(false);
   }, [user]);
 

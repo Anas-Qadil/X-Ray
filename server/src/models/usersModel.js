@@ -18,7 +18,7 @@ const usersSchema = new Schema({
 	},
 	role: {
 		type: String,
-		enum: ["admin", "patient", "hospital", "company", "person"],
+		enum: ["admin", "patient", "hospital", "company", "person", "radio", "clinic"],
 		required: true,
 	},
 	patient: {
@@ -44,6 +44,16 @@ const usersSchema = new Schema({
 	admin: {
 		type: Schema.Types.ObjectId,
 		ref: "adminModel",
+		default: null,
+	},
+	radio: {
+		type: Schema.Types.ObjectId,
+		ref: "radioModel",
+		default: null,
+	},
+	clinic: {
+		type: Schema.Types.ObjectId,
+		ref: "clinicModel",
 		default: null,
 	}
 }, { timestamps: true });

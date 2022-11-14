@@ -1,4 +1,3 @@
-const express = require("express");
 const usersModel = require("../../models/usersModel");
 const bcrypt = require("bcrypt")
 
@@ -35,6 +34,12 @@ const loginMiddleware = async (req, res, next) => {
           break;
         case "admin":
           await user.populate("admin");
+          break;
+        case "radio":
+          await user.populate("radio");
+          break;
+        case "clinic":
+          await user.populate("clinic");
           break;
         default:
           return res.status(400).send({

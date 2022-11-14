@@ -35,8 +35,10 @@ const CreateAccount = ({role}) => {
           >
             {(role === "admin" || role === "hospital") && <MenuItem value="patient">Patient</MenuItem>}
             {(role === "admin" || role === "hospital" || role === "company") && <MenuItem value="person">Professional Healthcare</MenuItem>}
-            {role === "admin" && <MenuItem value="hospital">Hospital</MenuItem>}
             {role === "admin" && <MenuItem value="company">Company</MenuItem>}
+            {role === "admin" && <MenuItem value="hospital">Hospital</MenuItem>}
+            {role === "admin" && <MenuItem value="radio">Radiology</MenuItem>}
+            {role === "admin" && <MenuItem value="clinic">Clinic</MenuItem>}
           </Select>
         </FormControl>
         <br />
@@ -45,7 +47,9 @@ const CreateAccount = ({role}) => {
         <br />
         {accountType === "person" && <CreatePerson role={role} />}
         {accountType === "patient" && <CreatePatient role={role}  />}
-        {accountType === "hospital" && <CreateHospital role={role} />}
+        {accountType === "hospital" && <CreateHospital role={role} type="hospital" />}
+        {accountType === "radio" && <CreateHospital role={role} type="radio" />}
+        {accountType === "clinic" && <CreateHospital role={role} type="clinic" />}
         {accountType === "company" && <CreateCompany role={role} />}
       </Container>
       </div>

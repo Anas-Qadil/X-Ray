@@ -68,9 +68,9 @@ const Sidebar = ({role}) => {
               <li>
                 <CreditCardIcon className="icon" />
                 {(role === "admin") && <span>Global Statistics</span>}
-                {(role === "company") && <span>Statistics Of Your Persons</span>}
-                {(role === "hospital") && <span>Statistics Of Your Patients</span>}
-                {(role === "person" || role === "patient") && <span>Your Statistics</span>}
+                {(role === "company") && <span>Statistics</span>}
+                {(role === "hospital") && <span>Statistics</span>}
+                {(role === "person" || role === "patient") && <span>Statistics</span>}
               </li>
             </Link>
             

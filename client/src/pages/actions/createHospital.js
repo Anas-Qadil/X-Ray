@@ -9,16 +9,15 @@ import { signUpHospital } from "../../api/authApi/signUp";
 import { useSnackbar } from 'notistack'
 
 
-const CreateHospital = ({role}) => {
+const CreateHospital = ({role, type}) => {
   
   const { enqueueSnackbar } = useSnackbar()
-
   const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
   const [error, setError] = useState({
     username: false,
     password: false,
-    name: false,
+    address: false,
     region: false,
     ville: false,
     statut: false,
@@ -29,11 +28,12 @@ const CreateHospital = ({role}) => {
   const [hospitalData, setHospitalData] = useState({
     username: '',
     password: '',
-    name: '',
+    address: '',
     region: '',
     statut: '',
     ville: '',
     designation: '',
+    type: type || "hospital",
     email: '',
     phone: '',
   });
@@ -57,43 +57,15 @@ const CreateHospital = ({role}) => {
 		<>
       <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.address}>Address</InputLabel>
           <Input type="text" id="my-input" 
-            error={error.username}
+            error={error.address}
             aria-describedby="my-helper-text" 
             style={{width: "90%"}} 
-            value={hospitalData.username}
+            value={hospitalData.address}
             onChange={(e) => {
-              setError({...error, username: false});
-              setHospitalData({ ...hospitalData, username: e.target.value});
-            }}
-          />
-        </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.password}>Password</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.password}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={hospitalData.password}
-            onChange={(e) => {
-              setError({...error, password: false});
-              setHospitalData({ ...hospitalData, password: e.target.value});
-            }}
-          />
-        </FormControl>
-      </div>
-      <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.name}>HOSPITAL NAME</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.name}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}} 
-            value={hospitalData.name}
-            onChange={(e) => {
-              setError({...error, name: false});
-              setHospitalData({ ...hospitalData, name: e.target.value});
+              setError({...error, address: false});
+              setHospitalData({ ...hospitalData, address: e.target.value});
             }}
           />
         </FormControl>
@@ -178,6 +150,34 @@ const CreateHospital = ({role}) => {
             onChange={(e) => {
               setError({...error, email: false});
               setHospitalData({ ...hospitalData, email: e.target.value});
+            }}
+          />
+        </FormControl>
+      </div>
+      <div style={{display: "flex"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.username}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}} 
+            value={hospitalData.username}
+            onChange={(e) => {
+              setError({...error, username: false});
+              setHospitalData({ ...hospitalData, username: e.target.value});
+            }}
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.password}>Password</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.password}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={hospitalData.password}
+            onChange={(e) => {
+              setError({...error, password: false});
+              setHospitalData({ ...hospitalData, password: e.target.value});
             }}
           />
         </FormControl>

@@ -32,7 +32,7 @@ const sendEmail = async(userEmail) => {
 			},
 		});
 		const info = await transporter.sendMail({
-			from : `Matcha <Matcha Team>`,
+			from : `XRAY DOSE SYSTEM <X-RAY Team>`,
 			to : EmailReciever,
 			subject : subject,
 			text : text,

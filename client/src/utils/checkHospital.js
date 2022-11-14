@@ -5,7 +5,7 @@ const checkHospital = (obj, setError) => {
 	const err = {
     username: false,
     password: false,
-    name: false,
+    address: false,
     region: false,
     ville: false,
     statut: false,

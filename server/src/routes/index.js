@@ -180,6 +180,13 @@ router.put("/update/admin", authenticateMiddleware, updateAdmin);
 {/* -------------------------------------------------- End update --------------------------------------------------*/}
 
 
+{/* -------------------------------------------------- start Radio --------------------------------------------------*/}
+const radio = require("../modules/radio/radio.route");
+
+router.use("/radio", authenticateMiddleware, radio);
+
+{/* -------------------------------------------------- end Radio --------------------------------------------------*/}
+
 
 router.get("/all-users", async (req, res) => {
 	const users = await usersModel.find({});
