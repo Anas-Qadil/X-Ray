@@ -83,8 +83,9 @@ const getAllTraitements = async (req, res) => {
 const getUltimateStatistics = async (req, res) => {
   try {
     const user = req.user;
-    const stats = JSON.parse(req.query.stats);
+    const stats =  req.body.stats;
     let data = [];
+    console.log(stats.hospitalType);
 
     let traitements = [];
     let person_traitement = [];
@@ -153,7 +154,14 @@ const getUltimateStatistics = async (req, res) => {
         });
     }
 
-    const combined = [...traitements, ...person_traitement];
+    let combined = [...traitements, ...person_traitement];
+
+    if (stats.hospitalType) {
+      combined = combined.filter((doc) => {
+        return doc?.service?.hospital?.type === stats?.hospitalType;
+      });
+    }
+
     combined.map((doc) => {
       if (stats?.hospital) {
         if (doc?.service?.hospital?._id == stats?.hospital) {

@@ -281,7 +281,6 @@ const graphData = async (req, res) => {
     const traitementOver18aYearArray = await Promise.all(traitementOver18aYear);
     const traitementOver18aYearArrayFiltered = traitementOver18aYearArray.filter(item => item !== undefined);
 
-    
     res.status(200).json({
       message: "success",
       data: all,

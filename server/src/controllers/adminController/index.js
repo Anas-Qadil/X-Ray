@@ -68,7 +68,8 @@ const { deleteService, getAllTraitements, getUltimateStatistics,
 } = require("./service");
 router.delete("/service/:id", authenticateMiddleware, deleteService);
 router.get("/all-traitements", authenticateMiddleware, getAllTraitements);
-router.get("/ultimate-statistics", authenticateMiddleware, getUltimateStatistics);
+// router.get("/ultimate-statistics", authenticateMiddleware, getUltimateStatistics);
+router.post("/ultimate-statistics", authenticateMiddleware, getUltimateStatistics);
 router.get("/user-hospital/:id", authenticateMiddleware, getUserHospital);
 router.get("/user-company/:id", authenticateMiddleware, getUserCompany);
 router.get("/user-patient/:id", authenticateMiddleware, getUserPatient);
