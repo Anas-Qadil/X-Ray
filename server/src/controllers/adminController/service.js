@@ -115,10 +115,12 @@ const getUltimateStatistics = async (req, res) => {
           populate: {
             path: 'hospital',
           },
-        }).populate({
+        })
+        .populate({
           path: 'person',
           populate: {
             path: 'hospital',
+            path: 'company',
           },
         });
     } else {
@@ -135,6 +137,7 @@ const getUltimateStatistics = async (req, res) => {
         },
       })
       .populate('patient');
+
       person_traitement = await person_traitementModel.find({
         createdAt: {
           $gte: moment(stats.startDate, "YYYY-MM-DD").toISOString(),
@@ -147,6 +150,12 @@ const getUltimateStatistics = async (req, res) => {
             path: 'hospital',
           },
         }).populate({
+          path: 'person',
+          populate: {
+            path: 'company',
+          },
+        })
+        .populate({
           path: 'person',
           populate: {
             path: 'hospital',
@@ -207,7 +216,6 @@ const getUltimateStatistics = async (req, res) => {
         }
       });
     } else result = data2;
-
     res.send({ data: result });
   } catch (e) {
     console.log(e);
