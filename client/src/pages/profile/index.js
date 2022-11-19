@@ -63,7 +63,6 @@ const Profile = ({role}) => {
     }
   }
 
-  console.log(user);
 
   const formatData = (traitements) => {
     let data = [];
@@ -77,7 +76,7 @@ const Profile = ({role}) => {
         service: traitements[size - i]?.service?.name,
         examen: traitements[size - i]?.service?.examen,
         equipement: traitements[size - i]?.service?.equipment,
-        hopital: traitements[size - i]?.service?.hospital?.name,
+        hopital: traitements[size - i]?.service?.hospital?.designation,
         dose: traitements[size - i]?.dose,
       }
       data.push(formatedData);
@@ -162,6 +161,8 @@ const Profile = ({role}) => {
     getGraph();
   }, []);
 
+  console.log(user);
+
   return (
     <div>
       <div className="single">
@@ -231,13 +232,13 @@ const Profile = ({role}) => {
                     </div>}
                     {user.OwnRole === "person" && 
                       <div className="detailItem">
-                        <span className="itemKey">{user.company ? "Company" : user.hospital ? "Hospital" : ""}:</span>
+                        <span className="itemKey">{user.company ? "Company" : user.hospital || user?.hospital?.type ? "Health Institution" : ""}:</span>
                         <span className="itemValue">
                           {
                             user.company ? 
                             ((typeof user.company === 'object' && user.company !== null) ? user.company?.designation : user.company)
                               : 
-                              typeof user.hospital === 'object' && user.hospital !== null ? user.hospital?.name : user.hospital
+                              typeof user.hospital === 'object' && user.hospital !== null ? user.hospital?.designation : user.hospital
                           }
                           </span>
                       </div>
@@ -246,11 +247,11 @@ const Profile = ({role}) => {
                 }
                 { (user.OwnRole === "hospital" || user.OwnRole === "company") && 
                   <div className="details">
-                    <h1 className="itemTitle">Health Institution</h1>
-                    {user.OwnRole === "hospital" && <div className="detailItem">
+                    <h1 className="itemTitle">{user.OwnRole === "hospital" ? "Health Institution" : "Company"}</h1>
+                    <div className="detailItem">
                       <span className="itemKey">Designation:</span>
                       <span className="itemValue">{user.designation}</span>
-                    </div>}
+                    </div>
                     <div className="detailItem">
                       <span className="itemKey">Region:</span>
                       <span className="itemValue">{user.region}</span>

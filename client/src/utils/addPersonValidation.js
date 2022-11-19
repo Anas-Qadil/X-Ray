@@ -58,10 +58,6 @@ const validatePersonData = (personData, error, setError) => {
     errorObject.fonction = true;
   if (!personData.type)
     errorObject.type = true;
-  if (personData.type === "technical" && ( !personData.company || validator.isEmpty(personData.company) ))
-    errorObject.company = true;
-  if (personData.type === "medical" && ( !personData.hospital ||  validator.isEmpty(personData.hospital)))
-    errorObject.hospital = true;
   setError(errorObject);
   let checker = 1;
   for (let key in errorObject) {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FormControl, InputLabel, Input, Select, MenuItem } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -7,7 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import TextField from '@mui/material/TextField';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { getCompanies, getHospitals } from "../../api/servicesApi";
+import { getCompanies, getHospitals, getAllHospitals } from "../../api/servicesApi";
 import { useSelector } from 'react-redux'
 import { signUpPerson } from "../../api/authApi/signUp";
 import validatePersonData from "../../utils/addPersonValidation";
@@ -17,6 +17,8 @@ import { useSnackbar } from 'notistack'
 const CreatePerson = ({role}) => {
 
   const navigate = useNavigate();
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [type, setType] = useState("hospital"); // company or hospital or radio
   const { enqueueSnackbar } = useSnackbar()
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
@@ -54,7 +56,7 @@ const CreatePerson = ({role}) => {
     phone: '',
     email: '',
     poids: '',
-    secteur: 'public',
+    secteur: '',
     fonction: '',
     type: role === "hospital" ? "medical" : 'technical',
     company: null,
@@ -63,21 +65,26 @@ const CreatePerson = ({role}) => {
 
   const addPerson = async () => {
     try {
+      setBtnLoading(true);
       if (role === "company")
         setPersonData({...personData, company: user?.company?._id});
       else if (role === "hospital")
         setPersonData({...personData, hospital: user?.hospital?._id});
+      console.log(personData);
       const validation = validatePersonData(personData, error, setError);
+      console.log(error);
       if (validation === 1) {
         const res = await signUpPerson(token, personData);
         if (res?.status === 200) {
           enqueueSnackbar('Professional Healthcare was created successfully', {variant: 'success'})
           navigate(`/${role}`);
         }
-      } else 
-        enqueueSnackbar('Please Check your inputs', {variant: 'error'})
+      } else enqueueSnackbar('Please Check your inputs', {variant: 'error'})
+       
+      setBtnLoading(false);  
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      setBtnLoading(false);
     }
   }
 
@@ -90,9 +97,13 @@ const CreatePerson = ({role}) => {
     }
   }
 
-  const getHospitalsData = async () => {
+  const getHospitalsData = async (hospitalType) => {
     try {
-      const res = await getHospitals(token);
+      let res;
+      console.log(hospitalType);
+      if (hospitalType) {
+        res = await getAllHospitals(token, hospitalType);
+      } else  res = await getAllHospitals(token, "");
       setHospitals(res?.data?.data);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
@@ -101,50 +112,73 @@ const CreatePerson = ({role}) => {
 
   useEffect(() => {
     getCompaniesData();
-    getHospitalsData();
-  }, []);
+    getHospitalsData(type);
+  }, [type]);
 
 	return (
 		<>
-      <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-        <InputLabel id="demo-simple-select-label" error={error.type}>Professional Healthcare Type</InputLabel>
+      {role !== "company" && 
+        <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
+          <InputLabel id="demo-simple-select-label" error={error.type}>Professional Healthcare Type</InputLabel>
+          <Select
+            error={error.type}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Professional Healthcare Type"
+            style={{width: "95%"}}
+            value={personData.type}
+            onChange={(e) => {
+              // empty personData
+              const old = {
+                username: '',
+                password: '',
+                  firstName: '',
+                  lastName: '',
+                  cin: '',
+                  gender: '',
+                  birthDate: moment().format("YYYY-MM-DD"),
+                  age: '',
+                  address: '',
+                  phone: '',
+                  email: '',
+                  poids:'',
+                  secteur: '',
+                  fonction: '',
+                  type: 'technical',
+                  company: null,
+                  hospital: null,
+                };
+              setPersonData({...old,
+                type: e.target.value,
+              })}}
+          >
+            {(role === "admin" || role === "hospital") && <MenuItem value="medical">Medical</MenuItem>}
+            <MenuItem value="technical">Technical</MenuItem>
+          </Select>
+        </FormControl>
+      }
+      <div style={{display: "flex"}}>
+      {role === "admin" && <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
+        <InputLabel id="demo-simple-select-label" error={error.type}>Type</InputLabel>
         <Select
           error={error.type}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          label="Professional Healthcare Type"
+          label="Type"
           style={{width: "95%"}}
-          value={personData.type}
+          value={type}
           onChange={(e) => {
-            // empty personData
-            const old = {
-              username: '',
-              password: '',
-                firstName: '',
-                lastName: '',
-                cin: '',
-                gender: '',
-                birthDate: moment().format("YYYY-MM-DD"),
-                age: '',
-                address: '',
-                phone: '',
-                email: '',
-                poids:'',
-                secteur: 'public',
-                fonction: '',
-                type: 'technical',
-                company: null,
-                hospital: null,
-              };
-            setPersonData({...old,
-            type: e.target.value,
-          })}}
+            setType(e.target.value);
+         }}
         >
-          {(role === "admin" || role === "hospital") && <MenuItem value="medical">Medical</MenuItem>}
-          {(role === "admin" || role === "company") && <MenuItem value="technical">Technical</MenuItem>}
+          <MenuItem value="company">Company</MenuItem>
+          <MenuItem value="hospital">Hospital</MenuItem>
+          <MenuItem value="radio">Radio</MenuItem>
+          <MenuItem value="clinic">Clinic</MenuItem>
         </Select>
-      </FormControl>
-      { role === "admin" && personData?.type === "technical" && (<FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
+      </FormControl>}
+      {role === "admin" && type === "company" && (
+      <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
         <InputLabel id="demo-simple-select-label" error={error.company} >Choose Company</InputLabel>
         <Select
           error={error.company}
@@ -164,37 +198,87 @@ const CreatePerson = ({role}) => {
           ))}
         </Select>
       </FormControl>)}
-      { role === "admin" && personData?.type === "medical" && (
-      <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-        <InputLabel id="demo-simple-select-label" error={error.hospital}>Choose Hospital</InputLabel>
-        <Select
-          error={error.hospital}
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="Choose Hospital"
-          style={{width: "95%"}}
-          value={personData.hospital}
-          onChange={(e) => {
-            setError({...error,
-              hospital: false,
-            });
-            setPersonData({...personData,
-            hospital: e.target.value,
-          })}}
-        >
-          {hospitals?.map((hospital, index) => (
-            <MenuItem value={hospital._id}>{hospital.designation}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>)}
+      { role === "admin" && type === "hospital" && (
+        <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
+          <InputLabel id="demo-simple-select-label" error={error.hospital}>Choose Hospital</InputLabel>
+          <Select
+            error={error.hospital}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Choose Hospital"
+            style={{width: "95%"}}
+            value={personData.hospital}
+            onChange={(e) => {
+              setError({...error,
+                hospital: false,
+              });
+              setPersonData({...personData,
+              hospital: e.target.value,
+            })}}
+          >
+            {hospitals?.map((hospital, index) => (
+              <MenuItem value={hospital._id}>{hospital.designation}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
+      { role === "admin" && type === "radio" && (
+        <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
+          <InputLabel id="demo-simple-select-label" error={error.hospital}>Choose Radio</InputLabel>
+          <Select
+            error={error.hospital}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Choose Radio"
+            style={{width: "95%"}}
+            value={personData.hospital}
+            onChange={(e) => {
+              setError({...error,
+                hospital: false,
+              });
+              setPersonData({...personData,
+              hospital: e.target.value,
+            })}}
+          >
+            {hospitals?.map((hospital, index) => (
+              <MenuItem value={hospital._id}>{hospital.designation}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
+      { role === "admin" && type === "clinic" && (
+        <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
+          <InputLabel id="demo-simple-select-label" error={error.hospital}>Choose Clinic</InputLabel>
+          <Select
+            error={error.hospital}
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="Choose Clinic"
+            style={{width: "95%"}}
+            value={personData.hospital}
+            onChange={(e) => {
+              setError({...error,
+                hospital: false,
+              });
+              setPersonData({...personData,
+              hospital: e.target.value,
+            })}}
+          >
+            {hospitals?.map((hospital, index) => (
+              <MenuItem value={hospital._id}>{hospital.designation}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
+      </div>
       <div style={{display: "flex"}}>
         <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-          <InputLabel id="demo-simple-select-label" error={error.secteur}>Secteur d’activité</InputLabel>
-          <Select
+          <InputLabel id="demo-simple-select-label" error={error.secteur}>Activity service</InputLabel>
+          <Input
             error={error.secteur}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            label="Secteur d’activité"
+            label="Activity service<"
             style={{width: "90%"}}
             value={personData.secteur}
             onChange={(e) => {
@@ -202,10 +286,7 @@ const CreatePerson = ({role}) => {
               setPersonData({...personData,
               secteur: e.target.value,
             })}}
-          >
-            <MenuItem value="public">Public</MenuItem>
-            <MenuItem value="private">Private</MenuItem>
-          </Select>
+          />
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.fonction}>Fonction</InputLabel>
@@ -280,7 +361,7 @@ const CreatePerson = ({role}) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Stack spacing={1} style={{width: "90%", marginRight: "40px"}} error={error.birthDate}>
             <DesktopDatePicker
-              label="Birth Date"
+              label="BirthDate"
               inputFormat="YYYY-MM-DD"
               value={personData.birthDate}
               onChange={(newValue) => {
@@ -426,9 +507,9 @@ const CreatePerson = ({role}) => {
           />
         </FormControl>
       </div>
-      <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
+      <Stack style={{marginTop: "10px"}} spacing={2} direction="row">
         <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-        <Button onClick={addPerson} variant="contained" fullWidth>Add {personData.type} Person</Button>
+        <Button disabled={btnLoading} onClick={addPerson} variant="contained" fullWidth>Add {personData.type} Person</Button>
       </Stack>
 		</>
   );

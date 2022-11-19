@@ -9,8 +9,9 @@ const loginController = async (req, res, next) => {
     if (req.user.role === "person") {
       user = await usersModel.findById(req.user.id)
         .populate("person")
+
       if (user) {
-        if (user.person.type === "medical")
+        if (user.person.hospital)
           await user.populate({
             path: "person",
             populate: {
@@ -27,7 +28,7 @@ const loginController = async (req, res, next) => {
         }
       }
     } else user = req.user;
-    
+    console.log(user);
     if (token)
       return res.send({
         status: "success",

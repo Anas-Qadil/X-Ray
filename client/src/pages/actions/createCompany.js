@@ -10,14 +10,16 @@ import { signUpCompany } from "../../api/authApi/signUp";
 import { useSnackbar } from 'notistack'
 
 const CreateCompany = ({role}) => {
-
+  
   const { enqueueSnackbar } = useSnackbar()
+  const [btnLoading, setBtnLoading] = useState(false);
   const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
   const [error, setError] = useState({
     username: false,
     password: false,
     region: false,
+    address: false,
     ville: false,
     designation: false,
     email: false,
@@ -28,6 +30,7 @@ const CreateCompany = ({role}) => {
     password: '',
     region: '',
     ville: '',
+    address: '',
     designation: '',
     email: '',
     phone: '',
@@ -36,6 +39,7 @@ const CreateCompany = ({role}) => {
 
   const addCompany =  async () => {
     try {
+      setBtnLoading(true);
       if (!checkCompany(companyData, setError)) {
         const res = await signUpCompany(token, companyData);
         if (res.status === 200 || res.status === 201) {
@@ -45,8 +49,10 @@ const CreateCompany = ({role}) => {
       } else {
         enqueueSnackbar('Please Check your inputs', {variant: 'error'})
       }
+      setBtnLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      setBtnLoading(false);
     }
   }
 
@@ -101,18 +107,18 @@ const CreateCompany = ({role}) => {
           />
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.phone}>PHONE</InputLabel>
-          <Input type="number" id="my-input" 
-            error={error.phone}
+          <InputLabel htmlFor="my-input" error={error.address}>Address</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.address}
             aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={companyData.phone}
+            style={{width: "95%"}} 
+            value={companyData.address}
             onChange={(e) => {
               setError({
                 ...error,
-                phone: false,
+                address: false,
               });
-              setCompanyData({...companyData, phone: e.target.value})}}
+              setCompanyData({...companyData, address: e.target.value})}}
           />
         </FormControl>
       </div>
@@ -130,6 +136,21 @@ const CreateCompany = ({role}) => {
                 email: false,
               });
               setCompanyData({...companyData, email: e.target.value})}}
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.phone}>PHONE</InputLabel>
+          <Input type="number" id="my-input" 
+            error={error.phone}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={companyData.phone}
+            onChange={(e) => {
+              setError({
+                ...error,
+                phone: false,
+              });
+              setCompanyData({...companyData, phone: e.target.value})}}
           />
         </FormControl>
       </div>
@@ -165,9 +186,11 @@ const CreateCompany = ({role}) => {
           />
         </FormControl>
       </div>
-      <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
+      <Stack style={{marginTop: "10px"}} spacing={2} direction="row">
         <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-        <Button variant="contained" onClick={addCompany} fullWidth>Add Company</Button>
+        <Button disabled={btnLoading} variant="contained" onClick={addCompany} fullWidth>
+          Add Company
+        </Button>
       </Stack>
 		</>
   );

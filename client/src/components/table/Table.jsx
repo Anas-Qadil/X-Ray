@@ -13,16 +13,16 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const List = ({data, labels, DataLoading}) => {
+const List = ({data, labels, DataLoading, style}) => {
 
   const location = useLocation();
   const navigate = useNavigate();
   const paths = location.pathname.split("/");
   const userRDX = useSelector(state => state?.data?.data?.user);
-  // console.log(data);
 
   return ( 
     <TableContainer component={Paper} className="table"
+      style={style ? {} : {maxWidth: "calc(100vw)", overflow: "auto"}}
     >
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead style={{backgroundColor: "#18a6df", color: "white"}}>
@@ -52,6 +52,7 @@ const List = ({data, labels, DataLoading}) => {
                           obj.phone = row?.phone;
                           obj.region = row?.region;
                           obj.ville = row?.ville;
+                          obj.address = row?.address;
                           obj.role = userRDX.role;
                           obj.OwnRole = "company";
                         } else if (paths[paths.length - 1] === "patients") {
@@ -70,6 +71,7 @@ const List = ({data, labels, DataLoading}) => {
                           obj.role = userRDX.role;
                           obj.OwnRole = "patient";
                         } else if (paths[paths.length - 1] === "persons") {
+                          console.log(row);
                           obj._id = row?._id;
                           obj.address = row?.address;
                           obj.age = row?.age;

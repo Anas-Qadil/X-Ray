@@ -27,9 +27,6 @@ const Update = ({role}) => {
       <div className="homeContainer">
       <Container  component={Paper} maxWidth="md" style={{marginTop: "40px", paddingBottom: "60px"}}>
         <h1 style={{display: "flex", justifyContent: "center"}}>Update Information</h1>
-        <br />
-        <br />
-        <br />
         <FormControl fullWidth style={{marginBottom: "20px"}}>
           <InputLabel id="demo-simple-select-label">Update</InputLabel>
           <Select
@@ -46,10 +43,6 @@ const Update = ({role}) => {
             {role === "admin" && <MenuItem value="admin">Admin</MenuItem>}
           </Select>
         </FormControl>
-        <br />
-        <br />
-        <hr />
-        <br />
         {updateType === "person" && <UpdatePerson role={role} />}
         {updateType === "patient" && <UpdatePatient role={role}  />}
         {updateType === "hospital" && <UpdateHospital role={role} />}

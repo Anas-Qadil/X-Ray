@@ -11,7 +11,9 @@ import { useSnackbar } from 'notistack'
 
 const CreateHospital = ({role, type}) => {
   
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
+  const [btnLoading, setBtnLoading] = useState(false);
+
   const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
   const [error, setError] = useState({
@@ -40,6 +42,7 @@ const CreateHospital = ({role, type}) => {
 
   const addHospital =  async () => {
     try {
+      setBtnLoading(true);
       if (!checkHospital(hospitalData, setError)) {
         const res = await signUpHospital(token, hospitalData);
         if (res.status === 200 || res.status === 201) {
@@ -47,9 +50,12 @@ const CreateHospital = ({role, type}) => {
           navigate(`/${role}`); 
         }
       } else 
-        enqueueSnackbar('Please Check your inputs', {variant: 'error'})
+        enqueueSnackbar('Please Check your inputs', {variant: 'error'});
+        
+      setBtnLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      setBtnLoading(false);
     }
   }
 
@@ -182,11 +188,9 @@ const CreateHospital = ({role, type}) => {
           />
         </FormControl>
       </div>
-      <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
+      <Stack style={{marginTop: "10px"}} spacing={2} direction="row">
         <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-        {/* <SnackbarProvider /> */}
-        <Button variant="contained" onClick={addHospital} fullWidth>Add Hospital</Button>
-        {/* <Button variant="contained" onClick={() => enqueueSnackbar('I love hooks', {variant: 'success'})} fullWidth>Add Hospital</Button> */}
+        <Button disabled={btnLoading} variant="contained" onClick={addHospital} fullWidth>Add Hospital</Button>
       </Stack>
 		</>
   );

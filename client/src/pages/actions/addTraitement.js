@@ -149,9 +149,6 @@ const AddTraitement = ({role}) => {
       {/* <Navbar /> */}
       <Container  component={Paper} maxWidth="md" style={{marginTop: "60px", paddingBottom: "60px"}}>
         <h1 style={{display: "flex", justifyContent: "center"}}>Add Traitement</h1>
-        <br />
-        <br />
-        <br />
         <FormControl fullWidth style={{marginBottom: "20px"}}>
           <InputLabel id="demo-simple-select-label">Choose Professional Healthcare Or Patient</InputLabel>
           <Select
@@ -174,7 +171,6 @@ const AddTraitement = ({role}) => {
             <MenuItem value="person">Professional Healthcare</MenuItem>
           </Select>
         </FormControl>
-        <br />
         <br />
         <hr />
         <br />
@@ -239,7 +235,7 @@ const AddTraitement = ({role}) => {
             error={error.dose}
           />
         </FormControl>
-        <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
+        <Stack style={{marginTop: "10px"}} spacing={2} direction="row">
           <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
           <Button variant="contained" onClick={AddTraitement__} fullWidth>Add Traitement</Button>
         </Stack>

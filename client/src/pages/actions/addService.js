@@ -47,13 +47,14 @@ const AddService = ({role}) => {
   const getAllHospitals = async () => {
     try {
       const res = await getHospitals(token);
+      console.log(res);
       if (res.status !== 200) {
         return enqueueSnackbar(res?.data?.message || 'Couldn\'nt Fetch Hospital Data..', {variant: 'error'})
       }
       let obj = [];
       res?.data?.data?.forEach((item) => {
         obj.push({
-          label: item.name,
+          label: item.designation,
           data: item
         }); 
       })
@@ -91,9 +92,6 @@ const AddService = ({role}) => {
     <div className="homeContainer">
       <Container  component={Paper} maxWidth="md" style={{marginTop: "60px", paddingBottom: "60px"}}>
         <h1 style={{display: "flex", justifyContent: "center"}}>Add Service</h1>
-        <br />
-        <br />
-        <br />
         {role==="admin" &&  
           <Autocomplete
             style={{marginBottom: "20px"}}
@@ -171,7 +169,7 @@ const AddService = ({role}) => {
             />
           </FormControl>
         </div>
-        <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
+        <Stack style={{marginTop: "10px"}} spacing={2} direction="row">
           <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
           <Button variant="contained" onClick={AddService__} fullWidth>Add Service</Button>
         </Stack>

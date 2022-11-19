@@ -347,41 +347,6 @@ const signUpPersonMiddleware = async (req, res, next) => {
             status: "failure",
             message: "type must be technical or medical"
           });
-        else {
-          if (data.type === "medical")
-          {
-            if (!data.hospital)
-            {
-              return res.status(400).send({
-                status: "failure",
-                message: "hospital is required for medical person"
-              });
-            }
-          } else if (data.type === "technical")
-          {
-            if (!data.company)
-            {
-              return res.status(400).send({
-                status: "failure",
-                message: "company is required for technical person"
-              });
-            }
-            if (!ObjectId.isValid(data.company)) {
-              return res.status(400).send({
-                status: "failure",
-                message: "invalide company id"
-              });
-            }
-            const company = await companyModel.findOne({ _id: data.company });
-            if (!company)
-            {
-              return res.status(400).send({
-                status: "failure",
-                message: "company not found"
-              });
-            }
-          }
-        }
       if (!data.firstName) {
         return res.status(400).send({
           status: "failure",

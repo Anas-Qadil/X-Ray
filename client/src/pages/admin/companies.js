@@ -19,7 +19,7 @@ const Companies = ({role}) => {
   const token = useSelector(state => state?.data?.token);
   const [search, setSearch] = useState("");
   const [companies, setCompanies] = useState([]);
-  const labels = ["ID", "Region", "Ville", "Designation", "Phone", "Email", "Action"];
+  const labels = ["ID", "Region", "Ville", "Address", "Designation", "Phone", "Email", "Action"];
   const [dataLoading, setDataLoading] = React.useState(true);
 
   // model
@@ -43,6 +43,7 @@ const Companies = ({role}) => {
           _id: company._id,
           region: company.region,
           ville: company.ville,
+          address: company.address,
           designation: company.designation,
           phone: company.phone,
           email: company.email,

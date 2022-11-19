@@ -97,36 +97,44 @@ const getHospitalPersons = async (req, res) => {
     const user = req.user;
     const id = String(req.user.hospital);
     const search = req.query.search;
-    const persons = await personModel.find({
-      $or: [
-        { firstName: { $regex: search, $options: "i" } },
-        { lastName: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-        { phone: { $regex: search, $options: "i" } },
-        { cin: { $regex: search, $options: "i" } },
-        { secteur: { $regex: search, $options: "i" } },
-        { type: { $regex: search, $options: "i" } },
-        { fonction: { $regex: search, $options: "i" } },
-        { poids: { $regex: search, $options: "i" } },
-      ],
-    }).populate("hospital");
+    let persons;
+    console.log(id);
+    if (!search || search == "") {
+      persons = await personModel.find({ hospital: id })
+        .populate("hospital");
+    } else {
+      persons = await personModel.find({
+        hospital: id,
+        $or: [
+          { firstName: { $regex: search, $options: "i" } },
+          { lastName: { $regex: search, $options: "i" } },
+          { email: { $regex: search, $options: "i" } },
+          { phone: { $regex: search, $options: "i" } },
+          { cin: { $regex: search, $options: "i" } },
+          { secteur: { $regex: search, $options: "i" } },
+          { type: { $regex: search, $options: "i" } },
+          { fonction: { $regex: search, $options: "i" } },
+          { poids: { $regex: search, $options: "i" } },
+        ],
+      }).populate("hospital");
+    }
 
-    let data = [];
-    const traitement = await person_traitementModel.find({})
-      .populate("person")
-      .populate("service");
+    let data = persons;
+    // const traitement = await person_traitementModel.find({})
+    //   .populate("person")
+    //   .populate("service");
       
-    traitement.map((doc) => {
-      persons.map((person) => {
-        if (String(doc.service.hospital) === String(user.hospital)) {
-          if (String(doc.person._id) === String(person._id)) {
-            if (!data.includes(person)) {
-              data.push(person);
-            }
-          }
-        }
-      });
-    });
+    // traitement.map((doc) => {
+    //   persons.map((person) => {
+    //     if (String(doc.service.hospital) === String(user.hospital)) {
+    //       if (String(doc.person._id) === String(person._id)) {
+    //         if (!data.includes(person)) {
+    //           data.push(person);
+    //         }
+    //       }
+    //     }
+    //   });
+    // });
 
     res.status(200).send({
       status: "success",

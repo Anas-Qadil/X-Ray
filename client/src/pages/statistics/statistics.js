@@ -21,15 +21,17 @@ import XRAYLOGO from "../../assets/LOGO.png";
 const Statistics = ({role}) => {
 
   // print functionallity
+  const [printStyle, setPrintStyle] = React.useState(false);
   const componentRef = useRef(null);
   const reactToPrintContent = React.useCallback(() => {
     return componentRef.current;
   }, [componentRef.current]);
   const reactToPrintTrigger = React.useCallback(() => {
     return (
-      <Button variant="contained" style={{
-        width: "100%",
-      }}>Print</Button>
+        <Button variant="contained" style={{
+          width: "100%",
+        }}
+        >Print</Button>
     );
   }, []);
 
@@ -41,13 +43,12 @@ const Statistics = ({role}) => {
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const [dataLoading, setDataLoading] = React.useState(true);
-  const navigate = useNavigate();
-  const labels = ["Date", "Region", "Ville", "Hospital", "Service", "Examen", "Protocole", "Appareil", "Dose"];
-  const [services, setServices] = React.useState([]);
+  const labels = ["Date", "CIN", "Region", "Ville", "Hospital", "Service", "Examen", "Protocole", "Appareil", "Dose"];
   const [data, setData] = React.useState([]);
   const [regions, setRegions] = React.useState([]); // regions of hospitals
   const [servicesName, setServicesName] = React.useState([]); // services name
   const [hospitals, setHospitals] = React.useState([]); // hospitals
+  const [companies, setCompanies] = React.useState([]); // companies
   const [appareils, setAppareils] = React.useState([]); // appareils
   const [patients, setPatients] = React.useState([]); // patients
   const [persons, setPersons] = React.useState([]); // persons
@@ -56,6 +57,7 @@ const Statistics = ({role}) => {
     region: "",
     service: "",
     appareil: "",
+    hospitalType: "",
     patient: role === "patient" ? user?.patient?._id : "",
     person: role === "person" ? user?.person?._id : "",
     startDate: moment().subtract(1, 'year').format('YYYY-MM-DD'),
@@ -71,9 +73,10 @@ const Statistics = ({role}) => {
         res.data?.data?.forEach((item) => {
           finalData.push({
             Date: moment(item.createdAt).format('YYYY-MM-DD'),
+            cin: item.patient?.cin || item.person?.cin,
             Region: item.service?.hospital?.region,
             Ville: item.service?.hospital?.ville,
-            Hospital: item.service?.hospital?.name,
+            Hospital: item.service?.hospital?.designation,
             Service: item.service?.name,
             Examen: item.service?.examen,
             Protocole: item.service?.protocol,
@@ -102,6 +105,7 @@ const Statistics = ({role}) => {
   }
   const getServices = async () => {
     try {
+      setDataLoading(true);
       let res;
       switch (role) {
         case "admin":
@@ -122,12 +126,14 @@ const Statistics = ({role}) => {
         default:
           break;
       }
+
       let regionsOpt = [];
       let servicesOpt = [];
       let hospitalsOpt = [];
       let appareilsOpt = [];
       let patientsOpt = [];
       let personsOpt = [];
+      let companiesOpt = [];
       let responseData;
       if (role === "person") {
         responseData = res?.data?.traitements;
@@ -137,6 +143,8 @@ const Statistics = ({role}) => {
       else {
         responseData = res?.data?.data;
       } 
+      console.log(responseData)
+
       responseData?.map(doc => {
         if (!regionsOpt.find(region => region?.label === doc?.service?.hospital?.region) && doc?.service && doc?.service?.hospital) {
           regionsOpt?.push({
@@ -144,6 +152,14 @@ const Statistics = ({role}) => {
             data: doc.service?.hospital?.region,
           });
         }
+        // check if company is already in the list
+        if (!companiesOpt.find(company => company?.label === doc?.person?.company?.designation) && doc?.person && doc?.person?.company) {
+          companiesOpt?.push({
+            label: doc.service?.company?.designation,
+            data: doc.service?.company?._id,
+          });
+        }
+
         // check if the service is already in the array
         if (!servicesOpt.find(service => service?.label === doc?.service?.name) && doc?.service !== null) {
           servicesOpt.push({
@@ -152,10 +168,19 @@ const Statistics = ({role}) => {
           });
         }
         // check if the hospital is already in the array
-        if (!hospitalsOpt?.find(hospital => hospital?.label === doc?.service?.hospital?.name) && doc?.service && doc.service?.hospital) {
-          hospitalsOpt?.push({
-            label: doc.service?.hospital?.name,
+        if (!hospitalsOpt?.find(hospital => hospital?.label === doc?.service?.hospital?.designation) && doc?.service && doc.service?.hospital) {
+          if (stats.hospitalType) {
+            if (doc?.service?.hospital?.type === stats.hospitalType) {
+              hospitalsOpt.push({
+                label: doc?.service?.hospital?.designation,
+                data: doc?.service?.hospital?._id,
+              });
+            }
+          }
+          else hospitalsOpt?.push({
+            label: doc.service?.hospital?.designation,
             data: doc.service?.hospital?._id,
+            type: doc.service?.hospital?.type
           });
         }
         // check if the appareil is already in the array
@@ -181,12 +206,14 @@ const Statistics = ({role}) => {
           });
         }
       });
+      console.log(companiesOpt)
       setRegions(regionsOpt);
       setServicesName(servicesOpt);
       setHospitals(hospitalsOpt);
       setAppareils(appareilsOpt);
       setPatients(patientsOpt);
       setPersons(personsOpt);
+      setDataLoading(false);
     } catch (e) {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
@@ -224,19 +251,69 @@ const Statistics = ({role}) => {
                       }}
                       renderInput={(params) => <TextField {...params} label="Patients" />}
                     />
+                  </> }
+                { role === "company" || role === "admin" && <Autocomplete
+                  sx={{ width: "100%", mr: 2 }}
+                  disablePortal
+                  id="combo-box-demo"
+                  options={persons}
+                  onChange={(event, value) => {
+                    setStats({
+                      ...stats,
+                      person: value?.data,
+                      patient: "",
+                    });
+                  }}
+                  renderInput={(params) => <TextField {...params} label="Persons" />}
+                />}
+                {role === "admin" && <Autocomplete
+                  sx={{ width: "100%", mr: 2 }}
+                  disablePortal
+                  id="combo-box-demo"
+                  options={persons}
+                  onChange={(event, value) => {
+                    setStats({
+                      ...stats,
+                      person: value?.data,
+                      patient: "",
+                    });
+                  }}
+                  renderInput={(params) => <TextField {...params} label="Company" />}
+                />}
+            </div>
+            <div style={{
+              display: "flex",
+              width: "100%",
+              marginBottom: "20px",
+            }}>
+              { (role === "admin") &&
+                  <>
                     <Autocomplete
                       sx={{ width: "100%", mr: 2 }}
                       disablePortal
                       id="combo-box-demo"
-                      options={persons}
+                      options={[{label: "Radio", data: "radio"}, {label: "Clinic", data: "clinic"}, {label: "Hospital", data: "hospital"}]}
                       onChange={(event, value) => {
+                        // changeHospitalType(value?.data);
                         setStats({
                           ...stats,
-                          person: value?.data,
-                          patient: "",
+                          hospitalType: value?.data,
                         });
                       }}
-                      renderInput={(params) => <TextField {...params} label="Persons" />}
+                      renderInput={(params) => <TextField {...params} label="Health Institution Type" />}
+                    />
+                    <Autocomplete
+                      sx={{ width: "100%", mr: 2 }}
+                      disablePortal
+                      id="combo-box-demo"
+                      options={hospitals}
+                      onChange={(e, value) => {
+                        setStats({
+                          ...stats,
+                          hospital: value?.data,
+                        });
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Health Institution" />}
                     />
                   </> }
             </div>
@@ -244,22 +321,7 @@ const Statistics = ({role}) => {
               display: "flex",
               width: "100%",
             }}>
-
-            {(role !== "hospital" && role !== "company") &&
-              <Autocomplete
-                sx={{ width: "20%", mr: 2 }}
-                disablePortal
-                id="combo-box-demo"
-                options={hospitals}
-                onChange={(e, value) => {
-                  setStats({
-                    ...stats,
-                    hospital: value?.data,
-                  });
-                }}
-                renderInput={(params) => <TextField {...params} label="Hospital" />}
-              />}
-              <Autocomplete
+              {role !== "hospital" && <Autocomplete
                 sx={{ width: "20%", mr: 2 }}
                 disablePortal
                 id="combo-box-demo"
@@ -271,7 +333,7 @@ const Statistics = ({role}) => {
                   });
                 }}
                 renderInput={(params) => <TextField {...params} label="Region" />}
-              />
+              />}
               <Autocomplete
                 sx={{ width: "20%", mr: 2 }}
                 disablePortal
@@ -322,7 +384,7 @@ const Statistics = ({role}) => {
             </FormControl>
             </div>
           </div>
-          <ReactToPrint 
+          <ReactToPrint
             content={reactToPrintContent}
             trigger={reactToPrintTrigger} 
           />
@@ -388,14 +450,12 @@ const Statistics = ({role}) => {
                   <h3>Age : </h3>
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.age}</p>
                 </div>
-                <div style={{ display: "flex", marginTop: "-30px" }}>
-                  <h3>ID : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?._id}</p>
-                </div>
-                <div style={{ display: "flex", marginTop: "-30px" }}>
-                  <h3>Email : </h3>
-                  <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.email}</p>
-                </div>
+                { selectedUSer?.email &&
+                  <div style={{ display: "flex", marginTop: "-30px" }}>
+                    <h3>Email : </h3>
+                    <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.email}</p>
+                  </div>
+                }
                 { stats?.person &&
                   <div style={{ display: "flex", marginTop: "-30px" }}>
                   <h3>La fonction  : </h3>
@@ -409,9 +469,9 @@ const Statistics = ({role}) => {
               display: "flex",
               justifyContent: "space-around",
             }}>
-              <h3>Dose Total : {totalDose} mSv</h3> 
+              <h3>Dose Total : {totalDose?.toFixed(2)} mSv</h3> 
             </div>}
-            <Table data={data} labels={labels} DataLoading={dataLoading} />
+            <Table data={data} labels={labels} DataLoading={dataLoading} style={printStyle} />
           </div>
         </div>
       </div>

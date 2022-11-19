@@ -7,6 +7,11 @@ const companySchema = new Schema({
     required: true,
     trim: true
   },
+  address: {
+    type: String,
+    required: true,
+    trim: true
+  },
   ville: {
     type: String,
     required: true,

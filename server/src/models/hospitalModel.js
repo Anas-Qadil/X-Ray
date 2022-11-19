@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema;
 
 const hospitalSchema = new schema({
-	name: {
-		type: String,
-    trim: true,
-    default: ""
-	},
 	region: {
 		type: String,
     trim: true,

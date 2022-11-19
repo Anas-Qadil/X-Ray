@@ -72,7 +72,7 @@ const Persons = ({role}) => {
         if (person.company) {
           obj._company = person.company.designation;
         } else if (person.hospital) {
-          obj._hospital = person.hospital.name;
+          obj._hospital = person.hospital.designation;
         }
         if (role === "admin") {
           obj.action = ( <IconButton onClick={() => checkDelete(person?._id)} aria-label="delete" size="large">
@@ -87,7 +87,7 @@ const Persons = ({role}) => {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
-
+  console.log(data);
   const deletePerson = async (id) => {
     try {
       const res = await deletePersonAPI(token, id);

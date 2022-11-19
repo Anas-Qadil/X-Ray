@@ -74,7 +74,7 @@ const Company = () => {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
-  
+  console.log(data);
   useEffect(() => {
     if (token) {
       getServices();

@@ -452,7 +452,7 @@ const UpdatePerson = ({role}) => {
           />
         </FormControl>
       </div>
-      <Stack style={{marginTop: "50px"}} spacing={2} direction="row">
+      <Stack style={{marginTop: "10px"}} spacing={2} direction="row">
         <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
         <Button variant="contained" onClick={updatePerson} fullWidth>Update {personData.type} Person</Button>
       </Stack>

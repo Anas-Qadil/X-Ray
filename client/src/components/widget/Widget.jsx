@@ -106,7 +106,7 @@ const Widget = ({ type, dose, DataLoading }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {DataLoading === false ? dose % 2 === 0 ? dose : dose.toFixed(4) : <LineLoader />}
+          {DataLoading === false ? dose % 2 === 0 ? dose : dose.toFixed(2) : <LineLoader />}
         </span>
         <span className="link">{data.link}</span>
       </div>
