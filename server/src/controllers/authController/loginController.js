@@ -28,7 +28,6 @@ const loginController = async (req, res, next) => {
         }
       }
     } else user = req.user;
-    console.log(user);
     if (token)
       return res.send({
         status: "success",

@@ -9,6 +9,8 @@ import { Container } from '@mui/material';
 import { FormControl, InputLabel, Input, FormHelperText, Select, MenuItem } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import UpdateAdmin from './updateAdmin';
+import PersonalInformation from "./personalInformations";
+
 
 const Update = ({role}) => {
 
@@ -38,7 +40,8 @@ const Update = ({role}) => {
           >
             {(role === "admin") && <MenuItem value="patient">Patient</MenuItem>}
             {(role === "admin" || role === "hospital" || role === "company") && <MenuItem value="person">Professional Healthcare</MenuItem>}
-            {role === "admin" && <MenuItem value="hospital">Hospital</MenuItem>}
+            {(role === "hospital" || role === "company") && <MenuItem value="personalInformation">Personal Information</MenuItem>}
+            {role === "admin" && <MenuItem value="hospital">Health Institution</MenuItem>}
             {role === "admin" && <MenuItem value="company">Company</MenuItem>}
             {role === "admin" && <MenuItem value="admin">Admin</MenuItem>}
           </Select>
@@ -48,6 +51,8 @@ const Update = ({role}) => {
         {updateType === "hospital" && <UpdateHospital role={role} />}
         {updateType === "company" && <UpdateCompany role={role} />}
         {updateType === "admin" && <UpdateAdmin role={role} />}
+        {updateType === "personalInformation" && role === "hospital" && <UpdateHospital role={role} />}
+        {updateType === "personalInformation" && role === "company" && <UpdateCompany role={role} />}
       </Container>
       </div>
     </div>

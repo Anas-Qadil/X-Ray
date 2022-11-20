@@ -6,7 +6,6 @@ const createRadio = async (req, res, next) => {
 	try {
 		const user = req.user;
 		const data = req.body;
-		console.log(user);
 		if (!user || user.role !== "admin") return res.status(403).send("Forbidden");
 		if (!data) return res.status(400).send({ message: "data is required" });
 		if (!data.username) return res.status(400).send({ message: "username is required" });

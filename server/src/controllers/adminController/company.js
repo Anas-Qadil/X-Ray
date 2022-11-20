@@ -349,7 +349,6 @@ const getCompanyData = async (req, res) => {
 const getAllStatistics = async (req, res) => {
   try {
     const stats = req.query;
-    console.log(stats);
 
 
 

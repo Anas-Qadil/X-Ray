@@ -63,63 +63,7 @@ const CreateHospital = ({role, type}) => {
 		<>
       <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.address}>Address</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.address}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}} 
-            value={hospitalData.address}
-            onChange={(e) => {
-              setError({...error, address: false});
-              setHospitalData({ ...hospitalData, address: e.target.value});
-            }}
-          />
-        </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.region} >REGION</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.region}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={hospitalData.region}
-            onChange={(e) => {
-              setError({...error, region: false});
-              setHospitalData({ ...hospitalData, region: e.target.value});
-            }}
-          />
-        </FormControl>
-      </div>
-      <div style={{display: "flex"}}> {/* phone and age */}
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.ville}>VILLE</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.ville}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}} 
-            value={hospitalData.ville}
-            onChange={(e) => {
-              setError({...error, ville: false});
-              setHospitalData({ ...hospitalData, ville: e.target.value});
-            }}
-          />
-        </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.statut}>STATUT</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.statut}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={hospitalData.statut}
-            onChange={(e) => {
-              setError({...error, statut: false});
-              setHospitalData({ ...hospitalData, statut: e.target.value});
-            }}
-          />
-        </FormControl>
-      </div>
-      <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.designation}>DESIGNATION</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.designation}>Designation</InputLabel>
           <Input type="text" id="my-input" 
             error={error.designation}
             aria-describedby="my-helper-text" 
@@ -132,7 +76,50 @@ const CreateHospital = ({role, type}) => {
           />
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.phone}>PHONE</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.statut}>Statut</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.statut}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={hospitalData.statut}
+            onChange={(e) => {
+              setError({...error, statut: false});
+              setHospitalData({ ...hospitalData, statut: e.target.value});
+            }}
+          />
+        </FormControl>
+      </div>
+      <div style={{display: "flex"}}> {/* phone and age */}
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.region} >Region</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.region}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={hospitalData.region}
+            onChange={(e) => {
+              setError({...error, region: false});
+              setHospitalData({ ...hospitalData, region: e.target.value});
+            }}
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.ville}>Ville</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.ville}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}} 
+            value={hospitalData.ville}
+            onChange={(e) => {
+              setError({...error, ville: false});
+              setHospitalData({ ...hospitalData, ville: e.target.value});
+            }}
+          />
+        </FormControl>
+      </div>
+      <div style={{display: "flex"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.phone}>Phone</InputLabel>
           <Input type="number" id="my-input" 
             error={error.phone}
             aria-describedby="my-helper-text" 
@@ -144,10 +131,8 @@ const CreateHospital = ({role, type}) => {
             }}
           />
         </FormControl>
-      </div>
-      <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.email}>EMAIL</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.email}>Email</InputLabel>
           <Input type="text" id="my-input" 
             error={error.email}
             aria-describedby="my-helper-text" 
@@ -156,6 +141,21 @@ const CreateHospital = ({role, type}) => {
             onChange={(e) => {
               setError({...error, email: false});
               setHospitalData({ ...hospitalData, email: e.target.value});
+            }}
+          />
+        </FormControl>
+      </div>
+      <div style={{display: "flex"}}>
+       <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.address}>Address</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.address}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}} 
+            value={hospitalData.address}
+            onChange={(e) => {
+              setError({...error, address: false});
+              setHospitalData({ ...hospitalData, address: e.target.value});
             }}
           />
         </FormControl>

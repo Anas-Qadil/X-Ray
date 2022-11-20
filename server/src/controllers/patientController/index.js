@@ -155,7 +155,6 @@ const getPatientDoses = async (req, res) => {
       lastyearDose,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).send({
       status: "failure",
       message: error.message

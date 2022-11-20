@@ -98,7 +98,6 @@ const getHospitalPersons = async (req, res) => {
     const id = String(req.user.hospital);
     const search = req.query.search;
     let persons;
-    console.log(id);
     if (!search || search == "") {
       persons = await personModel.find({ hospital: id })
         .populate("hospital");

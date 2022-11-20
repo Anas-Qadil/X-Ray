@@ -85,7 +85,6 @@ const getUltimateStatistics = async (req, res) => {
     const user = req.user;
     const stats =  req.body.stats;
     let data = [];
-    console.log(stats.hospitalType);
 
     let traitements = [];
     let person_traitement = [];
@@ -218,7 +217,6 @@ const getUltimateStatistics = async (req, res) => {
     } else result = data2;
     res.send({ data: result });
   } catch (e) {
-    console.log(e);
     res.status(500).json({ message: e.message });
   }
 }

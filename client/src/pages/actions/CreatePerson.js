@@ -268,6 +268,38 @@ const CreatePerson = ({role}) => {
       )}
       </div>
       <div style={{display: "flex"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.firstName}>FIRST NAME</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.firstName}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={personData.firstName}
+            onChange={(e) => {
+              setError({...error, firstName: false})
+              setPersonData({...personData,
+              firstName: e.target.value,
+            })}}
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.lastName}>LAST NAME</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.lastName}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={personData.lastName}
+            onChange={(e) => {
+              setError({...error,
+                lastName: false,
+              })
+              setPersonData({...personData,
+              lastName: e.target.value,
+            })}}
+          />
+        </FormControl>
+      </div>
+      <div style={{display: "flex"}}>
         <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
           <InputLabel id="demo-simple-select-label" error={error.secteur}>Activity service</InputLabel>
           <Input
@@ -297,38 +329,6 @@ const CreatePerson = ({role}) => {
               fonction: e.target.value,
             })}}
 
-          />
-        </FormControl>
-      </div>
-      <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.firstName}>FIRST NAME</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.firstName}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={personData.firstName}
-            onChange={(e) => {
-              setError({...error, firstName: false})
-              setPersonData({...personData,
-              firstName: e.target.value,
-            })}}
-          />
-        </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.lastName}>LAST NAME</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.lastName}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={personData.lastName}
-            onChange={(e) => {
-              setError({...error,
-                lastName: false,
-              })
-              setPersonData({...personData,
-              lastName: e.target.value,
-            })}}
           />
         </FormControl>
       </div>
@@ -393,31 +393,6 @@ const CreatePerson = ({role}) => {
             })}}
           />
         </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}} disabled>
-          <InputLabel htmlFor="my-input">{personData?.age || "Age"}</InputLabel>
-          <Input type="text" id="my-input" 
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}} 
-          />
-        </FormControl>
-      </div>
-      <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.address}>ADDRESS</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.address}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}} 
-            value={personData.address}
-            onChange={(e) => {
-              setError({...error,
-                address: false,
-              });
-              setPersonData({...personData,
-              address: e.target.value,
-            })}}
-          />
-        </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.email}>EMAIL</InputLabel>
           <Input type="email" id="my-input"
@@ -453,6 +428,25 @@ const CreatePerson = ({role}) => {
           />
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.address}>ADDRESS</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.address}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}} 
+            value={personData.address}
+            onChange={(e) => {
+              setError({...error,
+                address: false,
+              });
+              setPersonData({...personData,
+              address: e.target.value,
+            })}}
+          />
+        </FormControl>
+        
+      </div>
+      <div style={{display: "flex"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.poids} >POIDS</InputLabel>
           <Input type="number" id="my-input" 
              error={error.poids}
@@ -466,6 +460,13 @@ const CreatePerson = ({role}) => {
               setPersonData({...personData,
               poids: e.target.value,
             })}}
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}} disabled>
+          <InputLabel htmlFor="my-input">{personData?.age || "Age"}</InputLabel>
+          <Input type="text" id="my-input" 
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}} 
           />
         </FormControl>
       </div>

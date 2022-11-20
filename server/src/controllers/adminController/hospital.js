@@ -363,7 +363,6 @@ const getAllSearchServices = async (req, res) => {
       ],
     })
       .populate("hospital");
-    // console.log(services);
     const hospitals = await hospitalModel.find({
       $or: [
         {name: {$regex: hospitalSearch, $options: "i"}},

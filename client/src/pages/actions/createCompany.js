@@ -60,6 +60,38 @@ const CreateCompany = ({role}) => {
 		<>
       <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.designation}>Designation</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.designation}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={companyData.designation}
+            onChange={(e) => {
+              setError({
+                ...error,
+                designation: false,
+              });
+              setCompanyData({...companyData, designation: e.target.value})}}
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.address}>Address</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.address}
+            aria-describedby="my-helper-text" 
+            style={{width: "95%"}} 
+            value={companyData.address}
+            onChange={(e) => {
+              setError({
+                ...error,
+                address: false,
+              });
+              setCompanyData({...companyData, address: e.target.value})}}
+          />
+        </FormControl>
+      </div>
+      <div style={{display: "flex"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.region}>REGION</InputLabel>
           <Input type="text" id="my-input" 
             error={error.region}
@@ -87,38 +119,6 @@ const CreateCompany = ({role}) => {
                 ville: false,
               });
               setCompanyData({...companyData, ville: e.target.value})}}
-          />
-        </FormControl>
-      </div>
-      <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.designation}>DESIGNATION</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.designation}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={companyData.designation}
-            onChange={(e) => {
-              setError({
-                ...error,
-                designation: false,
-              });
-              setCompanyData({...companyData, designation: e.target.value})}}
-          />
-        </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.address}>Address</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.address}
-            aria-describedby="my-helper-text" 
-            style={{width: "95%"}} 
-            value={companyData.address}
-            onChange={(e) => {
-              setError({
-                ...error,
-                address: false,
-              });
-              setCompanyData({...companyData, address: e.target.value})}}
           />
         </FormControl>
       </div>

@@ -68,7 +68,7 @@ const CreatePatient = ({role}) => {
     <>
       <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.firstName} >FIRST NAME</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.firstName} >First Name</InputLabel>
           <Input type="text" id="my-input" 
             error={error.firstName}
             aria-describedby="my-helper-text" 
@@ -80,7 +80,7 @@ const CreatePatient = ({role}) => {
           />
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.lastName}>LAST NAME</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.lastName}>Last Name</InputLabel>
           <Input type="text" id="my-input" 
             error={error.lastName}
             aria-describedby="my-helper-text" 
@@ -134,7 +134,7 @@ const CreatePatient = ({role}) => {
       </div>
       <div style={{display: "flex"}}> {/* phone and age */}
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.phone} >PHONE</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.phone} >Phone</InputLabel>
           <Input type="number" id="my-input" 
             error={error.phone}
             aria-describedby="my-helper-text" 
@@ -148,32 +148,8 @@ const CreatePatient = ({role}) => {
             }
           />
         </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}} disabled>
-          <InputLabel htmlFor="my-input" error={error.age}>{patientData?.age || "Age"}</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.age}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}} 
-          />
-        </FormControl>
-      </div>
-      <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.address}>ADDRESS</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.address}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={patientData.address}
-            onChange={(e) => {
-              setError({...error,
-                address: false,
-              });
-              setPatientData({...patientData, address: e.target.value})}}
-          />
-        </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.email}>EMAIL</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.email}>Email</InputLabel>
           <Input type="text" id="my-input" 
             error={error.email}
             aria-describedby="my-helper-text" 
@@ -189,7 +165,7 @@ const CreatePatient = ({role}) => {
         </FormControl>
       </div>
       <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+      <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.cin}>CIN</InputLabel>
           <Input type="text" id="my-input" 
             error={error.cin}
@@ -205,7 +181,23 @@ const CreatePatient = ({role}) => {
           />
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.poids}>POIDS</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.address}>Address</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.address}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={patientData.address}
+            onChange={(e) => {
+              setError({...error,
+                address: false,
+              });
+              setPatientData({...patientData, address: e.target.value})}}
+          />
+        </FormControl>
+      </div>
+      <div style={{display: "flex"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.poids}>Weight</InputLabel>
           <Input type="number" id="my-input" 
             error={error.poids}
             aria-describedby="my-helper-text" 
@@ -218,6 +210,14 @@ const CreatePatient = ({role}) => {
               setPatientData({...patientData, poids: e.target.value})}
             }
 
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}} disabled>
+          <InputLabel htmlFor="my-input" error={error.age}>{patientData?.age || "Age"}</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.age}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}} 
           />
         </FormControl>
       </div>

@@ -11,18 +11,23 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { checkUpdateCompany } from "../../../utils/checkCompany";
 import { updateCompanyData } from "../../../api/update/index";
-
+import { useDispatch } from "react-redux";
+import { setData } from "../../../store";
 
 const UpdateCompany = ({role}) => {
 
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
+  const user = useSelector(state => state?.data?.user);
+  const dispatch = useDispatch();
+
   const [error, setError] = useState({
     username: false,
     password: false,
     region: false,
     ville: false,
+    address: false,
     designation: false,
     email: false,
     phone: false,
@@ -32,6 +37,7 @@ const UpdateCompany = ({role}) => {
     password: '',
     region: '',
     ville: '',
+    address: '',
     designation: '',
     email: '',
     phone: '',
@@ -79,6 +85,13 @@ const UpdateCompany = ({role}) => {
       if (res.status !== 200)
         return enqueueSnackbar("Error while updating company", {variant: "error"});
       enqueueSnackbar("Company updated successfully", {variant: "success"});
+      if (role === "company") {
+        const newUser = Object.assign({}, user);
+        newUser.username = companyData.username;
+        newUser.company = companyData;
+        delete newUser.company.password;
+        dispatch(setData({ user: newUser }));
+      }
       navigate(`/${role}`);
     } catch (e) {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
@@ -86,18 +99,24 @@ const UpdateCompany = ({role}) => {
   }
 
   useEffect(() => {
-    if (role !== 'admin') {
-      navigate(`${role}`);
+    if (role === "company") {
+      const newOBJ = Object.assign({}, user.company);
+      newOBJ.username = user.username;
+      delete newOBJ.__v;
+      setCompanyData(newOBJ);
+    } else {
+      if (role !== 'admin') {
+        navigate(`/${role}`);
+      }
+      getAllCompanies();
+      if (companyData._id)
+        getCompanyUser(companyData._id);
     }
-    getAllCompanies();
-    if (companyData._id)
-      getCompanyUser(companyData._id);
   }, [companyData._id]);
-
 
 	return (
 	<div>
-    <Autocomplete
+    {role !== "company" && <Autocomplete
       style={{marginBottom: "20px"}}
       disablePortal
       id="combo-box-demo"
@@ -111,6 +130,7 @@ const UpdateCompany = ({role}) => {
             region: '',
             ville: '',
             designation: '',
+            address: '',
             email: '',
             phone: '',
           });
@@ -121,14 +141,114 @@ const UpdateCompany = ({role}) => {
           _id: value.data._id,
           region: value.data.region,
           ville: value.data.ville,
+          address: value.data.address,
           designation: value.data.designation,
           email: value.data.email,
           phone: value.data.phone,
         });
       }}
       renderInput={(params) => <TextField {...params} label="Companies" />}
-    />
+    />}
+        <div style={{display: "flex"}}>
+      <FormControl disabled={role === "company" && true} color="primary" fullWidth style={{marginBottom: "20px"}}>
+        <InputLabel htmlFor="my-input" error={error.designation}>DESIGNATION</InputLabel>
+        <Input type="text" id="my-input" 
+          error={error.designation}
+          aria-describedby="my-helper-text" 
+          style={{width: "90%"}}
+          value={companyData.designation}
+          onChange={(e) => {
+            setError({
+              ...error,
+              designation: false,
+            });
+            if (role !== "company")
+              setCompanyData({...companyData, designation: e.target.value})}}
+        />
+      </FormControl>
+      <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.address}>Address</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.address}
+            aria-describedby="my-helper-text" 
+            style={{width: "95%"}} 
+            value={companyData.address}
+            onChange={(e) => {
+              setError({
+                ...error,
+                address: false,
+              });
+              setCompanyData({...companyData, address: e.target.value})}}
+          />
+        </FormControl>
+    </div>
     <div style={{display: "flex"}}>
+      <FormControl disabled={role === "company" && true} color="primary" fullWidth style={{marginBottom: "20px"}}>
+        <InputLabel htmlFor="my-input" error={error.region}>REGION</InputLabel>
+        <Input type="text" id="my-input" 
+          error={error.region}
+          aria-describedby="my-helper-text" 
+          style={{width: "90%"}}
+          value={companyData.region}
+          onChange={(e) => {
+            setError({
+              ...error,
+              region: false,
+            });
+            if (role !== "company")
+              setCompanyData({...companyData, region: e.target.value})}}
+        />
+      </FormControl>
+      <FormControl disabled={role === "company" && true} color="primary" fullWidth style={{marginBottom: "20px"}}>
+        <InputLabel htmlFor="my-input" error={error.ville}>VILLE</InputLabel>
+        <Input type="text" id="my-input" 
+          error={error.ville}
+          aria-describedby="my-helper-text" 
+          style={{width: "90%"}}
+          value={companyData.ville}
+          onChange={(e) => {
+            setError({
+              ...error,
+              ville: false,
+            });
+            if (role !== "company")
+              setCompanyData({...companyData, ville: e.target.value})}}
+        />
+      </FormControl>
+    </div>
+    <div style={{display: "flex"}}>
+      <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+        <InputLabel htmlFor="my-input" error={error.email}>EMAIL</InputLabel>
+        <Input type="text" id="my-input" 
+          error={error.email}
+          aria-describedby="my-helper-text" 
+          style={{width: "95%"}} 
+          value={companyData.email}
+          onChange={(e) => {
+            setError({
+              ...error,
+              email: false,
+            });
+            setCompanyData({...companyData, email: e.target.value})}}
+        />
+      </FormControl>
+      <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+        <InputLabel htmlFor="my-input" error={error.phone}>PHONE</InputLabel>
+        <Input type="number" id="my-input" 
+          error={error.phone}
+          aria-describedby="my-helper-text" 
+          style={{width: "90%"}}
+          value={companyData.phone}
+          onChange={(e) => {
+            setError({
+              ...error,
+              phone: false,
+            });
+            setCompanyData({...companyData, phone: e.target.value})}}
+        />
+      </FormControl>
+    </div>
+        <div style={{display: "flex"}}>
       <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
         <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>
         <Input type="text" id="my-input" 
@@ -157,87 +277,6 @@ const UpdateCompany = ({role}) => {
               password: false,
             });
             setCompanyData({...companyData, password: e.target.value})}}
-        />
-      </FormControl>
-    </div>
-    <div style={{display: "flex"}}>
-      <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-        <InputLabel htmlFor="my-input" error={error.region}>REGION</InputLabel>
-        <Input type="text" id="my-input" 
-          error={error.region}
-          aria-describedby="my-helper-text" 
-          style={{width: "90%"}}
-          value={companyData.region}
-          onChange={(e) => {
-            setError({
-              ...error,
-              region: false,
-            });
-            setCompanyData({...companyData, region: e.target.value})}}
-        />
-      </FormControl>
-      <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-        <InputLabel htmlFor="my-input" error={error.ville}>VILLE</InputLabel>
-        <Input type="text" id="my-input" 
-          error={error.ville}
-          aria-describedby="my-helper-text" 
-          style={{width: "90%"}}
-          value={companyData.ville}
-          onChange={(e) => {
-            setError({
-              ...error,
-              ville: false,
-            });
-            setCompanyData({...companyData, ville: e.target.value})}}
-        />
-      </FormControl>
-    </div>
-    <div style={{display: "flex"}}>
-      <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-        <InputLabel htmlFor="my-input" error={error.designation}>DESIGNATION</InputLabel>
-        <Input type="text" id="my-input" 
-          error={error.designation}
-          aria-describedby="my-helper-text" 
-          style={{width: "90%"}}
-          value={companyData.designation}
-          onChange={(e) => {
-            setError({
-              ...error,
-              designation: false,
-            });
-            setCompanyData({...companyData, designation: e.target.value})}}
-        />
-      </FormControl>
-      <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-        <InputLabel htmlFor="my-input" error={error.phone}>PHONE</InputLabel>
-        <Input type="number" id="my-input" 
-          error={error.phone}
-          aria-describedby="my-helper-text" 
-          style={{width: "90%"}}
-          value={companyData.phone}
-          onChange={(e) => {
-            setError({
-              ...error,
-              phone: false,
-            });
-            setCompanyData({...companyData, phone: e.target.value})}}
-        />
-      </FormControl>
-    </div>
-    <div style={{display: "flex"}}>
-      <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-        <InputLabel htmlFor="my-input" error={error.email}>EMAIL</InputLabel>
-        <Input type="text" id="my-input" 
-          error={error.email}
-          aria-describedby="my-helper-text" 
-          style={{width: "95%"}} 
-          value={companyData.email}
-          onChange={(e) => {
-            setError({
-              ...error,
-              email: false,
-            });
-            setCompanyData({...companyData, email: e.target.value})}}
         />
       </FormControl>
     </div>
