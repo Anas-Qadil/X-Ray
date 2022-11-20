@@ -113,7 +113,7 @@ const CreatePatient = ({role}) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Stack spacing={1} style={{width: "90%", marginRight: "40px"}}>
             <DesktopDatePicker
-              label="Date desktop"
+              label="BirthDate"
               inputFormat="YYYY-MM-DD"
               value={patientData.birthDate}
               onChange={(newValue) => {

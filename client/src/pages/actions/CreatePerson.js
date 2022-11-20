@@ -66,13 +66,9 @@ const CreatePerson = ({role}) => {
   const addPerson = async () => {
     try {
       setBtnLoading(true);
-      if (role === "company")
-        setPersonData({...personData, company: user?.company?._id});
-      else if (role === "hospital")
-        setPersonData({...personData, hospital: user?.hospital?._id});
-      console.log(personData);
+      if (role === "company") personData.company = user.company._id;
+      else if (role === "hospital") personData.hospital = user.hospital._id;
       const validation = validatePersonData(personData, error, setError);
-      console.log(error);
       if (validation === 1) {
         const res = await signUpPerson(token, personData);
         if (res?.status === 200) {

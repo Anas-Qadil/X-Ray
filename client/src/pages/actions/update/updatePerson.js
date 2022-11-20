@@ -14,13 +14,16 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { getMedicalPersons, getUserPerson, getPersons, getPersonForCompanyRole } from "../../../api/servicesApi";
 import { checkUpdatePersonData } from "../../../utils/checkPatient";
 import { updatePersonData } from "../../../api/update/index";
+import { useDispatch } from "react-redux";
+import { setData } from "../../../store";
 
 const UpdatePerson = ({role}) => {
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar()
   const token = useSelector(state => state?.data?.token);
-  const user = useSelector(state => state?.data?.data?.user);
+  const user = useSelector(state => state?.data?.user);
+  const dispatch = useDispatch();
   const [error, setError] = React.useState({
     username: false,
     password: false,
@@ -96,6 +99,7 @@ const UpdatePerson = ({role}) => {
     }
   }
 
+
   const getAllPersons = async () => {
     try {
       const res = await getPersons(token, "");
@@ -136,33 +140,48 @@ const UpdatePerson = ({role}) => {
     try {
       if (checkUpdatePersonData(personData, setError))
         return;
-
       const res = await updatePersonData(token, personData);
       if (res.status !== 200)
         return enqueueSnackbar("Error while updating person", {variant: "error"});
       enqueueSnackbar("Person updated successfully", {variant: "success"});
-      navigate(`/${role}`);
+      const newUser = Object.assign({}, user);
+      newUser.username = personData.username;
+      newUser.person = personData;
+      newUser.person.hospital = user.person.hospital;
+      newUser.person.company = user.person.company;
+      dispatch(setData({user: newUser}));
 
+      navigate(`/${role}`);
     } catch (e) {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
 
+
   useEffect(() => {
-    if (role === "hospital") {
-      getMedicalPersonsData();
-    } else if (role === "admin") {
-      getAllPersons();
-    } else if (role === "company") {
-      getPersonForCompanyRoleData();
+    if (role === "person") {
+      const newOBJ = Object.assign({}, user.person);
+      newOBJ.username = user.username;
+      newOBJ.company = user.person?.company?._id || null;
+      newOBJ.hospital = user.person?.hospital?._id || null;
+      delete newOBJ.__v;
+      setPersonData(newOBJ);
+    } else {
+      if (role === "hospital") {
+        getMedicalPersonsData();
+      } else if (role === "admin") {
+        getAllPersons();
+      } else if (role === "company") {
+        getPersonForCompanyRoleData();
+      }
+      if (personData?._id)
+        getPersonUser(personData?._id);
     }
-    if (personData?._id)
-      getPersonUser(personData?._id);
   }, [personData._id]);
 
 	return (
 	<div>
-    <Autocomplete
+    {role !== "person" && <Autocomplete
       style={{marginBottom: "20px"}}
       disablePortal
       id="combo-box-demo"
@@ -212,60 +231,25 @@ const UpdatePerson = ({role}) => {
         });
       }}
       renderInput={(params) => <TextField {...params} label="Professional Healthcare" />}
-    />
+    />}
       <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.username}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={personData.username}
-            onChange={(e) => {
-              setError({...error, username: false});
-              setPersonData({...personData,
-              username: e.target.value,
-            })}}
-
-          />
-        </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.password}>Passwrod</InputLabel>
-          <Input type="text" id="my-input" 
-            error={error.password}
-            aria-describedby="my-helper-text" 
-            style={{width: "90%"}}
-            value={personData.password}
-            onChange={(e) => {
-              setError({...error,
-                password: false,
-              });
-              setPersonData({...personData,
-              password: e.target.value,
-            })}}
-
-          />
-        </FormControl>
-      </div>
-      <div style={{display: "flex"}}>
-        <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-          <InputLabel id="demo-simple-select-label" error={error.secteur}>Secteur d’activité</InputLabel>
-          <Select
+        <FormControl disabled={role === "person" && true} fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
+          <InputLabel id="demo-simple-select-label" error={error.secteur}>Activity service</InputLabel>
+          <Input
             error={error.secteur}
-            labelId="demo-simple-select-label"
+            // labelId="demo-simple-select-label"
             id="demo-simple-select"
-            label="Secteur d’activité"
+            label="Activity service"
             style={{width: "90%"}}
             value={personData.secteur}
             onChange={(e) => {
               setError({...error, secteur: false});
-              setPersonData({...personData,
-              secteur: e.target.value,
-            })}}
-          >
-            <MenuItem value="public">Public</MenuItem>
-            <MenuItem value="private">Private</MenuItem>
-          </Select>
+              if (role !== "person")
+                setPersonData({...personData,
+                  secteur: e.target.value,
+                })
+            }}
+          />
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.fonction}>Fonction</InputLabel>
@@ -284,7 +268,7 @@ const UpdatePerson = ({role}) => {
         </FormControl>
       </div>
       <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+        <FormControl disabled={role === "person" && true} color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.firstName}>FIRST NAME</InputLabel>
           <Input type="text" id="my-input" 
             error={error.firstName}
@@ -293,12 +277,13 @@ const UpdatePerson = ({role}) => {
             value={personData.firstName}
             onChange={(e) => {
               setError({...error, firstName: false})
+              if (role !== "person")
               setPersonData({...personData,
               firstName: e.target.value,
             })}}
           />
         </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+        <FormControl disabled={role === "person" && true} color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.lastName}>LAST NAME</InputLabel>
           <Input type="text" id="my-input" 
             error={error.lastName}
@@ -309,6 +294,7 @@ const UpdatePerson = ({role}) => {
               setError({...error,
                 lastName: false,
               })
+              if (role !== "person")
               setPersonData({...personData,
               lastName: e.target.value,
             })}}
@@ -316,11 +302,11 @@ const UpdatePerson = ({role}) => {
         </FormControl>
       </div>
       <div style={{display: "flex"}}>
-        <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
+        <FormControl disabled={role === "person" && true} fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
           <InputLabel id="demo-simple-select-label" error={error.gender}>Gender</InputLabel>
           <Select
             error={error.gender}
-            labelId="demo-simple-select-label"
+            // labelId="demo-simple-select-label"
             id="demo-simple-select"
             label="Gender"
             style={{width: "90%"}}
@@ -329,6 +315,7 @@ const UpdatePerson = ({role}) => {
               setError({...error,
                 gender: false,
               });
+              if (role !== "person")
               setPersonData({...personData,
               gender: e.target.value
             })}}
@@ -340,6 +327,7 @@ const UpdatePerson = ({role}) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Stack spacing={1} style={{width: "90%", marginRight: "40px"}} error={error.birthDate}>
             <DesktopDatePicker
+              disabled={role === "person" && true}
               label="Birth Date"
               inputFormat="YYYY-MM-DD"
               value={personData.birthDate}
@@ -349,6 +337,8 @@ const UpdatePerson = ({role}) => {
                 });
                 const currentYear = moment().format("YYYY");
                 const age = currentYear - newValue.format("YYYY");
+
+                if (role !== "person")
                 setPersonData({...personData,
                   birthDate: newValue.format("YYYY-MM-DD"),
                   age: age,
@@ -419,7 +409,7 @@ const UpdatePerson = ({role}) => {
         </FormControl>
       </div>
       <div style={{display: "flex"}}>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+        <FormControl disabled={role === "person" && true} color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.cin}>CIN</InputLabel>
           <Input type="text" id="my-input" 
             error={error.cin}
@@ -430,12 +420,13 @@ const UpdatePerson = ({role}) => {
               setError({...error,
                 cin: false,
               })
+              if (role !== "person")
               setPersonData({...personData,
               cin: e.target.value,
             })}}
           />
         </FormControl>
-        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+        <FormControl disabled={role === "person" && true} color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.poids}>POIDS</InputLabel>
           <Input type="number" id="my-input" 
              error={error.poids}
@@ -446,15 +437,50 @@ const UpdatePerson = ({role}) => {
               setError({...error,
                 poids: false,
               });
+              if (role !== "person")
               setPersonData({...personData,
               poids: e.target.value,
             })}}
           />
         </FormControl>
       </div>
+      <div style={{display: "flex"}}>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.username}>Username</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.username}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={personData.username}
+            onChange={(e) => {
+              setError({...error, username: false});
+              setPersonData({...personData,
+              username: e.target.value,
+            })}}
+
+          />
+        </FormControl>
+        <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
+          <InputLabel htmlFor="my-input" error={error.password}>Passwrod</InputLabel>
+          <Input type="text" id="my-input" 
+            error={error.password}
+            aria-describedby="my-helper-text" 
+            style={{width: "90%"}}
+            value={personData.password}
+            onChange={(e) => {
+              setError({...error,
+                password: false,
+              });
+              setPersonData({...personData,
+              password: e.target.value,
+            })}}
+
+          />
+        </FormControl>
+      </div>
       <Stack style={{marginTop: "10px"}} spacing={2} direction="row">
         <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-        <Button variant="contained" onClick={updatePerson} fullWidth>Update {personData.type} Person</Button>
+        <Button variant="contained" onClick={updatePerson} fullWidth>Update</Button>
       </Stack>
 	</div>
   );

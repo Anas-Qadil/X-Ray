@@ -22,14 +22,13 @@ import { getPersonTraitements, getHospitalServices, getCompanyServices, getAllTr
 const Profile = ({role}) => {
 
   const token = useSelector(state => state?.data?.token);
-  const userRDX = useSelector(state => state?.data?.data?.user);
+  const userRDX = useSelector(state => state?.data?.user);
   const location = useLocation();
   const [graph, setGraph] = useState({});
   const { enqueueSnackbar } = useSnackbar();
   const locationData = location?.state?.data || {};
   const [mainPageData, setMainPageData] = useState([]);
   const [DataLoading, setDataLoading] = useState(true);
-  let labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"];
   // data
   const [doseData, setDoseData] = useState([]);
   // check if locationData is empty
@@ -160,8 +159,6 @@ const Profile = ({role}) => {
     getDoses();
     getGraph();
   }, []);
-
-  console.log(user);
 
   return (
     <div>

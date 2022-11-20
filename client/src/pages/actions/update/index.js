@@ -13,13 +13,13 @@ import UpdateAdmin from './updateAdmin';
 const Update = ({role}) => {
 
   const navigate = useNavigate();
-  const [updateType, setUpdateType] = useState('person'); // patient or person
+  const [updateType, setUpdateType] = useState(role === "patient" ? "patient" : "person"); // patient or person
 
-  useEffect(() => {
-    if (role === "patient" || role === "person") {
-      navigate(`/${role}`);
-    }
-  }, []);
+  // useEffect(() => {
+  //   // if (role === "patient" || role === "person") {
+  //   //   navigate(`/${role}`);
+  //   // }
+  // }, []);
 
 	return (
     <div className="home">
@@ -27,7 +27,7 @@ const Update = ({role}) => {
       <div className="homeContainer">
       <Container  component={Paper} maxWidth="md" style={{marginTop: "40px", paddingBottom: "60px"}}>
         <h1 style={{display: "flex", justifyContent: "center"}}>Update Information</h1>
-        <FormControl fullWidth style={{marginBottom: "20px"}}>
+        {role !== "patient" && role !== "person" && <FormControl fullWidth style={{marginBottom: "20px"}}>
           <InputLabel id="demo-simple-select-label">Update</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -42,7 +42,7 @@ const Update = ({role}) => {
             {role === "admin" && <MenuItem value="company">Company</MenuItem>}
             {role === "admin" && <MenuItem value="admin">Admin</MenuItem>}
           </Select>
-        </FormControl>
+        </FormControl>}
         {updateType === "person" && <UpdatePerson role={role} />}
         {updateType === "patient" && <UpdatePatient role={role}  />}
         {updateType === "hospital" && <UpdateHospital role={role} />}
@@ -55,3 +55,4 @@ const Update = ({role}) => {
 }
 
 export default Update;
+

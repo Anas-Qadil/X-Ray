@@ -126,14 +126,14 @@ const Sidebar = ({role}) => {
               </Link>
             )}
           <p className="title">Action</p>
-          {(role === "admin" || role === "hospital" || role === "company") && (
+          {/* {(role === "admin" || role === "hospital" || role === "company") && ( */}
             <Link to="/update" style={{ textDecoration: "none" }}>
               <li>
                 <SettingsIcon className="icon" />
                 <span>Update</span>
               </li>
             </Link>
-          )}
+          {/* )} */}
           {(role === "admin" || role === "hospital") && (
             <Link to="/add-service" style={{ textDecoration: "none" }}>
               <li>
