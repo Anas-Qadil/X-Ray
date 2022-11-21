@@ -154,7 +154,8 @@ const Profile = ({role}) => {
     }
     setMainPageData(data);
   }
-
+  
+  console.log(locationData);
   useEffect(() => {
     getDoses();
     getGraph();

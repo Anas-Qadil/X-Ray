@@ -169,7 +169,7 @@ const CreatePerson = ({role}) => {
         >
           <MenuItem value="company">Company</MenuItem>
           <MenuItem value="hospital">Hospital</MenuItem>
-          <MenuItem value="radio">Radio</MenuItem>
+          <MenuItem value="radio">Radiology Center</MenuItem>
           <MenuItem value="clinic">Clinic</MenuItem>
         </Select>
       </FormControl>}
@@ -220,12 +220,12 @@ const CreatePerson = ({role}) => {
       )}
       { role === "admin" && type === "radio" && (
         <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-          <InputLabel id="demo-simple-select-label" error={error.hospital}>Choose Radio</InputLabel>
+          <InputLabel id="demo-simple-select-label" error={error.hospital}>Choose Radiology Center</InputLabel>
           <Select
             error={error.hospital}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            label="Choose Radio"
+            label="Choose Radiology Center"
             style={{width: "95%"}}
             value={personData.hospital}
             onChange={(e) => {
@@ -301,7 +301,7 @@ const CreatePerson = ({role}) => {
       </div>
       <div style={{display: "flex"}}>
         <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-          <InputLabel id="demo-simple-select-label" error={error.secteur}>Activity service</InputLabel>
+          <InputLabel id="demo-simple-select-label" error={error.secteur}>{type === "company" ? "Modality" : "Activity service"}</InputLabel>
           <Input
             error={error.secteur}
             labelId="demo-simple-select-label"

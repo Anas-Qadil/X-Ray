@@ -10,6 +10,7 @@ import { getAllHospitals, deleteHospitalAPI } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
 import Model from "../../components/popups/index";
 import validateSearchInput from "../../utils/searchValidate";
+import moment from "moment";
 
 const Hospitals = ({role}) => {
 
@@ -18,7 +19,7 @@ const Hospitals = ({role}) => {
   const token = useSelector(state => state?.data?.token);
   const [search, setSearch] = useState("");
   const [hospitals, setHospitals] = useState([]);
-  const labels = ["ID", "Designation", "Region", "Ville", "Statut", "Phone", "Email", "Action"]
+  const labels = ["ID", "Created At", "Designation", "Region", "Ville", "Statut", "Phone", "Email", "Action"]
   const [dataLoading, setDataLoading] = React.useState(true);
 
   // model
@@ -40,6 +41,7 @@ const Hospitals = ({role}) => {
         hospitalsData.push({
           id: i,
           _id: hospital._id,
+          createdAt: moment(hospital.createdAt).format("YYYY-MM-DD HH:mm"),
           designation: hospital.designation,
           region: hospital.region,
           ville: hospital.ville,

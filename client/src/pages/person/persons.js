@@ -27,9 +27,9 @@ const Persons = ({role}) => {
 
   let labels;
   if (role === "admin") 
-	  labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Address", "Phone", "Email", "Secteur", "Fonction", "Type", "action"]
+	  labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Phone", "Activity Service", "Fonction", "Type", "action"]
   else 
-	  labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Address", "Phone", "Email", "Secteur", "Fonction", "Type"]
+	  labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Phone", "Activity Service", "Fonction", "Type"]
 
   const getAllPersons = async () => {
     try {
@@ -49,12 +49,13 @@ const Persons = ({role}) => {
       else {
         res = await getPersonForCompanyRole(token, search);
       }
+      console.log(res);
       res?.data?.data?.map((person) => {
         i++;
         let obj = {
           id: i,
           _id: person._id,
-          createdAt: moment(person.createdAt).format("YYYY-MM-DD"),
+          createdAt: moment(person.createdAt).format("YYYY-MM-DD HH:mm"),
           firstName: person.firstName,
           lastName: person.lastName,
           cin: person.cin,
@@ -62,12 +63,12 @@ const Persons = ({role}) => {
           birthDate: moment(person.birthDate).format("YYYY-MM-DD"),
           age: person.age,
           poids: person.poids,
-          address: person.address,
           phone: person.phone,
-          email: person.email,
           secteur: person.secteur,
           fonction: person.fonction,
           type: person.type,
+          __address: person.address,
+          __email: person.email,
         }
         if (person.company) {
           obj._company = person.company.designation;
@@ -87,7 +88,6 @@ const Persons = ({role}) => {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
-  console.log(data);
   const deletePerson = async (id) => {
     try {
       const res = await deletePersonAPI(token, id);

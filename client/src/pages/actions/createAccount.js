@@ -35,7 +35,7 @@ const CreateAccount = ({role}) => {
               {(role === "admin" || role === "hospital" || role === "company") && <MenuItem value="person">Professional Healthcare</MenuItem>}
               {role === "admin" && <MenuItem value="company">Company</MenuItem>}
               {role === "admin" && <MenuItem value="hospital">Hospital</MenuItem>}
-              {role === "admin" && <MenuItem value="radio">Radiology</MenuItem>}
+              {role === "admin" && <MenuItem value="radio">Radiology Center</MenuItem>}
               {role === "admin" && <MenuItem value="clinic">Clinic</MenuItem>}
             </Select>
           </FormControl>

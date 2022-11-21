@@ -22,7 +22,10 @@ const List = ({data, labels, DataLoading, style}) => {
 
   return ( 
     <TableContainer component={Paper} className="table"
-      style={style ? {} : {maxWidth: "calc(100vw)", overflow: "auto"}}
+      style={style ? {
+        maxHeight: "calc(50vh)", overflow: "auto",
+        axWidth: "calc(100vw)", overflow: "auto"
+      } : {maxWidth: "calc(100vw)", overflow: "auto"}}
     >
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead style={{backgroundColor: "#18a6df", color: "white"}}>
@@ -37,7 +40,7 @@ const List = ({data, labels, DataLoading, style}) => {
             data?.map((row) => (
               <TableRow className="tableRowHover" key={row?.id} >
                 {Object?.keys(row)?.map((key, index) => {
-                    if (key === "_id" || key === "_company" || key === "_hospital")
+                    if (key === "_id" || key === "_company" || key === "_hospital" || key === "__address" || key === "__email")
                       return ;
                     return (<TableCell 
                       className="tableCell" 
@@ -71,7 +74,6 @@ const List = ({data, labels, DataLoading, style}) => {
                           obj.role = userRDX.role;
                           obj.OwnRole = "patient";
                         } else if (paths[paths.length - 1] === "persons") {
-                          console.log(row);
                           obj._id = row?._id;
                           obj.address = row?.address;
                           obj.age = row?.age;

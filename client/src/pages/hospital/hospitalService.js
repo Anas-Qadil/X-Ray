@@ -21,7 +21,12 @@ const HospitalService = ({role}) => {
   const [hospitalSearch, setHospitalSearch] = React.useState("");
   const [dataLoading, setDataLoading] = React.useState(true);
   const token = useSelector(state => state?.data?.token);
-  const labels = ["ID", "Name", "Equipement", "Examen", "Protocol", "Hospital Designation", "Hospital Region"];
+  let labels = [];
+  if (role === "hospital")
+    labels = ["ID", "Created At", "Designation", "Equipement", "Examen", "Protocol"]
+  else 
+    labels = ["ID", "Created At", "Designation", "Equipement", "Examen", "Protocol", "Hospital Designation", "Hospital Region"];
+
   if (role === "admin") labels.push("Action");
 
   // model
@@ -48,12 +53,15 @@ const HospitalService = ({role}) => {
         let obj = {
           id: i,
           _id: service._id,
+          createdAt: moment(service.createdAt).format("YYYY-MM-DD HH:mm"),
           name: service.name,
           equipement: service.equipment,
           examen: service.examen, 
           protocol: service.protocol,
-          hospital: service.hospital?.designation,
-          region: service.hospital?.region,
+        }
+        if (role !== "hospital") {
+          obj.hospital = service.hospital?.designation;
+          obj.region = service.hospital?.region;
         }
         if (role === "admin") {
           obj.action = ( <IconButton onClick={() => checkDelete(service?._id)} aria-label="delete" size="large">

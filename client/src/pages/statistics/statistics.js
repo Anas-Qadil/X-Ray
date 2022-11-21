@@ -17,11 +17,14 @@ import ReactToPrint from "react-to-print";
 import { useRef } from 'react';
 import { Button } from '@mui/material';
 import XRAYLOGO from "../../assets/LOGO.png";
+import { CSVLink, CSVDownload } from "react-csv";
+import PrintModel from "../../components/printModel";
+
 
 const Statistics = ({role}) => {
 
   // print functionallity
-  const [printStyle, setPrintStyle] = React.useState(false);
+  const [printStyle, setPrintStyle] = React.useState(true);
   const componentRef = useRef(null);
   const reactToPrintContent = React.useCallback(() => {
     return componentRef.current;
@@ -38,6 +41,7 @@ const Statistics = ({role}) => {
   //select patient/person
   const [selectedUSer, setSelectedUser] = React.useState({});
   const [totalDose, setTotalDose] = React.useState(0);
+  const [printState, setPrintState] = React.useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
   const token = useSelector(state => state?.data?.token);
@@ -384,10 +388,43 @@ const Statistics = ({role}) => {
             </FormControl>
             </div>
           </div>
-          <ReactToPrint
+          {/* <ReactToPrint
             content={reactToPrintContent}
             trigger={reactToPrintTrigger} 
-          />
+          /> */}
+          {!printState && 
+            <Button sx={{ ':hover': { bgcolor: '#1976d2', color: 'white' },bgcolor: '#1976d2' }}
+              style={{ color: "white",
+              width: "100%",
+              }}
+              onClick={() => {
+                setPrintState(true);
+                setPrintStyle(false);
+              }}
+            >
+              Print
+            </Button>
+          }
+          {printState && <div style={{ display: "flex", width: "100%", backgroundColor: "#f5f5f5", }}>
+            <ReactToPrint
+              content={reactToPrintContent}
+              trigger={reactToPrintTrigger}
+              style={{
+                width: "95%",
+                marginRight: "5%",
+              }}
+            />
+            <CSVLink data={data} style={{
+              width: "95%",
+              backgroundColor: "#0ba600",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginLeft: "5%",
+              color: "white",
+            }} >Print as csv</CSVLink>
+          </div>}
           <br />
           <hr />
           <div ref={componentRef}>
@@ -475,6 +512,8 @@ const Statistics = ({role}) => {
           </div>
         </div>
       </div>
+
+      {/* <PrintModel open={true} /> */}
     </div>
   );
 }

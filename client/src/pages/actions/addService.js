@@ -105,11 +105,11 @@ const AddService = ({role}) => {
                 hospital: value?.data?._id,
               });
             }}
-            renderInput={(params) => <TextField error={error.hospital} {...params} label="Hospitals" />}
+            renderInput={(params) => <TextField error={error.hospital} {...params} label="Health Institution" />}
           />}
         <div style={{display: "flex"}}>
           <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-            <InputLabel htmlFor="my-input" error={error.name}>Service Name</InputLabel>
+            <InputLabel htmlFor="my-input" error={error.name}>Designation</InputLabel>
             <Input type="text" id="my-input" 
               aria-describedby="my-helper-text" 
               style={{width: "95%"}}
