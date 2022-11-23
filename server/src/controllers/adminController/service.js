@@ -164,6 +164,7 @@ const getUltimateStatistics = async (req, res) => {
 
     let combined = [...traitements, ...person_traitement];
 
+
     if (stats.hospitalType) {
       combined = combined.filter((doc) => {
         return doc?.service?.hospital?.type === stats?.hospitalType;
@@ -171,6 +172,11 @@ const getUltimateStatistics = async (req, res) => {
     }
 
     combined.map((doc) => {
+      if (stats.company) {
+        if (doc?.person?.company?._id.toString() === stats.company) {
+          data.push(doc);
+        }
+      }
       if (stats?.hospital) {
         if (doc?.service?.hospital?._id == stats?.hospital) {
           if (stats?.region) {
@@ -204,7 +210,7 @@ const getUltimateStatistics = async (req, res) => {
     let result = [];
     if (user.role === "company") {
       data2.map((doc) => {
-        if (doc?.person?.company?.toString() == user?.company?.toString()) {
+        if (doc?.person?.company?._id.toString() == user?.company?.toString()) {
           result.push(doc);
         }
       });

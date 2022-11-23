@@ -31,7 +31,7 @@ const addPersonTraitement = async (req, res) => {
       await savedTraitement.populate("service");
       await savedTraitement.populate("service.hospital");
       await savedTraitement.populate("person.company");
-      
+
       let totalDoses = 0;
       validTraitementData.map((doc) => {
         totalDoses += Number(doc.dose);
@@ -50,10 +50,11 @@ const addPersonTraitement = async (req, res) => {
             sendAdminMail(hospitalEmail, savedTraitement?.person?.cin);
           }
         }
+      
         const companyEmail = savedTraitement?.person?.company?.email;
         if (companyEmail) {
           if (validator.isEmail(companyEmail))
-            sendAdminMail(hospitalEmail, savedTraitement?.person?.cin);
+            sendAdminMail(companyEmail, savedTraitement?.person?.cin);
         }
 
         phone = savedTraitement?.person?.phone;

@@ -12,13 +12,12 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack'
 import Autocomplete from '@mui/material/Autocomplete';
-import { getPatientDoses, getPersonTraitements, getCompanyServices, getUltimateStatisticsApi, getHospitalServices, getAllTraitementApi } from '../../api/servicesApi';
+import { getPatientDoses, getPersonTraitements, getCompanies, getCompanyServices, getUltimateStatisticsApi, getHospitalServices, getAllTraitementApi } from '../../api/servicesApi';
 import ReactToPrint from "react-to-print";
 import { useRef } from 'react';
 import { Button } from '@mui/material';
 import XRAYLOGO from "../../assets/LOGO.png";
 import { CSVLink, CSVDownload } from "react-csv";
-import PrintModel from "../../components/printModel";
 
 
 const Statistics = ({role}) => {
@@ -47,7 +46,7 @@ const Statistics = ({role}) => {
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const [dataLoading, setDataLoading] = React.useState(true);
-  const labels = ["Date", "CIN", "Region", "Ville", "Hospital", "Service", "Examen", "Protocole", "Appareil", "Dose"];
+  const labels = ["Date", "CIN", "Region", "Ville", "Health Insitution", "Service", "Examen", "Protocole", "Appareil", "Dose"];
   const [data, setData] = React.useState([]);
   const [regions, setRegions] = React.useState([]); // regions of hospitals
   const [servicesName, setServicesName] = React.useState([]); // services name
@@ -58,6 +57,7 @@ const Statistics = ({role}) => {
   const [persons, setPersons] = React.useState([]); // persons
   const [stats, setStats] = React.useState({
     hospital: "",
+    company: "",
     region: "",
     service: "",
     appareil: "",
@@ -72,11 +72,12 @@ const Statistics = ({role}) => {
     try {
       setDataLoading(true);
       const res = await getUltimateStatisticsApi(token, stats);
+      console.log(stats);
       let finalData = [];
       if (res?.data?.data) {
         res.data?.data?.forEach((item) => {
           finalData.push({
-            Date: moment(item.createdAt).format('YYYY-MM-DD'),
+            Date: moment(item.createdAt).format('YYYY-MM-DD HH:mm'),
             cin: item.patient?.cin || item.person?.cin,
             Region: item.service?.hospital?.region,
             Ville: item.service?.hospital?.ville,
@@ -107,6 +108,25 @@ const Statistics = ({role}) => {
       enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
     }
   }
+
+  const getAllCompanies = async () => {
+    try {
+      const res = await getCompanies(token);
+      const companyOptions = [];
+      if (res?.data?.data) {
+        res.data.data.forEach((item) => {
+          companyOptions.push({
+            data: item._id,
+            label: item.designation,
+          });
+        });
+        setCompanies(companyOptions);
+      }
+    } catch (e) {
+      enqueueSnackbar(e?.response?.data?.message || 'Something Went Wrong..', {variant: 'error'})
+    }
+  }
+
   const getServices = async () => {
     try {
       setDataLoading(true);
@@ -147,7 +167,6 @@ const Statistics = ({role}) => {
       else {
         responseData = res?.data?.data;
       } 
-      console.log(responseData)
 
       responseData?.map(doc => {
         if (!regionsOpt.find(region => region?.label === doc?.service?.hospital?.region) && doc?.service && doc?.service?.hospital) {
@@ -210,7 +229,7 @@ const Statistics = ({role}) => {
           });
         }
       });
-      console.log(companiesOpt)
+
       setRegions(regionsOpt);
       setServicesName(servicesOpt);
       setHospitals(hospitalsOpt);
@@ -226,6 +245,9 @@ const Statistics = ({role}) => {
   useEffect(() => {
     getServices();
     getAllStatistics();
+    if (role === "admin") {
+      getAllCompanies();
+    }
   }, [stats]);
 
 	return (
@@ -256,7 +278,7 @@ const Statistics = ({role}) => {
                       renderInput={(params) => <TextField {...params} label="Patients" />}
                     />
                   </> }
-                { role === "company" || role === "admin" && <Autocomplete
+                { (role === "company" || role === "admin") && <Autocomplete
                   sx={{ width: "100%", mr: 2 }}
                   disablePortal
                   id="combo-box-demo"
@@ -270,16 +292,15 @@ const Statistics = ({role}) => {
                   }}
                   renderInput={(params) => <TextField {...params} label="Persons" />}
                 />}
-                {role === "admin" && <Autocomplete
+                {(role === "admin") && <Autocomplete
                   sx={{ width: "100%", mr: 2 }}
                   disablePortal
                   id="combo-box-demo"
-                  options={persons}
+                  options={companies}
                   onChange={(event, value) => {
                     setStats({
                       ...stats,
-                      person: value?.data,
-                      patient: "",
+                      company: value?.data,
                     });
                   }}
                   renderInput={(params) => <TextField {...params} label="Company" />}
@@ -290,7 +311,7 @@ const Statistics = ({role}) => {
               width: "100%",
               marginBottom: "20px",
             }}>
-              { (role === "admin") &&
+              { (role === "admin" || role === "patient" || role === "person") &&
                   <>
                     <Autocomplete
                       sx={{ width: "100%", mr: 2 }}

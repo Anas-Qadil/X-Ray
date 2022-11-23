@@ -365,13 +365,12 @@ const getAllSearchServices = async (req, res) => {
       .populate("hospital");
     const hospitals = await hospitalModel.find({
       $or: [
-        {name: {$regex: hospitalSearch, $options: "i"}},
-        {region: {$regex: hospitalSearch, $options: "i"}},
-        {ville: {$regex: hospitalSearch, $options: "i"}},
-        {statut: {$regex: hospitalSearch, $options: "i"}},
         {designation: {$regex: hospitalSearch, $options: "i"}},
-        {phone: {$regex: hospitalSearch, $options: "i"}},
-        {email: {$regex: hospitalSearch, $options: "i"}},
+        {region: {$regex: hospitalSearch, $options: "i"}},
+        // {ville: {$regex: hospitalSearch, $options: "i"}},
+        // {statut: {$regex: hospitalSearch, $options: "i"}},
+        // {phone: {$regex: hospitalSearch, $options: "i"}},
+        // {email: {$regex: hospitalSearch, $options: "i"}},
       ],
     });
 
