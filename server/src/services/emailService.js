@@ -68,7 +68,7 @@ const sendAdminMail = async(userEmail, patientCin) => {
 			},
 		});
 		const info = await transporter.sendMail({
-			from : `Matcha <Matcha Team>`,
+			from : `X-Ray <X-Ray Team>`,
 			to : EmailReciever,
 			subject : subject,
 			text : text,

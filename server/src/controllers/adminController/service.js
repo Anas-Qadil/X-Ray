@@ -177,7 +177,7 @@ const getUltimateStatistics = async (req, res) => {
           data.push(doc);
         }
       }
-      if (stats?.hospital) {
+      else if (stats?.hospital) {
         if (doc?.service?.hospital?._id == stats?.hospital) {
           if (stats?.region) {
             if (doc?.service?.hospital?.region == stats?.region) {
