@@ -424,7 +424,7 @@ const UpdatePerson = ({role}) => {
       </div>
       <div style={{display: "flex"}}>
         <FormControl disabled={role === "person" && true} color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.poids}>POIDS</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.poids}>WEIGHT</InputLabel>
           <Input type="number" id="my-input" 
              error={error.poids}
             aria-describedby="my-helper-text" 

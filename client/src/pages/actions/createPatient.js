@@ -17,6 +17,7 @@ import { useSnackbar } from 'notistack'
 const CreatePatient = ({role}) => {
 
   const { enqueueSnackbar } = useSnackbar()
+  const [btnLoading, setBtnLoading] = React.useState(false);
 
   const token = useSelector(state => state?.data?.token);
   const navigate = useNavigate();
@@ -51,6 +52,7 @@ const CreatePatient = ({role}) => {
 
   const addPatient = async () => {
     try {
+      setBtnLoading(true);
       if (!checkPatientData(patientData, setError)) {
         const res = await signUpPatient(token, patientData);
         if (res.status === 200 || res.status === 201) {
@@ -59,8 +61,10 @@ const CreatePatient = ({role}) => {
         }
       } else 
         enqueueSnackbar('Please Check your inputs', {variant: 'error'})
+      setBtnLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong..', {variant: 'error'})
+      setBtnLoading(false);
     }
   }
 
@@ -249,7 +253,7 @@ const CreatePatient = ({role}) => {
       </div>
       <Stack style={{marginTop: "10px"}} spacing={2} direction="row">
         <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-        <Button variant="contained" onClick={addPatient} fullWidth>Add Patient</Button>
+        <Button disabled={btnLoading} variant="contained" onClick={addPatient} fullWidth>Add Patient</Button>
       </Stack>
     </>
   );

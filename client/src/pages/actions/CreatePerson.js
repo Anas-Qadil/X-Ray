@@ -447,7 +447,7 @@ const CreatePerson = ({role}) => {
       </div>
       <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.poids} >POIDS</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.poids} >Weight</InputLabel>
           <Input type="number" id="my-input" 
              error={error.poids}
             aria-describedby="my-helper-text" 

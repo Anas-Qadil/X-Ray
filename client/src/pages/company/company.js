@@ -24,7 +24,7 @@ const Company = () => {
   const [mainPageData, setMainPageData] = useState([]);
   const [graph, setGraph] = useState({});
 
-  const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
+  const labels = ["Date", "CIN", "Service", "Examination", "Equipement", "Hopital", "Dose"]
   
   const getServices = async () => {
     try {

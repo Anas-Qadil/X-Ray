@@ -10,6 +10,7 @@ import { FormControl, InputLabel, Input, FormHelperText, Select, MenuItem } from
 import { useNavigate } from "react-router-dom";
 import UpdateAdmin from './updateAdmin';
 import PersonalInformation from "./personalInformations";
+import BGImage from "../../../assets/5415687.jpg"
 
 
 const Update = ({role}) => {
@@ -26,8 +27,13 @@ const Update = ({role}) => {
 	return (
     <div className="home">
       <Sidebar role={role} />
-      <div className="homeContainer">
-      <Container  component={Paper} maxWidth="md" style={{marginTop: "40px", paddingBottom: "60px"}}>
+      <div className="homeContainer"
+        style={{
+          background:`linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.3)), url(${BGImage})`,
+          backgroundSize: 'cover',
+        }}
+      >
+      <Container  component={Paper} maxWidth="md" style={{paddingBottom: "60px", paddingTop: "20px"}}>
         <h1 style={{display: "flex", justifyContent: "center"}}>Update Information</h1>
         {role !== "patient" && role !== "person" && <FormControl fullWidth style={{marginBottom: "20px"}}>
           <InputLabel id="demo-simple-select-label">Update</InputLabel>

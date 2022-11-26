@@ -31,9 +31,9 @@ const HospitalPatient = ({role}) => {
 
   let labels;
   if (location.pathname === "/persons") 
-    labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Address", "Phone", "Email", "Secteur", "Fonction", "Type"]
+    labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Weight", "Address", "Phone", "Email", "Sector", "Fonction", "Type"]
   else 
-    labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Address", "Phone", "Email"]
+    labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Weight", "Address", "Phone", "Email"]
   if (role === "admin") labels.push("Action");
 
   const getPatinets = async () => {

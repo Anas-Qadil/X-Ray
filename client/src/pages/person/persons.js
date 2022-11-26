@@ -27,9 +27,9 @@ const Persons = ({role}) => {
 
   let labels;
   if (role === "admin") 
-	  labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Phone", "Activity Service", "Fonction", "Type", "action"]
+	  labels = ["ID", "CreatedAt", "First name", "Last name", "CIN", "Gender", "Date of birth", "Age", "Weight", "Phone", "Activity Service", "Fonction", "Type", "Action"]
   else 
-	  labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Poids", "Phone", "Activity Service", "Fonction", "Type"]
+	  labels = ["ID", "CreatedAt", "First name", "Last name", "CIN", "Gender", "Date of birth", "Age", "Weight", "Phone", "Activity Service", "Fonction", "Type"]
 
   const getAllPersons = async () => {
     try {

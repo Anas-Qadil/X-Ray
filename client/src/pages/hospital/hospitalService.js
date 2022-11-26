@@ -23,9 +23,9 @@ const HospitalService = ({role}) => {
   const token = useSelector(state => state?.data?.token);
   let labels = [];
   if (role === "hospital")
-    labels = ["ID", "Created At", "Designation", "Equipement", "Examen", "Protocol"]
+    labels = ["ID", "Created At", "Designation", "Equipement", "Examination", "Protocol"]
   else 
-    labels = ["ID", "Created At", "Designation", "Equipement", "Examen", "Protocol", "Hospital Designation", "Hospital Region"];
+    labels = ["ID", "Created At", "Designation", "Equipement", "Examination", "Protocol", "Hospital Designation", "Hospital Region"];
 
   if (role === "admin") labels.push("Action");
 

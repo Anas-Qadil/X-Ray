@@ -182,16 +182,27 @@ const Profile = ({role}) => {
                 />
                 { (user.OwnRole === "patient" || user.OwnRole === "person") && 
                   <div className="details">
-                    <h1 className="itemTitle">{user.firstName + ' ' + user.lastName}</h1>
+                    {user.OwnRole === "person" && <h1 className="itemTitle">Professional Healthcare</h1>}
+                    {user.OwnRole === "patient" && <h1 className="itemTitle">Patient</h1>}
                     {user.OwnRole === "person" && <div className="detailItem">
                       <span className="itemKey">Person Type:</span>
                       <span className="itemValue">{user.type}</span>
                     </div>}
 
-                    {user.email && <div className="detailItem">
-                      <span className="itemKey">Email:</span>
-                      <span className="itemValue">{user.email}</span>
-                    </div>}
+                    <div className="detailItem">
+                      <span className="itemKey">first name:</span>
+                      <span className="itemValue">{user.firstName}</span>
+                    </div>
+                    <div className="detailItem">
+                      <span className="itemKey">first name:</span>
+                      <span className="itemValue">{user.lastName}</span>
+                    </div>
+                    {user.email && 
+                      <div className="detailItem">
+                        <span className="itemKey">Email:</span>
+                        <span className="itemValue">{user.email}</span>
+                      </div>
+                    }
                     <div className="detailItem">
                       <span className="itemKey">age:</span>
                       <span className="itemValue">{user.age}</span>
@@ -217,7 +228,7 @@ const Profile = ({role}) => {
                       <span className="itemValue">{user.cin}</span>
                     </div>
                     <div className="detailItem">
-                      <span className="itemKey">poids:</span>
+                      <span className="itemKey">weight:</span>
                       <span className="itemValue">{user.poids}</span>
                     </div>
                     {user.OwnRole === "person" && <div className="detailItem">
@@ -278,11 +289,11 @@ const Profile = ({role}) => {
                 }
                 { (user.OwnRole === "admin") && 
                   <div className="details">
-                    <h1 className="itemTitle">{user.firstName + " " + user.lastName}</h1>
-                    <div className="detailItem">
+                    <h1 className="itemTitle">Admin</h1>
+                    {/* <div className="detailItem">
                       <span className="itemKey">CIN:</span>
                       <span className="itemValue">{user.cin}</span>
-                    </div>
+                    </div> */}
                     {user.email && <div className="detailItem">
                       <span className="itemKey">Email:</span>
                       <span className="itemValue">{user.email}</span>

@@ -19,6 +19,7 @@ import { useSnackbar } from 'notistack'
 import { getHospitals } from "../../api/servicesApi";
 import checkAddService from "../../utils/AddServiceCheck";
 import { AddServiceAPI } from "../../api/servicesApi";
+import BGImage from "../../assets/5415687.jpg"
 
 
 const AddService = ({role}) => {
@@ -26,6 +27,7 @@ const AddService = ({role}) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
+  const [btnLoading, setBtnLoading] = React.useState(false);
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const [hospitals, setHospitals] = React.useState([]);
@@ -66,6 +68,7 @@ const AddService = ({role}) => {
 
   const AddService__ = async () => {
     try {
+      setBtnLoading(true);
       if (!checkAddService(serviceData, setError)) {
         const res = await AddServiceAPI(token, serviceData);
         if (res.status === 200 || res.status === 201) {
@@ -77,8 +80,10 @@ const AddService = ({role}) => {
       } else {
         enqueueSnackbar('Please Check Your Inputs..', {variant: 'error'})
       }
+      setBtnLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong...', {variant: 'error'})
+      setBtnLoading(false);
     }
   }
 
@@ -89,8 +94,13 @@ const AddService = ({role}) => {
 	return (
   <div className="home">
     <Sidebar role={role} />
-    <div className="homeContainer">
-      <Container  component={Paper} maxWidth="md" style={{marginTop: "60px", paddingBottom: "60px"}}>
+    <div className="homeContainer"
+      style={{
+        background:`linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.3)), url(${BGImage})`,
+        backgroundSize: 'cover',
+      }}
+    >
+      <Container  component={Paper} maxWidth="md" style={{marginTop: "12%", paddingBottom: "60px", paddingTop: "20px"}}>
         <h1 style={{display: "flex", justifyContent: "center"}}>Add Service</h1>
         {role==="admin" &&  
           <Autocomplete
@@ -140,7 +150,7 @@ const AddService = ({role}) => {
         </div>
         <div style={{display: "flex"}}>
           <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-            <InputLabel htmlFor="my-input" error={error.examen}>Examen</InputLabel>
+            <InputLabel htmlFor="my-input" error={error.examen}>Examination</InputLabel>
             <Input type="text" id="my-input" 
               aria-describedby="my-helper-text" 
               style={{width: "95%"}}
@@ -171,7 +181,7 @@ const AddService = ({role}) => {
         </div>
         <Stack style={{marginTop: "10px"}} spacing={2} direction="row">
           <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-          <Button variant="contained" onClick={AddService__} fullWidth>Add Service</Button>
+          <Button variant="contained" disabled={btnLoading} onClick={AddService__} fullWidth>Add Service</Button>
         </Stack>
       </Container>
       </div>

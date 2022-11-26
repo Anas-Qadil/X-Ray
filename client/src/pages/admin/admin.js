@@ -18,7 +18,7 @@ const Admin = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [loading, setLoading] = React.useState(true);
   const token = useSelector(state => state?.data?.token);
-  const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"];
+  const labels = ["Date", "CIN", "Service", "Examination", "Equipement", "Hopital", "Dose"];
   const [graph, setGraph] = useState({});
   const [dataLoading, setDataLoading] = useState(true);
   const [data, setData] = useState([]);

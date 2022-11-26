@@ -17,7 +17,7 @@ import { setData } from '../../store/index'
 import Loader from "../../components/loader";
 import { reloginApi } from '../../api/authApi/loginApi';
 import { useSnackbar } from 'notistack'
-
+import LOGO from '../../assets/LOGO.png';
 
 function Copyright(props) {
   return (
@@ -116,11 +116,16 @@ const Login = () => {
                 alignItems: 'center',
             }}
             >
-            <Avatar  sx={{ m: 1,marginTop: 5, bgcolor: 'secondary.main' }}>
-            </Avatar>
-            <Typography component="h1" variant="h5">
+            {/* <Avatar  sx={{ m: 1,marginTop: 5, bgcolor: 'secondary.main' }}>
+            </Avatar> */}
+            <img src={LOGO} style={{
+              width: '50%',
+              marginTop: '-5%',
+              marginBottom: '-10%',
+            }} />
+            {/* <Typography component="h1" variant="h5">
                 Connection
-            </Typography>
+            </Typography> */}
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
               <TextField
                 htmlFor="username"
@@ -128,7 +133,7 @@ const Login = () => {
                 required
                 fullWidth
                 id="username"
-                label="id utilisateur"
+                label="Username"
                 name="username"
                 autoFocus
                 type="text" 
@@ -142,7 +147,7 @@ const Login = () => {
                 required
                 fullWidth
                 name="password"
-                label="Mot de passe"
+                label="Password"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -152,7 +157,8 @@ const Login = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, color: 'secondary.light', bgcolor: 'primary.main' }}
+                
               >
               Login
               </Button>

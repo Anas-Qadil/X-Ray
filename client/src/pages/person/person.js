@@ -20,7 +20,7 @@ const Person = () => {
 
   const { enqueueSnackbar } = useSnackbar()
 
-  const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
+  const labels = ["Date", "CIN", "Service", "Examination", "Equipement", "Hopital", "Dose"]
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const dispatch = useDispatch();

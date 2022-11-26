@@ -9,6 +9,7 @@ import CreatePerson from "./CreatePerson";
 import CreatePatient from "./createPatient";
 import CreateHospital from "./createHospital";
 import CreateCompany from "./createCompany";
+import BGImage from "../../assets/5415687.jpg"
 
 const CreateAccount = ({role}) => {
   
@@ -17,9 +18,14 @@ const CreateAccount = ({role}) => {
 	return (
   <div className="home">
     <Sidebar role={role} />
-    <div className="homeContainer">
+    <div className="homeContainer"
+      style={{
+        background:`linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.3)), url(${BGImage})`,
+        backgroundSize: 'cover',
+      }}
+    >
       {/* <Navbar /> */}
-      <Container  component={Paper} maxWidth="md" style={{marginTop: "40px", paddingBottom: "60px"}}>
+      <Container  component={Paper} maxWidth="md" style={{paddingBottom: "38px", paddingTop: "15px"}}>
         <h1 style={{display: "flex", justifyContent: "center"}}>Create Account</h1>
         { role !== "company" &&
           <FormControl fullWidth style={{marginBottom: "20px"}}>

@@ -46,7 +46,7 @@ const Statistics = ({role}) => {
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const [dataLoading, setDataLoading] = React.useState(true);
-  const labels = ["Date", "CIN", "Region", "Ville", "Health Insitution", "Service", "Examen", "Protocole", "Appareil", "Dose"];
+  const labels = ["Date", "CIN", "Region", "Ville", "Health Insitution", "Service", "examination", "Protocole", "Appareil", "Dose"];
   const [data, setData] = React.useState([]);
   const [regions, setRegions] = React.useState([]); // regions of hospitals
   const [servicesName, setServicesName] = React.useState([]); // services name
@@ -278,7 +278,7 @@ const Statistics = ({role}) => {
                       renderInput={(params) => <TextField {...params} label="Patients" />}
                     />
                   </> }
-                { (role === "company" || role === "admin") && <Autocomplete
+                { (role === "company" || role === "admin" || role === "hospital") && <Autocomplete
                   sx={{ width: "100%", mr: 2 }}
                   disablePortal
                   id="combo-box-demo"
@@ -290,7 +290,7 @@ const Statistics = ({role}) => {
                       patient: "",
                     });
                   }}
-                  renderInput={(params) => <TextField {...params} label="Persons" />}
+                  renderInput={(params) => <TextField {...params} label="Professional healthcare" />}
                 />}
                 {(role === "admin") && <Autocomplete
                   sx={{ width: "100%", mr: 2 }}
@@ -360,7 +360,7 @@ const Statistics = ({role}) => {
                 renderInput={(params) => <TextField {...params} label="Region" />}
               />}
               <Autocomplete
-                sx={{ width: "20%", mr: 2 }}
+                sx={role === "hospital" ? {width: "32.7%", mr: 2} : { width: "22.2%", mr: 2 }}
                 disablePortal
                 id="combo-box-demo"
                 options={servicesName}
@@ -373,7 +373,7 @@ const Statistics = ({role}) => {
                 renderInput={(params) => <TextField {...params} label="Service" />}
               />
               <Autocomplete
-                sx={{ width: "20%", mr: 2 }}
+                sx={role === "hospital" ? {width: "32.7%", mr: 2} : { width: "22.2%", mr: 2 }}
                 disablePortal
                 id="combo-box-demo"
                 options={appareils}
@@ -458,19 +458,19 @@ const Statistics = ({role}) => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-              }}>Rapport dosimétrique</h1>
+              }}>Dose Report</h1>
               <img src={XRAYLOGO} width="200px" />
             </div>
             <div style={{ marginLeft: "100px", marginTop: "-50px"}}>
-              <h3>Période : {stats?.startDate} - {stats?.endDate}</h3>
-              <h3>Année : {moment(stats?.endDate).year()}</h3>
+              <h3>Period : {stats?.startDate} - {stats?.endDate}</h3>
+              <h3>Year : {moment(stats?.endDate).year()}</h3>
             </div>
 
             {(stats?.patient || stats?.person) &&  
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <div>
                 <div style={{ display: "flex" }}>
-                  <h3>Nom : </h3>
+                  <h3>Last name : </h3>
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.lastName}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
@@ -478,7 +478,7 @@ const Statistics = ({role}) => {
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.cin}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
-                  <h3>Date de naissance : </h3>
+                  <h3>Date of Birth : </h3>
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {moment(selectedUSer?.birthDate).format("YYYY-MM-DD")}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
@@ -486,22 +486,22 @@ const Statistics = ({role}) => {
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.address}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
-                  <h3>Tél : </h3>
+                  <h3>phone : </h3>
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.phone}</p>
                 </div>
                 { stats.person &&
                   <div style={{ display: "flex", marginTop: "-30px" }}>
-                    <h3>Lieu d’activité : </h3>
+                    <h3>Place of activity : </h3>
                     <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.secteur}</p>
                   </div>}
               </div>
               <div>
                 <div style={{ display: "flex" }}>
-                  <h3>Prénom : </h3>
+                  <h3>First name : </h3>
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.firstName}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
-                  <h3>Sexe : </h3>
+                  <h3>Gender : </h3>
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.gender}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
@@ -516,7 +516,7 @@ const Statistics = ({role}) => {
                 }
                 { stats?.person &&
                   <div style={{ display: "flex", marginTop: "-30px" }}>
-                  <h3>La fonction  : </h3>
+                  <h3>Function  : </h3>
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.fonction}</p>
                 </div>}
               </div>

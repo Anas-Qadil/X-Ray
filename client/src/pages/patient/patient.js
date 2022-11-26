@@ -79,7 +79,7 @@ const Patient = () => {
     setLoading(false);
   }, [user]);
 
-  const labels = ["Date", "CIN", "Service", "Examen", "Equipement", "Hopital", "Dose"]
+  const labels = ["Date", "CIN", "Service", "Examination", "Equipement", "Hopital", "Dose"]
 
   if (loading) return <Loader />
   return (

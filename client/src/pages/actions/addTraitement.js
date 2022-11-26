@@ -17,11 +17,14 @@ import { useNavigate } from "react-router-dom";
 import { addPersonTraitement, addPatientTraitement } from "../../api/servicesApi";
 import { useSnackbar } from 'notistack'
 import { getPatientForHospitlRole, getAllHospitalServices } from "../../api/servicesApi";
+import BGImage from "../../assets/5415687.jpg"
+
 
 const AddTraitement = ({role}) => {
   
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
+  const [btnLoading, setBtnLoading] = React.useState(false);
   const navigate = useNavigate();
   const token = useSelector(state => state?.data?.token);
   const [patients, setPatients] = React.useState([]);
@@ -114,6 +117,7 @@ const AddTraitement = ({role}) => {
 
   const AddTraitement__ = async () => {
     try {
+      setBtnLoading(true);
       if(!checkifEmpty(traitementData, setError)) {
         if (traitementType === 'person') {
           const res = await addPersonTraitement(token, traitementData);
@@ -131,8 +135,10 @@ const AddTraitement = ({role}) => {
       } else {
         enqueueSnackbar('Please Check your inputs', {variant: 'error'})
       }
+      setBtnLoading(false);
     } catch (e) {
       enqueueSnackbar(e.response.data.message || 'Something Went Wrong...', {variant: 'error'})
+      setBtnLoading(false);
     }
   }
 
@@ -145,9 +151,14 @@ const AddTraitement = ({role}) => {
 	return (
   <div className="home">
     <Sidebar role={role} />
-    <div className="homeContainer">
+    <div className="homeContainer"
+      style={{
+        background:`linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.3)), url(${BGImage})`,
+        backgroundSize: 'cover',
+      }}
+    >
       {/* <Navbar /> */}
-      <Container  component={Paper} maxWidth="md" style={{marginTop: "60px", paddingBottom: "60px"}}>
+      <Container  component={Paper} maxWidth="md" style={{marginTop: "10%", paddingBottom: "60px", paddingTop: "20px"}}>
         <h1 style={{display: "flex", justifyContent: "center"}}>Add Traitement</h1>
         <FormControl fullWidth style={{marginBottom: "20px"}}>
           <InputLabel id="demo-simple-select-label">Choose Professional Healthcare Or Patient</InputLabel>
@@ -237,7 +248,7 @@ const AddTraitement = ({role}) => {
         </FormControl>
         <Stack style={{marginTop: "10px"}} spacing={2} direction="row">
           <Button variant="outlined" onClick={() => navigate(`/${role}`)} fullWidth>Cancel</Button>
-          <Button variant="contained" onClick={AddTraitement__} fullWidth>Add Traitement</Button>
+          <Button disabled={btnLoading} variant="contained" onClick={AddTraitement__} fullWidth>Add Traitement</Button>
         </Stack>
       </Container>
       </div>

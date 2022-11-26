@@ -108,7 +108,7 @@ const UpdateAdmin = ({role}) => {
           />
         </FormControl>
       </div>
-      <div style={{display: "flex"}}>
+      {/* <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.firstName} >FIRST NAME</InputLabel>
           <Input type="text" id="my-input" 
@@ -133,7 +133,7 @@ const UpdateAdmin = ({role}) => {
               setAdmin({...admin, lastName: e.target.value})}}
           />
         </FormControl>
-      </div>
+      </div> */}
       <div style={{display: "flex"}}>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
           <InputLabel htmlFor="my-input" error={error.phone} >PHONE</InputLabel>
