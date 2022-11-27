@@ -301,7 +301,7 @@ const CreatePerson = ({role}) => {
       </div>
       <div style={{display: "flex"}}>
         <FormControl fullWidth style={{marginBottom: "20px"}}> {/* gender and birthday */}
-          <InputLabel id="demo-simple-select-label" error={error.secteur}>{type === "company" ? "Modality" : "Activity service"}</InputLabel>
+          <InputLabel id="demo-simple-select-label" error={error.secteur}>{type === "company" || role === "company" ? "Modality Service" : "Activity service"}</InputLabel>
           <Input
             error={error.secteur}
             labelId="demo-simple-select-label"
@@ -357,7 +357,7 @@ const CreatePerson = ({role}) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Stack spacing={1} style={{width: "90%", marginRight: "40px"}} error={error.birthDate}>
             <DesktopDatePicker
-              label="BirthDate"
+              label="Date of birth"
               inputFormat="YYYY-MM-DD"
               value={personData.birthDate}
               onChange={(newValue) => {

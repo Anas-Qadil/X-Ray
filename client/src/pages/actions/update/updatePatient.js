@@ -236,7 +236,7 @@ const UpdatePatient = ({role}) => {
         <Stack spacing={1} style={{width: "90%", marginRight: "40px"}}>
           <DesktopDatePicker
             disabled={role === "patient" && true}
-            label="Date desktop"
+            label="Date of birth"
             inputFormat="YYYY-MM-DD"
             value={patientData.birthDate}
             onChange={(newValue) => {

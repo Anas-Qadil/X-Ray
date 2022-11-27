@@ -155,20 +155,22 @@ const Profile = ({role}) => {
     setMainPageData(data);
   }
   
-  console.log(locationData);
   useEffect(() => {
     getDoses();
     getGraph();
   }, []);
+console.log(user);
 
   return (
     <div>
       <div className="single">
         <Sidebar role={user.role} />
-        <div className="singleContainer">
+        <div className="singleContainer"
+          style={{ width: "100%", height: "100vh", overflow: "auto" }}
+        >
           <div className="top">
             <div className="left">
-              <div className="editButton">{user?.OwnRole === "person" ? "Professional Healthcare" : user?.OwnRole === "hospital" ? "Health Institution" : user?.OwnRole }</div>
+              <div className="editButton">{user?.OwnRole === "person" ? "Professional Healthcare" : user?.OwnRole === "hospital" ? "Healthcare Institution" : user?.OwnRole }</div>
               <h1 className="title">Information</h1>
               <div className="item">
                 <img
@@ -190,11 +192,11 @@ const Profile = ({role}) => {
                     </div>}
 
                     <div className="detailItem">
-                      <span className="itemKey">first name:</span>
+                      <span className="itemKey">First name:</span>
                       <span className="itemValue">{user.firstName}</span>
                     </div>
                     <div className="detailItem">
-                      <span className="itemKey">first name:</span>
+                      <span className="itemKey">Last name:</span>
                       <span className="itemValue">{user.lastName}</span>
                     </div>
                     {user.email && 
@@ -204,44 +206,44 @@ const Profile = ({role}) => {
                       </div>
                     }
                     <div className="detailItem">
-                      <span className="itemKey">age:</span>
+                      <span className="itemKey">Age:</span>
                       <span className="itemValue">{user.age}</span>
                     </div>
                     <div className="detailItem">
-                      <span className="itemKey">gender:</span>
+                      <span className="itemKey">Gender:</span>
                       <span className="itemValue">{user.gender}</span>
                     </div>
                     <div className="detailItem">
-                      <span className="itemKey">birthDate:</span>
+                      <span className="itemKey">Date of birth:</span>
                       <span className="itemValue">{moment(user.birthDate).format("YYYY-MM-DD")}</span>
                     </div>
-                    <div className="detailItem">
-                      <span className="itemKey">address:</span>
+                    {user.address && <div className="detailItem">
+                      <span className="itemKey">Address:</span>
                       <span className="itemValue">{user.address}</span>
-                    </div>
+                    </div>}
                     {user.phone && <div className="detailItem">
-                      <span className="itemKey">phone:</span>
+                      <span className="itemKey">Phone:</span>
                       <span className="itemValue">{user.phone}</span>
                     </div>}
                     <div className="detailItem">
-                      <span className="itemKey">cin:</span>
+                      <span className="itemKey">Cin:</span>
                       <span className="itemValue">{user.cin}</span>
                     </div>
                     <div className="detailItem">
-                      <span className="itemKey">weight:</span>
+                      <span className="itemKey">Weight:</span>
                       <span className="itemValue">{user.poids}</span>
                     </div>
                     {user.OwnRole === "person" && <div className="detailItem">
-                      <span className="itemKey">secteur:</span>
+                      <span className="itemKey">Activity service:</span>
                       <span className="itemValue">{user.secteur}</span>
                     </div>}
                     {user.OwnRole === "person" && <div className="detailItem">
-                      <span className="itemKey">fonction:</span>
+                      <span className="itemKey">Fonction:</span>
                       <span className="itemValue">{user.fonction}</span>
                     </div>}
                     {user.OwnRole === "person" && 
                       <div className="detailItem">
-                        <span className="itemKey">{user.company ? "Company" : user.hospital || user?.hospital?.type ? "Health Institution" : ""}:</span>
+                        <span className="itemKey">{user.company ? "Company" : user.hospital || user?.hospital?.type ? "Healthcare Institution" : ""}:</span>
                         <span className="itemValue">
                           {
                             user.company ? 
@@ -256,7 +258,7 @@ const Profile = ({role}) => {
                 }
                 { (user.OwnRole === "hospital" || user.OwnRole === "company") && 
                   <div className="details">
-                    <h1 className="itemTitle">{user.OwnRole === "hospital" ? "Health Institution" : "Company"}</h1>
+                    <h1 className="itemTitle">{user.OwnRole === "hospital" ? "Healthcare Institution" : "Company"}</h1>
                     <div className="detailItem">
                       <span className="itemKey">Designation:</span>
                       <span className="itemValue">{user.designation}</span>
@@ -266,15 +268,15 @@ const Profile = ({role}) => {
                       <span className="itemValue">{user.region}</span>
                     </div>
                     <div className="detailItem">
-                      <span className="itemKey">Ville:</span>
+                      <span className="itemKey">City:</span>
                       <span className="itemValue">{user.ville}</span>
                     </div>
                     {user.phone && <div className="detailItem">
-                      <span className="itemKey">phone:</span>
+                      <span className="itemKey">Phone:</span>
                       <span className="itemValue">{user.phone}</span>
                     </div>}
                     {user.address && <div className="detailItem">
-                      <span className="itemKey">address:</span>
+                      <span className="itemKey">Address:</span>
                       <span className="itemValue">{user.address}</span>
                     </div>}
                     {user.email && <div className="detailItem">
@@ -282,7 +284,7 @@ const Profile = ({role}) => {
                       <span className="itemValue">{user.email}</span>
                     </div>}
                     {user.OwnRole === "hospital" &&  <div className="detailItem">
-                      <span className="itemKey">statut:</span>
+                      <span className="itemKey">Statut:</span>
                       <span className="itemValue">{user.statut}</span>
                     </div>}
                   </div>

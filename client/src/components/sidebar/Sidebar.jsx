@@ -121,7 +121,7 @@ const Sidebar = ({role}) => {
               <Link to="/admin/hospitals" style={{ textDecoration: "none" }}>
                 <li>
                   <LocalHospitalIcon className="icon" />
-                  <span>Health Insitution</span>
+                  <span>Healthcare institution</span>
                 </li>
               </Link>
             )}

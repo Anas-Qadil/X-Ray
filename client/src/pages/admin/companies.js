@@ -12,15 +12,34 @@ import { deleteCompanyAPI } from '../../api/servicesApi'
 import Model from "../../components/popups/index";
 import validateSearchInput from "../../utils/searchValidate";
 import moment from "moment";
+import { CSVLink, CSVDownload } from "react-csv";
+import { Button } from '@mui/material';
+import ReactToPrint from "react-to-print";
 
 const Companies = ({role}) => {
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const [printStyle, setPrintStyle] = React.useState(true);
+  const [printState, setPrintState] = React.useState(false);
+  const [csvPrintData, setCsvPrintData] = React.useState([]);
+  const componentRef = React.useRef(null);
+  const reactToPrintContent = React.useCallback(() => {
+    return componentRef.current;
+  }, [componentRef.current]);
+  const reactToPrintTrigger = React.useCallback(() => {
+    return (
+        <Button variant="contained" style={{
+          width: "100%",
+        }}
+        >Print</Button>
+    );
+  }, []);
+
   const token = useSelector(state => state?.data?.token);
   const [search, setSearch] = useState("");
   const [companies, setCompanies] = useState([]);
-  const labels = ["ID", "Created At", "Designation", "Region", "Ville", "Address", "Phone", "Email", "Action"];
+  const labels = ["ID", "Created At", "Designation", "Region", "City", "Address", "Phone", "Email", "Action"];
   const [dataLoading, setDataLoading] = React.useState(true);
 
   // model
@@ -35,6 +54,7 @@ const Companies = ({role}) => {
         return;
       }
       const companiesData = [];
+      const dataToPrint = [];
       const res = await getAllCompanies(token, search);
       let i = 0;
       res?.data?.data?.forEach((company) => {
@@ -53,7 +73,19 @@ const Companies = ({role}) => {
           <DeleteIcon fontSize="inherit" />
         </IconButton>
         });
+        let objToPrint = {
+          id: i,
+          createdAt: moment(company.createdAt).format("YYYY-MM-DD HH:mm"),
+          designation: company.designation,
+          region: company.region,
+          city: company.ville,
+          address: company.address,
+          phone: company.phone,
+          email: company.email,
+        }
+        dataToPrint.push(objToPrint);
       });
+      setCsvPrintData(dataToPrint);
       setCompanies(companiesData);
       setDataLoading(false);
     } catch (e) {
@@ -86,7 +118,9 @@ const Companies = ({role}) => {
 	return (
 	<div className="home">
 	  <Sidebar role={role} />
-	  <div className="homeContainer">
+	  <div className="homeContainer"
+      style={{ width: "100%", height: "100vh", overflow: "auto" }}
+    >
       {/* <Navbar /> */}
       <div className="listContainer">
         <div className="listTitle">Companies</div>
@@ -101,8 +135,49 @@ const Companies = ({role}) => {
             }}/>
         </div>
         <br />
+        {!printState && 
+            <Button sx={{ ':hover': { bgcolor: '#1976d2', color: 'white' },bgcolor: '#1976d2' }}
+              style={{ color: "white",
+              width: "100%",
+              }}
+              onClick={() => {
+                setPrintState(true);
+                setPrintStyle(false);
+              }}
+            >
+              Print
+            </Button>
+          }
+          {printState && <div style={{ display: "flex", width: "100%", backgroundColor: "#f5f5f5", }}>
+            <ReactToPrint
+              content={reactToPrintContent}
+              trigger={reactToPrintTrigger}
+              style={{
+                width: "95%",
+                marginRight: "5%",
+              }}
+            />
+            <CSVLink data={csvPrintData} style={{
+              width: "95%",
+              backgroundColor: "#0ba600",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginLeft: "5%",
+              color: "white",
+            }} >Print as csv</CSVLink>
+          </div>}
+        <hr />
+        <br />
         <Model open={open} setOpen={setOpen} deleteThis={deleteCompany} id={id} />
-        <Table data={companies} labels={labels} DataLoading={dataLoading} />
+        <div  ref={componentRef} 
+          style={{
+            width: "100%",
+          }}
+        >
+          <Table style={printStyle} data={companies} labels={labels} DataLoading={dataLoading} />
+        </div>
       </div>
 	  </div>
 	</div>

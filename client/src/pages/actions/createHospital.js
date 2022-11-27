@@ -104,7 +104,7 @@ const CreateHospital = ({role, type}) => {
           />
         </FormControl>
         <FormControl color="primary" fullWidth style={{marginBottom: "20px"}}>
-          <InputLabel htmlFor="my-input" error={error.ville}>Ville</InputLabel>
+          <InputLabel htmlFor="my-input" error={error.ville}>City</InputLabel>
           <Input type="text" id="my-input" 
             error={error.ville}
             aria-describedby="my-helper-text" 

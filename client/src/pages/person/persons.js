@@ -11,10 +11,30 @@ import { getPersons, getPersonForCompanyRole, deletePersonAPI, getHospitalPerson
 import { useSnackbar } from 'notistack'
 import Model from "../../components/popups/index";
 import validateSearchInput from "../../utils/searchValidate";
+import { CSVLink, CSVDownload } from "react-csv";
+import { Button } from '@mui/material';
+import ReactToPrint from "react-to-print";
+
 
 const Persons = ({role}) => {
 
   const { enqueueSnackbar } = useSnackbar()
+
+  const [printStyle, setPrintStyle] = React.useState(true);
+  const [printState, setPrintState] = React.useState(false);
+  const [csvPrintData, setCsvPrintData] = React.useState([]);
+  const componentRef = React.useRef(null);
+  const reactToPrintContent = React.useCallback(() => {
+    return componentRef.current;
+  }, [componentRef.current]);
+  const reactToPrintTrigger = React.useCallback(() => {
+    return (
+        <Button variant="contained" style={{
+          width: "100%",
+        }}
+        >Print</Button>
+    );
+  }, []);
 
   const token = useSelector(state => state?.data?.token);
   const [data, setData] = React.useState([]);
@@ -27,9 +47,9 @@ const Persons = ({role}) => {
 
   let labels;
   if (role === "admin") 
-	  labels = ["ID", "CreatedAt", "First name", "Last name", "CIN", "Gender", "Date of birth", "Age", "Weight", "Phone", "Activity Service", "Fonction", "Type", "Action"]
+	  labels = ["ID", "CreatedAt", "First name", "Last name", "CIN", "Gender", "Email", "Age", "Healthcare Institution/Company", "Phone", "Activity Service", "Fonction", "Type", "Action"]
   else 
-	  labels = ["ID", "CreatedAt", "First name", "Last name", "CIN", "Gender", "Date of birth", "Age", "Weight", "Phone", "Activity Service", "Fonction", "Type"]
+	  labels = ["ID", "CreatedAt", "First name", "Last name", "CIN", "Gender", "Email", "Age", "Healthcare Institution/Company", "Phone", "Activity Service", "Fonction", "Type"]
 
   const getAllPersons = async () => {
     try {
@@ -49,9 +69,12 @@ const Persons = ({role}) => {
       else {
         res = await getPersonForCompanyRole(token, search);
       }
-      console.log(res);
+
+      const dataToPrint = [];
+
       res?.data?.data?.map((person) => {
         i++;
+        
         let obj = {
           id: i,
           _id: person._id,
@@ -60,9 +83,11 @@ const Persons = ({role}) => {
           lastName: person.lastName,
           cin: person.cin,
           gender: person.gender,
-          birthDate: moment(person.birthDate).format("YYYY-MM-DD"),
+          __birthDate: moment(person.birthDate).format("YYYY-MM-DD"),
+          email: person.email,
           age: person.age,
-          poids: person.poids,
+          __poids: person.poids,
+          healthCareInstitution: person?.hospital?.designation || person?.company?.designation,
           phone: person.phone,
           secteur: person.secteur,
           fonction: person.fonction,
@@ -81,7 +106,26 @@ const Persons = ({role}) => {
           </IconButton>);
         }
         PersonsData.push(obj);
+
+        const objToPrint = {
+          id: i,
+          createdAt: moment(person.createdAt).format("YYYY-MM-DD HH:mm"),
+          firstName: person.firstName,
+          lastName: person.lastName,
+          CIN: person.cin,
+          Gender: person.gender,
+          Email: person.email,
+          Age: person.age,
+          HealthCareInstitution: person?.hospital?.designation || person?.company?.designation,
+          phone: person.phone,
+          ActivityService: person.secteur,
+          Fonction: person.fonction,
+          Type: person.type,
+        }
+        dataToPrint.push(objToPrint);
       });
+
+      setCsvPrintData(dataToPrint);
       setData(PersonsData);
       setDataLoading(false);
     } catch (e) {
@@ -113,7 +157,9 @@ const Persons = ({role}) => {
 	return (
 	<div className="home">
 	  <Sidebar role={role} />
-	  <div className="homeContainer">
+	  <div className="homeContainer"
+      style={{ width: "100%", height: "100vh", overflow: "auto" }}
+    >
       {/* <Navbar /> */}
       <div className="listContainer">
         <div className="listTitle">Professionals Healthcare</div>
@@ -128,8 +174,49 @@ const Persons = ({role}) => {
             }}/>
         </div>
         <br />
+        {!printState && 
+            <Button sx={{ ':hover': { bgcolor: '#1976d2', color: 'white' },bgcolor: '#1976d2' }}
+              style={{ color: "white",
+              width: "100%",
+              }}
+              onClick={() => {
+                setPrintState(true);
+                setPrintStyle(false);
+              }}
+            >
+              Print
+            </Button>
+          }
+          {printState && <div style={{ display: "flex", width: "100%", backgroundColor: "#f5f5f5", }}>
+            <ReactToPrint
+              content={reactToPrintContent}
+              trigger={reactToPrintTrigger}
+              style={{
+                width: "95%",
+                marginRight: "5%",
+              }}
+            />
+            <CSVLink data={csvPrintData} style={{
+              width: "95%",
+              backgroundColor: "#0ba600",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginLeft: "5%",
+              color: "white",
+            }} >Print as csv</CSVLink>
+          </div>}
+        <hr />
+        <br />
         <Model open={open} setOpen={setOpen} deleteThis={deletePerson} id={id} />
-        <Table data={data} labels={labels} DataLoading={dataLoading} />
+        <div  ref={componentRef} 
+          style={{
+            width: "100%",
+          }}
+        >
+          <Table style={printStyle} data={data} labels={labels} DataLoading={dataLoading} style={printStyle} />
+        </div>
       </div>
 	  </div>
 	</div>

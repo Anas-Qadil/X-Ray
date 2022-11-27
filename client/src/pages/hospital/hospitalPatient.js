@@ -13,10 +13,30 @@ import { getPatientForHospitlRole, deletePatientAPI } from "../../api/servicesAp
 import { useSnackbar } from 'notistack'
 import Model from "../../components/popups/index";
 import validateSearchInput from "../../utils/searchValidate";
+import { CSVLink, CSVDownload } from "react-csv";
+import { Button } from '@mui/material';
+import ReactToPrint from "react-to-print";
+
 
 const HospitalPatient = ({role}) => {
 
   const { enqueueSnackbar } = useSnackbar()
+
+  const [printStyle, setPrintStyle] = React.useState(true);
+  const [csvPrintData, setCsvPrintData] = React.useState([]);
+  const [printState, setPrintState] = React.useState(false);
+  const componentRef = React.useRef(null);
+  const reactToPrintContent = React.useCallback(() => {
+    return componentRef.current;
+  }, [componentRef.current]);
+  const reactToPrintTrigger = React.useCallback(() => {
+    return (
+        <Button variant="contained" style={{
+          width: "100%",
+        }}
+        >Print</Button>
+    );
+  }, []);
 
   const token = useSelector(state => state?.data?.token);
   const [data, setData] = React.useState([]);
@@ -31,9 +51,9 @@ const HospitalPatient = ({role}) => {
 
   let labels;
   if (location.pathname === "/persons") 
-    labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Weight", "Address", "Phone", "Email", "Sector", "Fonction", "Type"]
+    labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Date of birth", "Age", "Weight", "Address", "Phone", "Email", "Sector", "Fonction", "Type"]
   else 
-    labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Birth Date", "Age", "Weight", "Address", "Phone", "Email"]
+    labels = ["ID", "CreatedAt", "First Name", "Last Name", "CIN", "Gender", "Date of birth", "Age", "Weight", "Address", "Phone", "Email"]
   if (role === "admin") labels.push("Action");
 
   const getPatinets = async () => {
@@ -50,6 +70,7 @@ const HospitalPatient = ({role}) => {
       } else if (role === "hospital") {
         res = await getPatientForHospitlRole(token, search);
       }
+      const dataToPrint = [];
       res?.data?.data?.map((patient) => {
         i++;
         let obj = {
@@ -73,7 +94,23 @@ const HospitalPatient = ({role}) => {
           </IconButton>)
         }
         patientsData.push(obj);
+        const objToPrint = {
+          id: i,
+          createdAt: moment(patient.createdAt).format("YYYY-MM-DD HH:mm"),
+          firstName: patient.firstName,
+          lastName: patient.lastName,
+          cin: patient.cin,
+          gender: patient.gender,
+          DateOfBirth: moment(patient.birthDate).format("YYYY-MM-DD"),
+          age: patient.age,
+          Weight: patient.poids,
+          address: patient.address,
+          phone: patient.phone,
+          email: patient.email,
+        }
+        dataToPrint.push(objToPrint);
       });
+      setCsvPrintData(dataToPrint);
       setData(patientsData);
       setDataLoading(false);
     } catch (e) {
@@ -105,7 +142,9 @@ const HospitalPatient = ({role}) => {
 	return (
 	<div className="home">
 	  <Sidebar role={role} />
-	  <div className="homeContainer">
+	  <div className="homeContainer"
+      style={{ width: "100%", height: "100vh", overflow: "auto" }}
+    >
       {/* <Navbar /> */}
       <div className="listContainer">
         <div className="listTitle">Patients</div>
@@ -120,8 +159,50 @@ const HospitalPatient = ({role}) => {
             }}/>
         </div>
         <br />
+        {!printState && 
+            <Button sx={{ ':hover': { bgcolor: '#1976d2', color: 'white' },bgcolor: '#1976d2' }}
+              style={{ color: "white",
+              width: "100%",
+              }}
+              onClick={() => {
+                setPrintState(true);
+                setPrintStyle(false);
+              }}
+            >
+              Print
+            </Button>
+          }
+          {printState && <div style={{ display: "flex", width: "100%", backgroundColor: "#f5f5f5", }}>
+            <ReactToPrint
+              content={reactToPrintContent}
+              trigger={reactToPrintTrigger}
+              style={{
+                width: "95%",
+                marginRight: "5%",
+              }}
+            />
+            <CSVLink data={csvPrintData} style={{
+              width: "95%",
+              backgroundColor: "#0ba600",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginLeft: "5%",
+              color: "white",
+            }} >Print as csv</CSVLink>
+          </div>}
+          <hr />
+        <br />
         <Model open={open} setOpen={setOpen} deleteThis={deletePatient} id={id} />
-        <Table data={data} labels={labels} DataLoading={dataLoading} />
+        <div
+          ref={componentRef} 
+          style={{
+            width: "100%",
+          }}
+        >
+          <Table style={printStyle} data={data} labels={labels} DataLoading={dataLoading} />
+        </div>
       </div>
 	  </div>
 	</div>

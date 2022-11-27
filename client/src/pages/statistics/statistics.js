@@ -46,7 +46,7 @@ const Statistics = ({role}) => {
   const token = useSelector(state => state?.data?.token);
   const user = useSelector(state => state?.data?.data?.user);
   const [dataLoading, setDataLoading] = React.useState(true);
-  const labels = ["Date", "CIN", "Region", "Ville", "Health Insitution", "Service", "examination", "Protocole", "Appareil", "Dose"];
+  const labels = ["Date", "CIN", "Region", "City", "Healthcare Insitution", "Service", "examination", "Protocole", "Device", "Dose"];
   const [data, setData] = React.useState([]);
   const [regions, setRegions] = React.useState([]); // regions of hospitals
   const [servicesName, setServicesName] = React.useState([]); // services name
@@ -253,7 +253,9 @@ const Statistics = ({role}) => {
 	return (
     <div className="home">
       <Sidebar role={role} />
-      <div className="homeContainer">
+      <div className="homeContainer"
+        style={{ width: "100%", height: "100vh", overflow: "auto" }}
+      >
         <div className="listContainer">
           <div className="listTitleContainer">
             <div style={{
@@ -317,7 +319,7 @@ const Statistics = ({role}) => {
                       sx={{ width: "100%", mr: 2 }}
                       disablePortal
                       id="combo-box-demo"
-                      options={[{label: "Radio", data: "radio"}, {label: "Clinic", data: "clinic"}, {label: "Hospital", data: "hospital"}]}
+                      options={[{label: "Radiology center", data: "radio"}, {label: "Clinic", data: "clinic"}, {label: "Hospital", data: "hospital"}]}
                       onChange={(event, value) => {
                         // changeHospitalType(value?.data);
                         setStats({
@@ -325,7 +327,7 @@ const Statistics = ({role}) => {
                           hospitalType: value?.data,
                         });
                       }}
-                      renderInput={(params) => <TextField {...params} label="Health Institution Type" />}
+                      renderInput={(params) => <TextField {...params} label="Type" />}
                     />
                     <Autocomplete
                       sx={{ width: "100%", mr: 2 }}
@@ -338,7 +340,7 @@ const Statistics = ({role}) => {
                           hospital: value?.data,
                         });
                       }}
-                      renderInput={(params) => <TextField {...params} label="Health Institution" />}
+                      renderInput={(params) => <TextField {...params} label="Healthcare Institution" />}
                     />
                   </> }
             </div>
@@ -383,7 +385,7 @@ const Statistics = ({role}) => {
                     appareil: value?.data,
                   });
                 }}
-                renderInput={(params) => <TextField {...params} label="Appariel" />}
+                renderInput={(params) => <TextField {...params} label="Device" />}
               />
             <FormControl variant="standard" sx={{ mb: 2 }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -409,10 +411,6 @@ const Statistics = ({role}) => {
             </FormControl>
             </div>
           </div>
-          {/* <ReactToPrint
-            content={reactToPrintContent}
-            trigger={reactToPrintTrigger} 
-          /> */}
           {!printState && 
             <Button sx={{ ':hover': { bgcolor: '#1976d2', color: 'white' },bgcolor: '#1976d2' }}
               style={{ color: "white",
@@ -527,14 +525,12 @@ const Statistics = ({role}) => {
               display: "flex",
               justifyContent: "space-around",
             }}>
-              <h3>Dose Total : {totalDose?.toFixed(2)} mSv</h3> 
+              <h3>Total Dose : {totalDose?.toFixed(2)} mSv</h3> 
             </div>}
             <Table data={data} labels={labels} DataLoading={dataLoading} style={printStyle} />
           </div>
         </div>
       </div>
-
-      {/* <PrintModel open={true} /> */}
     </div>
   );
 }

@@ -18,6 +18,15 @@ import Loader from "../../components/loader";
 import { reloginApi } from '../../api/authApi/loginApi';
 import { useSnackbar } from 'notistack'
 import LOGO from '../../assets/LOGO.png';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import InputAdornment from '@mui/material/InputAdornment';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import IconButton from '@mui/material/IconButton';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from '@mui/icons-material/Visibility';
+
+
 
 function Copyright(props) {
   return (
@@ -60,6 +69,7 @@ const Login = () => {
   const [user, setUser] = useState('');
   const [psw, setPsw] = useState('');
 
+  const [showPassword, setShowPassword] = useState(false);
   
   const handleSubmit = async (e) =>{
     e.preventDefault();
@@ -141,7 +151,7 @@ const Login = () => {
                 autoComplete="off" 
                 onChange={(e) => setUser(e.target.value)} value={user} 
               />
-              <TextField
+              {/* <TextField
                 htmlFor="password"
                 margin="normal"
                 required
@@ -152,7 +162,35 @@ const Login = () => {
                 id="password"
                 autoComplete="current-password"
                 onChange={(e) => setPsw(e.target.value)} value={psw}
-              />
+              /> */}
+
+
+              <FormControl sx={{ marginTop: "30px", marginBottom: "23px", width: '100%' }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={psw}
+                  onChange={(e) => setPsw(e.target.value)}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => {
+                          setShowPassword(!showPassword);
+                        }}
+                        onMouseDown={(e) => e.preventDefault()}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+
+
               <Button
                 type="submit"
                 fullWidth

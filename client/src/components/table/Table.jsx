@@ -23,9 +23,9 @@ const List = ({data, labels, DataLoading, style}) => {
   return ( 
     <TableContainer component={Paper} className="table"
       style={style ? {
-        maxHeight: "calc(50vh)", overflow: "auto",
-        axWidth: "calc(100vw)", overflow: "auto"
-      } : {maxWidth: "calc(100vw)", overflow: "auto"}}
+        maxHeight: "calc(70vh)", overflow: "auto",
+        maxWidth: "calc(100vw)", overflow: "auto"
+      } : {}}
     >
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead style={{backgroundColor: "#18a6df", color: "white"}}>
@@ -40,7 +40,7 @@ const List = ({data, labels, DataLoading, style}) => {
             data?.map((row) => (
               <TableRow className="tableRowHover" key={row?.id} >
                 {Object?.keys(row)?.map((key, index) => {
-                    if (key === "_id" || key === "_company" || key === "_hospital" || key === "__address" || key === "__email")
+                    if (key === "_id" || key === "_company" || key === "__poids" || key === "_hospital" || key === "__birthDate" || key === "__address" || key === "__email")
                       return ;
                     return (<TableCell 
                       className="tableCell" 
@@ -74,18 +74,19 @@ const List = ({data, labels, DataLoading, style}) => {
                           obj.role = userRDX.role;
                           obj.OwnRole = "patient";
                         } else if (paths[paths.length - 1] === "persons") {
+                          console.log(row);
                           obj._id = row?._id;
-                          obj.address = row?.address;
+                          obj.address = row?.__address;
                           obj.age = row?.age;
-                          obj.birthDate = row?.birthDate;
+                          obj.birthDate = row?.__birthDate;
                           obj.cin = row?.cin;
                           obj.createdAt = row?.createdAt;
-                          obj.email = row?.email;
+                          obj.email = row?.__email;
                           obj.firstName = row?.firstName;
                           obj.gender = row?.gender;
                           obj.lastName = row?.lastName;
                           obj.phone = row?.phone;
-                          obj.poids = row?.poids;
+                          obj.poids = row?.__poids;
                           obj.secteur = row?.secteur;
                           obj.type = row?.type;
                           obj.fonction = row?.fonction;
@@ -101,6 +102,7 @@ const List = ({data, labels, DataLoading, style}) => {
                           obj._id = row?._id;
                           obj.designation = row?.designation;
                           obj.email = row?.email;
+                          obj.address = row?.__address;
                           obj.phone = row?.phone;
                           obj.region = row?.region;
                           obj.ville = row?.ville;

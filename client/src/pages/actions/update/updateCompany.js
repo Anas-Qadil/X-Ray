@@ -200,7 +200,7 @@ const UpdateCompany = ({role}) => {
         />
       </FormControl>
       <FormControl disabled={role === "company" && true} color="primary" fullWidth style={{marginBottom: "20px"}}>
-        <InputLabel htmlFor="my-input" error={error.ville}>VILLE</InputLabel>
+        <InputLabel htmlFor="my-input" error={error.ville}>City</InputLabel>
         <Input type="text" id="my-input" 
           error={error.ville}
           aria-describedby="my-helper-text" 

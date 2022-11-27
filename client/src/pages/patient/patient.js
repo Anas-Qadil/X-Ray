@@ -85,7 +85,9 @@ const Patient = () => {
   return (
     <div className="home">
       <Sidebar role="patient" />
-      <div className="homeContainer">
+      <div className="homeContainer"
+        style={{ width: "100%", height: "100vh", overflow: "auto" }}
+      >
         {/* <Navbar /> */}
         <div className="widgets" >
           <Widget type="user" dose={doseData?.doses} DataLoading={DataLoading} />

@@ -331,7 +331,7 @@ const UpdatePerson = ({role}) => {
           <Stack spacing={1} style={{width: "90%", marginRight: "40px"}} error={error.birthDate}>
             <DesktopDatePicker
               disabled={role === "person" && true}
-              label="Birth Date"
+              label="Date of birth"
               inputFormat="YYYY-MM-DD"
               value={personData.birthDate}
               onChange={(newValue) => {

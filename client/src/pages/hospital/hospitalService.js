@@ -11,10 +11,30 @@ import { useSelector } from 'react-redux'
 import { useSnackbar } from 'notistack'
 import Model from "../../components/popups/index";
 import validateSearchInput from "../../utils/searchValidate";
+import { CSVLink, CSVDownload } from "react-csv";
+import { Button } from '@mui/material';
+import ReactToPrint from "react-to-print";
+
 
 const HospitalService = ({role}) => {
 
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [printStyle, setPrintStyle] = React.useState(true);
+  const [csvPrintData, setCsvPrintData] = React.useState([]);
+  const [printState, setPrintState] = React.useState(false);
+  const componentRef = React.useRef(null);
+  const reactToPrintContent = React.useCallback(() => {
+    return componentRef.current;
+  }, [componentRef.current]);
+  const reactToPrintTrigger = React.useCallback(() => {
+    return (
+        <Button variant="contained" style={{
+          width: "100%",
+        }}
+        >Print</Button>
+    );
+  }, []);
 
   const [data, setData] = React.useState([]);
   const [search, setSearch] = React.useState("");
@@ -25,7 +45,7 @@ const HospitalService = ({role}) => {
   if (role === "hospital")
     labels = ["ID", "Created At", "Designation", "Equipement", "Examination", "Protocol"]
   else 
-    labels = ["ID", "Created At", "Designation", "Equipement", "Examination", "Protocol", "Hospital Designation", "Hospital Region"];
+    labels = ["ID", "Created At", "Designation", "Equipement", "Examination", "Protocol", "Healthcare institution", "City"];
 
   if (role === "admin") labels.push("Action");
 
@@ -48,6 +68,7 @@ const HospitalService = ({role}) => {
         res = await getAllHospitalServices(token);
       }
       let i = 0;
+      const dataToPrint = [];
       res?.data?.data?.map((service) => {
         i++;
         let obj = {
@@ -61,15 +82,25 @@ const HospitalService = ({role}) => {
         }
         if (role !== "hospital") {
           obj.hospital = service.hospital?.designation;
-          obj.region = service.hospital?.region;
+          obj.region = service.hospital?.ville;
         }
         if (role === "admin") {
           obj.action = ( <IconButton onClick={() => checkDelete(service?._id)} aria-label="delete" size="large">
             <DeleteIcon />
           </IconButton>)
         }
+        let csvObj = {
+          id: i,
+          createdAt: moment(service.createdAt).format("YYYY-MM-DD HH:mm"),
+          designation: service.name,
+          equipement: service.equipment,
+          examination: service.examen,
+          protocol: service.protocol,
+        }
+        dataToPrint.push(csvObj);
         servicesData.push(obj);
       });
+      setCsvPrintData(dataToPrint);
       setData(servicesData);
       setDataLoading(false);
     } catch (e) {
@@ -101,7 +132,9 @@ const HospitalService = ({role}) => {
 	return (
 	<div className="home">
 	  <Sidebar role={role} />
-	  <div className="homeContainer">
+	  <div className="homeContainer"
+      style={{ width: "100%", height: "100vh", overflow: "auto" }}
+    >
       <div className="listContainer">
         <div className="listTitle">Services</div>
         <div style={{display: "flex" }}>
@@ -117,7 +150,7 @@ const HospitalService = ({role}) => {
                 justifyContent: "center",
                 
               }}/>
-            <TextField id="standard-basic" label="Hospital Search" variant="standard" 
+            <TextField id="standard-basic" label="Healthcare institution Search" variant="standard" 
               value={hospitalSearch}
               onChange={(e) => setHospitalSearch(e.target.value)}
               style={{
@@ -131,8 +164,50 @@ const HospitalService = ({role}) => {
           }
         </div>
         <br />
+        {!printState && 
+            <Button sx={{ ':hover': { bgcolor: '#1976d2', color: 'white' },bgcolor: '#1976d2' }}
+              style={{ color: "white",
+              width: "100%",
+              }}
+              onClick={() => {
+                setPrintState(true);
+                setPrintStyle(false);
+              }}
+            >
+              Print
+            </Button>
+          }
+          {printState && <div style={{ display: "flex", width: "100%", backgroundColor: "#f5f5f5", }}>
+            <ReactToPrint
+              content={reactToPrintContent}
+              trigger={reactToPrintTrigger}
+              style={{
+                width: "95%",
+                marginRight: "5%",
+              }}
+            />
+            <CSVLink data={csvPrintData} style={{
+              width: "95%",
+              backgroundColor: "#0ba600",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginLeft: "5%",
+              color: "white",
+            }} >Print as csv</CSVLink>
+          </div>}
+          <hr />
+        <br />
         <Model open={open} setOpen={setOpen} deleteThis={deleteService} id={id} />
-        <Table data={data} labels={labels} DataLoading={dataLoading} />
+        <div
+          ref={componentRef}
+          style={{
+            width: "100%",
+          }}
+        >
+          <Table style={printStyle} data={data} labels={labels} DataLoading={dataLoading} />
+        </div>
       </div>
 	  </div>
 	</div>

@@ -93,7 +93,9 @@ const Person = () => {
   return (
     <div className="home">
       <Sidebar role="person" />
-      <div className="homeContainer">
+      <div className="homeContainer"
+        style={{ width: "100%", height: "100vh", overflow: "auto" }}
+      >
         <div className="widgets">
           <Widget type="user" dose={personTraitementData?.totalDose} DataLoading={DataLoading}/>
           <Widget type="yearly" dose={personTraitementData?.lastyearDose} DataLoading={DataLoading}/>

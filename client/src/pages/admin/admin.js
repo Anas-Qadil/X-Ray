@@ -59,7 +59,9 @@ const Admin = () => {
   return (
     <div className="home">
       <Sidebar role="admin" />
-      <div className="homeContainer">
+      <div className="homeContainer"
+        style={{ width: "100%", height: "100vh", overflow: "auto" }}
+      >
         {/* <Navbar /> */}
         <div className="widgets">
           <Widget type="user" dose={data?.doses} DataLoading={dataLoading} />
