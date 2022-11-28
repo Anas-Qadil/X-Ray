@@ -234,7 +234,7 @@ console.log(user);
                       <span className="itemValue">{user.poids}</span>
                     </div>
                     {user.OwnRole === "person" && <div className="detailItem">
-                      <span className="itemKey">Activity service:</span>
+                      <span className="itemKey"> Modality service:</span>
                       <span className="itemValue">{user.secteur}</span>
                     </div>}
                     {user.OwnRole === "person" && <div className="detailItem">

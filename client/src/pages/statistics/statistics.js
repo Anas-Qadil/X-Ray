@@ -484,12 +484,12 @@ const Statistics = ({role}) => {
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.address}</p>
                 </div>
                 <div style={{ display: "flex", marginTop: "-30px" }}>
-                  <h3>phone : </h3>
+                  <h3>Phone : </h3>
                   <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.phone}</p>
                 </div>
                 { stats.person &&
                   <div style={{ display: "flex", marginTop: "-30px" }}>
-                    <h3>Place of activity : </h3>
+                    <h3>Modality service : </h3>
                     <p style={{ fontSize: "20px", marginTop: "16px" }}>&nbsp;&nbsp; {selectedUSer?.secteur}</p>
                   </div>}
               </div>
